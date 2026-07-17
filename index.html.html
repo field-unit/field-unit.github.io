@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>∅</title>
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="%230e100d"/><text x="8" y="12.5" font-size="12" text-anchor="middle" fill="%238CAA55" font-family="monospace">∅</text></svg>'>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0e100d;
+  --dim:#2b331f;
+  --admin:#698246;
+  --mid:#7d9557;
+  --signal:#8CAA55;
+  --off:#E4E2D6;
+  --alert:#BE5030;
+  --term:"VT323",monospace;
+  --col:960px;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+
+body{
+  background:var(--bg);
+  color:var(--signal);
+  font-family:var(--term);
+  min-height:100vh;
+  padding-bottom:40px;
+  -webkit-font-smoothing:none;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:50;
+  background:repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,.16) 0 1px,
+    transparent 1px 3px
+  );
+}
+
+:focus-visible{
+  outline:2px solid var(--off);
+  outline-offset:2px;
+}
+
+.wrap{
+  max-width:var(--col);
+  margin:0 auto;
+  padding:0 14px;
+}
+
+/* HERO */
+.hero{
+  display:flex;
+  justify-content:center;
+  padding:34px 0 8px;
+}
+
+#glyph{
+  width:min(340px,72vw);
+  aspect-ratio:16/10;
+  display:block;
+  image-rendering:pixelated;
+  image-rendering:crisp-edges;
+}
+
+/* SEARCH */
+.searchrow{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  max-width:440px;
+  margin:6px auto 30px;
+  padding:0 14px;
+}
+
+.searchrow .gt{
+  color:var(--mid);
+  font-size:26px;
+  user-select:none;
+}
+
+#q{
+  flex:1;
+  min-width:0;
+  background:none;
+  border:none;
+  border-bottom:1px solid var(--dim);
+  color:var(--off);
+  font-family:var(--term);
+  font-size:24px;
+  letter-spacing:1px;
+  padding:2px 4px;
+  caret-color:var(--signal);
+}
+
+#q:focus{border-color:var(--signal)}
+
+#n{
+  color:var(--mid);
+  font-size:20px;
+  min-width:2ch;
+  text-align:right;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:14px;
+}
+
+.tile{
+  border:1px solid var(--dim);
+  background:#0a0c09;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+
+.tile.hide{display:none}
+
+.tile .medium{
+  position:relative;
+  display:block;
+  width:100%;
+}
+
+.tile img{
+  display:block;
+  width:100%;
+  height:auto;
+  image-rendering:pixelated;
+}
+
+.tile button.zoom{
+  all:unset;
+  cursor:zoom-in;
+  display:block;
+  width:100%;
+}
+
+.cap{
+  display:flex;
+  gap:8px;
+  align-items:baseline;
+  padding:6px 9px 7px;
+  font-size:16px;
+  line-height:1;
+  color:var(--mid);
+  letter-spacing:1px;
+  border-top:1px solid var(--dim);
+  white-space:nowrap;
+  overflow:hidden;
+}
+
+.cap .t{
+  color:var(--signal);
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.tile.playing .cap .t{color:var(--off)}
+.tile.playing{border-color:var(--admin)}
+
+/* AUDIO */
+.aud{position:relative}
+
+.aud canvas{
+  display:block;
+  width:100%;
+  aspect-ratio:16/6;
+  image-rendering:pixelated;
+  image-rendering:crisp-edges;
+  cursor:pointer;
+}
+
+.arow{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:7px 9px;
+  border-top:1px solid var(--dim);
+}
+
+.pbtn{
+  all:unset;
+  cursor:pointer;
+  color:var(--signal);
+  font-size:20px;
+  line-height:1;
+  width:30px;
+  height:24px;
+  text-align:center;
+  border:1px solid var(--admin);
+}
+
+.pbtn:hover{border-color:var(--signal)}
+
+.pbtn.err{
+  color:var(--alert);
+  border-color:var(--alert);
+  cursor:not-allowed;
+}
+
+.atime{
+  margin-left:auto;
+  font-size:15px;
+  color:var(--mid);
+}
+
+.tile.playing .atime{color:var(--signal)}
+
+/* EMPTY STATE */
+#empty{
+  display:none;
+  text-align:center;
+  color:var(--admin);
+  font-size:110px;
+  padding:40px 0 10px;
+  user-select:none;
+}
+
+#empty.on{display:block}
+
+/* LIGHTBOX */
+.lb{
+  position:fixed;
+  inset:0;
+  z-index:80;
+  background:rgba(8,9,7,.95);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  cursor:zoom-out;
+}
+
+.lb.on{display:flex}
+
+.lb img{
+  max-width:96vw;
+  max-height:92vh;
+  border:1px solid var(--signal);
+  image-rendering:pixelated;
+}
+
+/* FOOTER */
+.foot{
+  display:flex;
+  justify-content:center;
+  padding:36px 0 0;
+}
+
+#footc{
+  width:min(220px,50vw);
+  height:14px;
+  image-rendering:pixelated;
+  opacity:.8;
+}
+
+@media(max-width:520px){
+  .grid{grid-template-columns:1fr}
+  #q{font-size:21px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  body::after{background:none}
+}
+</style>
+</head>
+
+<body>
+
+<div class="hero">
+  <canvas id="glyph" width="176" height="110" aria-label="null set"></canvas>
+</div>
+
+<div class="searchrow">
+  <span class="gt">&gt;</span>
+  <input id="q" type="search" autocomplete="off" spellcheck="false" aria-label="search">
+  <span id="n" aria-live="polite"></span>
+</div>
+
+<div class="wrap">
+  <main class="grid" id="grid"></main>
+  <div id="empty" aria-hidden="true">∅</div>
+  <div class="foot">
+    <canvas id="footc" width="110" height="7" aria-hidden="true"></canvas>
+  </div>
+</div>
+
+<div class="lb" id="lb" aria-hidden="true">
+  <img alt="">
+</div>
+
+<script>
+/* ================================================================
+   POSTS — newest first.
+   All MP3 and image files currently sit beside index.html, so the
+   filenames below do not use tracks/ or art/ prefixes.
+   ================================================================ */
+const POSTS = [
+  { date:"July 26", title:"nature of freak", audio:"Nature_of_Freak_Demo.mp3", art:"Factory_Artwork~2.png" },
+  { date:"July 26", title:"nomemory notreal", audio:"nomemory_notreal_mthree.mp3", art:"Hague_Artwork_Final.png" },
+  { date:"June 26", title:"the of the", audio:"the_of_the_demo.mp3", art:"Abbey_Canal_Artwork_3.jpg" },
+  { date:"June 26", title:"curley cuh", audio:"Curley_Cuh_Demo.mp3", art:"Sign_Artwork_2.jpg" },
+  { date:"December 25", title:"pocket muck", audio:"Pocket_Muck_Demo.mp3", art:"untitled11.png" },
+  { date:"November 25", title:"medium slate", audio:"Medium_Slate_Demo.mp3", art:"RedStaircaseBrickworkArtwork.jpg" },
+  { date:"September 25", title:"LAN_33", audio:"LAN_33_Demo.mp3", art:"Canal_Bucket_Artwork6.jpg" },
+  { date:"August 25", title:"navvy", audio:"Navvy_Demo.mp3", art:"NoParking3.jpg" },
+  { date:"July 25", title:"lbd+m3", audio:"lbd_m3_demo.mp3", art:"CloudArtwork3.jpg" }
+];
+
+/* ================================================================
+   GRAIN ENGINE — used for the logo, footer and missing-art fallback.
+   ================================================================ */
+const RAMP=["#0e100d","#2b331f","#698246","#8CAA55","#E4E2D6"];
+const RGB=RAMP.map(h=>[
+  parseInt(h.slice(1,3),16),
+  parseInt(h.slice(3,5),16),
+  parseInt(h.slice(5,7),16)
+]);
+
+const BAYER=[
+  [0,8,2,10],
+  [12,4,14,6],
+  [3,11,1,9],
+  [15,7,13,5]
+];
+
+const REDUCED=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function paint(ctx,W,H,field,phase){
+  const img=ctx.createImageData(W,H);
+  const d=img.data;
+  const px=phase&3;
+  const py=(phase>>1)&3;
+
+  for(let y=0;y<H;y++){
+    for(let x=0;x<W;x++){
+      let v=field(x/W,y/H);
+      v=v<0?0:v>1?1:v;
+
+      const lv=v*4;
+      const b=lv|0;
+      const f=lv-b;
+      const threshold=(BAYER[(y+py)&3][(x+px)&3]+0.5)/16;
+      const c=RGB[f>threshold?Math.min(b+1,4):b];
+      const i=(y*W+x)*4;
+
+      d[i]=c[0];
+      d[i+1]=c[1];
+      d[i+2]=c[2];
+      d[i+3]=255;
+    }
+  }
+
+  ctx.putImageData(img,0,0);
+}
+
+function hash(x,y){
+  const s=Math.sin(x*127.1+y*311.7)*43758.5453;
+  return s-Math.floor(s);
+}
+
+function noise(x,y){
+  const xi=Math.floor(x);
+  const yi=Math.floor(y);
+  const xf=x-xi;
+  const yf=y-yi;
+  const u=xf*xf*(3-2*xf);
+  const v=yf*yf*(3-2*yf);
+
+  return (
+    hash(xi,yi)*(1-u)*(1-v)+
+    hash(xi+1,yi)*u*(1-v)+
+    hash(xi,yi+1)*(1-u)*v+
+    hash(xi+1,yi+1)*u*v
+  );
+}
+
+/* HERO */
+const glyph=document.getElementById("glyph");
+const gctx=glyph.getContext("2d");
+
+function glyphField(t){
+  return (u,v)=>{
+    const dx=(u-0.5)*1.6;
+    const dy=(v-0.5);
+    const d=Math.hypot(dx,dy);
+    const ring=Math.max(0,1-Math.abs(d-0.30)/0.075);
+    const s=Math.abs(dx*0.7071+dy*0.7071);
+    const inCirc=d<0.42?1:Math.max(0,1-(d-0.42)/0.06);
+    const slash=Math.max(0,1-s/0.05)*inCirc;
+    const glow=Math.max(0,0.42-d)*0.9;
+    const gr=noise(u*26+t*0.7,v*16-t*0.5)*0.30;
+
+    return Math.min(
+      1,
+      Math.max(ring,slash)*0.98+
+      glow*0.55+
+      gr*(d<0.5?1:0.35)
+    );
+  };
+}
+
+/* FOOTER */
+const footc=document.getElementById("footc");
+const fctx=footc.getContext("2d");
+
+function footField(t){
+  return (u,v)=>
+    0.28+
+    0.3*noise(u*30+t,v*4)+
+    0.25*Math.sin(u*9-t*1.3)*(0.5-Math.abs(v-0.5));
+}
+
+/* AUDIO */
+const players=[];
+
+function audioField(p,t){
+  return (u,v)=>{
+    const base=0.16+0.34*noise(u*34,v*7+p.seed);
+    const env=0.5+0.5*Math.sin(u*22+p.seed*7)*Math.sin(v*3.1);
+    let val=base*(0.65+0.5*env);
+
+    if(u<=p.prog){
+      val=Math.min(
+        1,
+        val+0.42+(p.playing?0.16*noise(u*40+t*3,v*9-t*2):0)
+      );
+    }
+
+    return val;
+  };
+}
+
+const fmt=s=>{
+  if(!isFinite(s)||s<0)s=0;
+  return (
+    String(Math.floor(s/60)).padStart(2,"0")+
+    ":"+
+    String(Math.floor(s%60)).padStart(2,"0")
+  );
+};
+
+function stopOthers(me){
+  players.forEach(p=>{
+    if(p!==me && p.audio && !p.audio.paused){
+      p.audio.pause();
+    }
+  });
+}
+
+/* BUILD TILES */
+const grid=document.getElementById("grid");
+
+const esc=s=>String(s).replace(
+  /[&<>"]/g,
+  c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])
+);
+
+POSTS.forEach((post,idx)=>{
+  const tile=document.createElement("article");
+  tile.className="tile";
+  tile.dataset.k=((post.title||"")+" "+(post.date||"")).toLowerCase();
+
+  if(post.audio){
+    tile.innerHTML=`
+      <div class="medium aud">
+        <canvas width="192" height="72"></canvas>
+      </div>
+      <div class="arow">
+        <button class="pbtn" aria-label="play">▶</button>
+        <span class="atime">--:--</span>
+      </div>
+      <div class="cap">
+        <span>${esc(post.date||"")}</span>
+        <span class="t">${esc(post.title||"")}</span>
+      </div>`;
+
+    const canvas=tile.querySelector("canvas");
+
+    const p={
+      canvas,
+      ctx:canvas.getContext("2d"),
+      W:192,
+      H:72,
+      btn:tile.querySelector(".pbtn"),
+      timeEl:tile.querySelector(".atime"),
+      tile,
+      prog:0,
+      playing:false,
+      seed:idx*3.7+1,
+      audio:null,
+      dur:0,
+      err:false,
+      artImg:null
+    };
+
+    const a=new Audio();
+    a.preload="metadata";
+    a.src=post.audio;
+    p.audio=a;
+
+    a.addEventListener("loadedmetadata",()=>{
+      p.dur=a.duration||0;
+      p.timeEl.textContent="00:00";
+    });
+
+    a.addEventListener("error",()=>{
+      p.err=true;
+      p.btn.classList.add("err");
+      p.btn.textContent="×";
+      p.timeEl.textContent="∅";
+    });
+
+    a.addEventListener("timeupdate",()=>{
+      if(p.dur){
+        p.prog=a.currentTime/p.dur;
+        p.timeEl.textContent=fmt(a.currentTime);
+      }
+
+      if(!animating){
+        drawPlayer(p,perf());
+      }
+    });
+
+    a.addEventListener("play",()=>{
+      p.playing=true;
+      p.tile.classList.add("playing");
+      p.btn.textContent="‖";
+      wake();
+    });
+
+    a.addEventListener("pause",()=>{
+      p.playing=false;
+      p.tile.classList.remove("playing");
+      p.btn.textContent="▶";
+      drawPlayer(p,perf());
+    });
+
+    a.addEventListener("ended",()=>{
+      p.prog=0;
+      drawPlayer(p,perf());
+    });
+
+    p.btn.addEventListener("click",()=>{
+      if(p.err)return;
+
+      if(a.paused){
+        stopOthers(p);
+        a.play().catch(()=>{});
+      }else{
+        a.pause();
+      }
+    });
+
+    canvas.addEventListener("click",e=>{
+      if(p.err||!p.dur)return;
+
+      const r=canvas.getBoundingClientRect();
+      const position=(e.clientX-r.left)/r.width;
+      a.currentTime=Math.max(0,Math.min(1,position))*p.dur;
+
+      if(a.paused){
+        stopOthers(p);
+        a.play().catch(()=>{});
+      }
+    });
+
+    if(post.art){
+      const im=new Image();
+
+      im.onload=()=>{
+        p.artImg=im;
+        drawPlayer(p,0.5);
+      };
+
+      im.onerror=()=>{
+        p.artImg=null;
+        drawPlayer(p,0.5);
+      };
+
+      im.src=post.art;
+    }
+
+    players.push(p);
+
+  }else if(post.images&&post.images.length){
+    tile.innerHTML=`
+      <div class="medium">
+        ${post.images.map(s=>`
+          <button class="zoom" aria-label="enlarge">
+            <img loading="lazy" src="${esc(s)}" alt="${esc(post.title||"image")}">
+          </button>
+        `).join("")}
+      </div>
+      <div class="cap">
+        <span>${esc(post.date||"")}</span>
+        <span class="t">${esc(post.title||"")}</span>
+      </div>`;
+  }
+
+  grid.appendChild(tile);
+});
+
+/* DRAW AUDIO TILE */
+function drawPlayer(p,t){
+  if(p.artImg){
+    const im=p.artImg;
+    const s=Math.max(p.W/im.width,p.H/im.height);
+    const x=(p.W-im.width*s)/2;
+    const y=(p.H-im.height*s)/2;
+
+    p.ctx.save();
+    p.ctx.clearRect(0,0,p.W,p.H);
+
+    /* Keep the artwork colourful, but slightly dark and degraded. */
+    p.ctx.imageSmoothingEnabled=false;
+    p.ctx.filter="saturate(0.82) contrast(1.12) brightness(0.82)";
+    p.ctx.drawImage(im,x,y,im.width*s,im.height*s);
+    p.ctx.filter="none";
+
+    /* Subtle green cast, much lighter than the old monochrome effect. */
+    p.ctx.fillStyle="rgba(105,130,70,0.10)";
+    p.ctx.fillRect(0,0,p.W,p.H);
+
+    /* Fine horizontal lines inside each image tile. */
+    p.ctx.fillStyle="rgba(0,0,0,0.16)";
+    for(let lineY=1;lineY<p.H;lineY+=3){
+      p.ctx.fillRect(0,lineY,p.W,1);
+    }
+
+    /* Playback progress: a restrained green burn and moving edge. */
+    const px=Math.max(0,Math.min(p.W,(p.prog*p.W)|0));
+
+    if(px>0){
+      p.ctx.fillStyle="rgba(140,170,85,0.14)";
+      p.ctx.fillRect(0,0,px,p.H);
+
+      p.ctx.fillStyle="#8CAA55";
+      p.ctx.fillRect(Math.max(0,px-1),0,2,p.H);
+    }
+
+    p.ctx.restore();
+    return;
+  }
+
+  /* Procedural fallback if an artwork file cannot be found. */
+  paint(p.ctx,p.W,p.H,audioField(p,t),REDUCED?0:(t*8)|0);
+}
+
+/* ANIMATION */
+const perf=()=>performance.now()/1000;
+let animating=false;
+let rafId=0;
+let lastTick=-1;
+
+function frame(){
+  const t=perf();
+  const tick=(t*12)|0;
+
+  if(tick!==lastTick){
+    lastTick=tick;
+    const ph=tick;
+
+    paint(gctx,176,110,glyphField(t),ph);
+    paint(fctx,110,7,footField(t),ph);
+
+    players.forEach(p=>{
+      if(p.playing){
+        drawPlayer(p,t);
+      }
+    });
+  }
+
+  if(!REDUCED && !document.hidden){
+    rafId=requestAnimationFrame(frame);
+    animating=true;
+  }else{
+    animating=false;
+  }
+}
+
+function wake(){
+  if(!animating && !REDUCED){
+    frame();
+  }
+}
+
+document.addEventListener("visibilitychange",()=>{
+  if(!document.hidden){
+    wake();
+  }
+});
+
+/* FIRST PAINT */
+players.forEach(p=>drawPlayer(p,0.5));
+
+if(REDUCED){
+  paint(gctx,176,110,glyphField(0.5),0);
+  paint(fctx,110,7,footField(0.5),0);
+}else{
+  frame();
+}
+
+/* SEARCH */
+const q=document.getElementById("q");
+const nEl=document.getElementById("n");
+const empty=document.getElementById("empty");
+
+function applySearch(){
+  const s=q.value.trim().toLowerCase();
+  let n=0;
+
+  document.querySelectorAll(".tile").forEach(tile=>{
+    const show=!s||tile.dataset.k.includes(s);
+    tile.classList.toggle("hide",!show);
+
+    if(show)n++;
+  });
+
+  nEl.textContent=n;
+  empty.classList.toggle("on",n===0);
+}
+
+q.addEventListener("input",applySearch);
+applySearch();
+
+/* LIGHTBOX */
+const lb=document.getElementById("lb");
+
+document.querySelectorAll(".zoom").forEach(button=>{
+  button.addEventListener("click",()=>{
+    const img=button.querySelector("img");
+    lb.querySelector("img").src=img.src;
+    lb.querySelector("img").alt=img.alt;
+    lb.classList.add("on");
+    lb.setAttribute("aria-hidden","false");
+  });
+});
+
+lb.addEventListener("click",()=>{
+  lb.classList.remove("on");
+  lb.setAttribute("aria-hidden","true");
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){
+    lb.classList.remove("on");
+    lb.setAttribute("aria-hidden","true");
+  }
+});
+</script>
+
+</body>
+</html>
