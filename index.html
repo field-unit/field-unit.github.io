@@ -283,24 +283,14 @@ POSTS.forEach((post,idx)=>{
       a.currentTime=((e.clientX-r.left)/r.width)*p.dur;
       if(a.paused){stopOthers(p);a.play();}
     });
-    if(post.art){
-      const im=new Image();
-      im.onload=()=>{
-        try{
-          const oc=document.createElement("canvas"); oc.width=p.W; oc.height=p.H;
-          const octx=oc.getContext("2d");
-          const s=Math.max(p.W/im.width,p.H/im.height);
-          octx.drawImage(im,(p.W-im.width*s)/2,(p.H-im.height*s)/2,im.width*s,im.height*s);
-          const d=octx.getImageData(0,0,p.W,p.H).data;
-          const lum=new Float32Array(p.W*p.H);
-          for(let i=0;i<lum.length;i++)
-            lum[i]=(0.2126*d[i*4]+0.7152*d[i*4+1]+0.0722*d[i*4+2])/255;
-          p.artLum=lum;                 // full grain treatment
-        }catch(e){ p.artImg=im; }       // local file:// fallback: direct draw
-        drawPlayer(p,0.5);
-      };
-      im.src=post.art;                  // if missing: stays on procedural grain
-    }
+if(post.art){
+  const im=new Image();
+  im.onload=()=>{
+    p.artImg=im;
+    drawPlayer(p,0.5);
+  };
+  im.src=post.art;
+}
     players.push(p);
   } else if(post.images&&post.images.length){
     tile.innerHTML=`
@@ -313,15 +303,23 @@ POSTS.forEach((post,idx)=>{
 });
 
 function drawPlayer(p,t){
-  if(p.artImg){   // local preview mode: plain art + progress tint
-    const im=p.artImg, s=Math.max(p.W/im.width,p.H/im.height);
-    p.ctx.drawImage(im,(p.W-im.width*s)/2,(p.H-im.height*s)/2,im.width*s,im.height*s);
-    const px=(p.prog*p.W)|0;
-    p.ctx.fillStyle="rgba(140,170,85,0.30)"; p.ctx.fillRect(0,0,px,p.H);
-    p.ctx.fillStyle="#8CAA55"; p.ctx.fillRect(Math.max(0,px-1),0,2,p.H);
-    return;
-  }
-  paint(p.ctx,p.W,p.H,audioField(p,t),REDUCED?0:(t*8)|0);
+if(p.artImg){
+  const im=p.artImg, s=Math.max(p.W/im.width,p.H/im.height);
+  p.ctx.imageSmoothingEnabled = false;
+  p.ctx.clearRect(0,0,p.W,p.H);
+  p.ctx.drawImage(im,(p.W-im.width*s)/2,(p.H-im.height*s)/2,im.width*s,im.height*s);
+
+  // subtle dark veil so it still suits the site
+  p.ctx.fillStyle="rgba(14,16,13,0.18)";
+  p.ctx.fillRect(0,0,p.W,p.H);
+
+  // progress overlay
+  const px=(p.prog*p.W)|0;
+  p.ctx.fillStyle="rgba(140,170,85,0.16)";
+  p.ctx.fillRect(0,0,px,p.H);
+  p.ctx.fillStyle="#8CAA55";
+  p.ctx.fillRect(Math.max(0,px-1),0,2,p.H);
+  return;
 }
 
 /* ---------- animation loop (hero + footer + playing tiles) ---------- */
