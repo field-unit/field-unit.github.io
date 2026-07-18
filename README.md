@@ -1,6 +1,13 @@
-# Field Unit homepage — SMASH.EXE link update
+# Field Unit homepage — renamed game links
 
-Replace the current `index.html` in the `field-unit.github.io` repository with this one.
+Replace the current `index.html` in the root of the `field-unit.github.io`
+repository with this updated file.
 
-This preserves the existing fish and train links and adds:
-- SMASH STUFF → https://field-unit.github.io/smash-exe/
+The game links now use the repository names without hyphens:
+
+- FISHEXE → https://field-unit.github.io/fishexe/
+- TRAINEXE → https://field-unit.github.io/trainexe/
+- SMASHEXE → https://field-unit.github.io/smashexe/
+
+The existing fishing, train and smash graphics and their visible button labels
+are unchanged.
