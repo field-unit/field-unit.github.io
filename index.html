@@ -137,6 +137,15 @@ body::after{
 }
 
 
+
+.smashlaunch .smashbody{
+  fill:var(--admin);
+  stroke:var(--signal);
+  stroke-width:2;
+}
+.smashlaunch .smashwindow{fill:var(--bg)}
+.smashlaunch .smashstone{fill:var(--alert)}
+
 /* ============ ORBIT INK ============ */
 #inkLayer{
   position:fixed;
@@ -257,7 +266,7 @@ body.touch-ink-on #inkMode{
 </div>
 
 <nav class="gamelinks" aria-label="Field Unit games">
-  <a class="gamelaunch fishlaunch" href="https://field-unit.github.io/fishexe/" aria-label="Open the FISH.EXE fishing game">
+  <a class="gamelaunch fishlaunch" href="https://field-unit.github.io/fish-exe/" aria-label="Open the FISH.EXE fishing game">
     <svg viewBox="0 0 92 46" role="img" aria-label="Radioactive pixel fish">
       <polygon class="fishbody" points="8,23 25,9 59,10 78,23 59,36 25,37"/>
       <polygon class="fishbody" points="8,23 0,8 0,38"/>
@@ -267,10 +276,10 @@ body.touch-ink-on #inkMode{
       <path class="rad" d="M33 27a10 10 0 0 1 0-9l5 3a4 4 0 0 0 0 4z"/>
       <path class="rad" d="M53 27a10 10 0 0 1-8 6v-6a4 4 0 0 0 3-2z"/>
     </svg>
-    <span>go fish</span>
+    <span>CLICK TO GO FISHING</span>
   </a>
 
-  <a class="gamelaunch trainlaunch" href="https://field-unit.github.io/trainexe/" aria-label="Open the TRAIN.EXE tram game">
+  <a class="gamelaunch trainlaunch" href="https://field-unit.github.io/train-exe/" aria-label="Open the TRAIN.EXE tram game">
     <svg viewBox="0 0 96 46" role="img" aria-label="Pixel electric train">
       <rect class="trainbody" x="11" y="7" width="70" height="31"/>
       <polygon class="trainbody" points="81,12 92,20 92,35 81,38"/>
@@ -283,7 +292,22 @@ body.touch-ink-on #inkMode{
       <path class="trainbody" d="M28 7L37 0H55L64 7Z"/>
       <line class="trainbody" x1="46" y1="0" x2="46" y2="7"/>
     </svg>
-    <span>train ride</span>
+    <span>RIDE THE TRAIN</span>
+  </a>
+
+  <a class="gamelaunch smashlaunch" href="https://field-unit.github.io/smash-exe/" aria-label="Open the SMASH.EXE town smashing game">
+    <svg viewBox="0 0 96 46" role="img" aria-label="Pixel building and stone">
+      <rect class="smashbody" x="14" y="5" width="49" height="36"/>
+      <rect class="smashwindow" x="22" y="12" width="11" height="8"/>
+      <rect class="smashwindow" x="42" y="12" width="11" height="8"/>
+      <rect class="smashwindow" x="22" y="26" width="11" height="8"/>
+      <rect class="smashwindow" x="42" y="26" width="11" height="8"/>
+      <rect class="smashbody" x="66" y="9" width="18" height="26"/>
+      <rect class="smashwindow" x="69" y="14" width="12" height="10"/>
+      <circle class="smashstone" cx="84" cy="9" r="4"/>
+      <circle class="smashstone" cx="78" cy="6" r="2"/>
+    </svg>
+    <span>SMASH STUFF</span>
   </a>
 </nav>
 

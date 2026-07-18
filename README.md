@@ -1,9 +1,6 @@
-# Field Unit homepage — two-game launcher
+# Field Unit homepage — SMASH.EXE link update
 
-Replace the current homepage `index.html` in the `field-unit.github.io`
-repository with this file.
+Replace the current `index.html` in the `field-unit.github.io` repository with this one.
 
-It preserves the orbit-ink feature and adds a second game launcher:
-
-- CLICK TO GO FISHING → `/fish-exe/`
-- RIDE THE TRAIN → `/train-exe/`
+This preserves the existing fish and train links and adds:
+- SMASH STUFF → https://field-unit.github.io/smash-exe/
