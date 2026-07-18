@@ -146,6 +146,26 @@ body::after{
 .smashlaunch .smashwindow{fill:var(--bg)}
 .smashlaunch .smashstone{fill:var(--alert)}
 
+
+.dartslaunch .dartboard{
+  fill:var(--bg);
+  stroke:var(--signal);
+  stroke-width:2;
+}
+.dartslaunch .dartring{fill:none;stroke:var(--admin);stroke-width:3}
+.dartslaunch .dartbull{fill:var(--alert)}
+.dartslaunch .dartshaft{stroke:var(--signal);stroke-width:3}
+.dartslaunch .dartflight{fill:var(--admin)}
+
+.publaunch .pubglass{
+  fill:var(--bg);
+  stroke:var(--signal);
+  stroke-width:2;
+}
+.publaunch .pubbeer{fill:var(--admin)}
+.publaunch .pubfoam{fill:var(--off)}
+.publaunch .pubhandle{fill:none;stroke:var(--signal);stroke-width:3}
+
 /* ============ ORBIT INK ============ */
 #inkLayer{
   position:fixed;
@@ -276,7 +296,7 @@ body.touch-ink-on #inkMode{
       <path class="rad" d="M33 27a10 10 0 0 1 0-9l5 3a4 4 0 0 0 0 4z"/>
       <path class="rad" d="M53 27a10 10 0 0 1-8 6v-6a4 4 0 0 0 3-2z"/>
     </svg>
-    <span>CLICK TO GO FISHING</span>
+    <span>GO FISHING</span>
   </a>
 
   <a class="gamelaunch trainlaunch" href="https://field-unit.github.io/trainexe/" aria-label="Open the TRAINEXE tram game">
@@ -295,7 +315,7 @@ body.touch-ink-on #inkMode{
     <span>RIDE THE TRAIN</span>
   </a>
 
-  <a class="gamelaunch smashlaunch" href="https://field-unit.github.io/smashexe/" aria-label="Open the SMASHEXE town smashing game">
+  <a class="gamelaunch smashlaunch" href="https://field-unit.github.io/smashexe/" aria-label="Open the SMASHEXE town game">
     <svg viewBox="0 0 96 46" role="img" aria-label="Pixel building and stone">
       <rect class="smashbody" x="14" y="5" width="49" height="36"/>
       <rect class="smashwindow" x="22" y="12" width="11" height="8"/>
@@ -308,6 +328,30 @@ body.touch-ink-on #inkMode{
       <circle class="smashstone" cx="78" cy="6" r="2"/>
     </svg>
     <span>SMASH STUFF</span>
+  </a>
+
+  <a class="gamelaunch dartslaunch" href="https://field-unit.github.io/dartsexe/" aria-label="Open the DARTSEXE darts game">
+    <svg viewBox="0 0 96 46" role="img" aria-label="Pixel dartboard and dart">
+      <circle class="dartboard" cx="35" cy="23" r="19"/>
+      <circle class="dartring" cx="35" cy="23" r="12"/>
+      <circle class="dartbull" cx="35" cy="23" r="4"/>
+      <line class="dartshaft" x1="54" y1="27" x2="84" y2="12"/>
+      <polygon class="dartflight" points="84,12 93,7 89,17"/>
+      <polygon class="dartflight" points="84,12 86,2 78,8"/>
+    </svg>
+    <span>PLAY DARTS</span>
+  </a>
+
+  <a class="gamelaunch publaunch" href="https://field-unit.github.io/pubexe/" aria-label="Open the PUBEXE pint game">
+    <svg viewBox="0 0 96 46" role="img" aria-label="Pixel pint glass">
+      <rect class="pubglass" x="25" y="6" width="42" height="35"/>
+      <rect class="pubbeer" x="29" y="16" width="34" height="21"/>
+      <rect class="pubfoam" x="29" y="10" width="34" height="9"/>
+      <path class="pubhandle" d="M67 14H81V33H67"/>
+      <rect class="pubfoam" x="34" y="7" width="7" height="5"/>
+      <rect class="pubfoam" x="49" y="6" width="8" height="5"/>
+    </svg>
+    <span>GO TO THE PUB</span>
   </a>
 </nav>
 
