@@ -58,10 +58,18 @@ body::after{
 .fxbtn.on{color:var(--alert);border-color:var(--alert)}
 .fxbtn:disabled{color:var(--dim);border-color:var(--dim);cursor:not-allowed}
 
-.fishlaunch{
-  width:max-content;
-  max-width:calc(100% - 28px);
+.gamelinks{
+  display:flex;
+  justify-content:center;
+  align-items:stretch;
+  flex-wrap:wrap;
+  gap:10px;
   margin:-14px auto 34px;
+  padding:0 14px;
+}
+.gamelaunch{
+  min-width:260px;
+  max-width:calc(100% - 28px);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -75,12 +83,12 @@ body::after{
   line-height:1.5;
   letter-spacing:1px;
 }
-.fishlaunch:hover,
-.fishlaunch:focus-visible{
+.gamelaunch:hover,
+.gamelaunch:focus-visible{
   color:var(--off);
   border-color:var(--signal);
 }
-.fishlaunch svg{
+.gamelaunch svg{
   width:76px;
   height:38px;
   flex:0 0 auto;
@@ -92,29 +100,37 @@ body::after{
   stroke:var(--signal);
   stroke-width:2;
 }
-.fishlaunch .fishdetail{
-  fill:var(--bg);
+.fishlaunch .fishdetail{fill:var(--bg)}
+.fishlaunch .rad{fill:var(--alert)}
+.trainlaunch .trainbody{
+  fill:var(--admin);
+  stroke:var(--signal);
+  stroke-width:2;
 }
-.fishlaunch .rad{
-  fill:var(--alert);
+.trainlaunch .trainwindow{fill:var(--bg)}
+.trainlaunch .trainlight{fill:var(--alert)}
+.gamelaunch:hover svg{
+  animation:gameJolt .5s steps(3,end) infinite;
 }
-.fishlaunch:hover svg{
-  animation:fishJolt .5s steps(3,end) infinite;
+@keyframes gameJolt{
+  0%,100%{transform:translate(0,0)}
+  33%{transform:translate(3px,-1px)}
+  66%{transform:translate(-2px,1px)}
 }
-@keyframes fishJolt{
-  0%,100%{transform:translateX(0)}
-  33%{transform:translateX(3px)}
-  66%{transform:translateX(-2px)}
-}
-@media(max-width:520px){
-  .fishlaunch{
+@media(max-width:620px){
+  .gamelinks{
     margin-top:-12px;
     margin-bottom:25px;
+    gap:8px;
+  }
+  .gamelaunch{
+    width:100%;
+    min-width:0;
     gap:8px;
     font-size:8px;
     padding:8px 10px;
   }
-  .fishlaunch svg{
+  .gamelaunch svg{
     width:62px;
     height:32px;
   }
@@ -240,18 +256,36 @@ body.touch-ink-on #inkMode{
   <button class="fxbtn" id="inkClear" type="button" title="clear floating drawings">CLEAR INK</button>
 </div>
 
-<a class="fishlaunch" href="https://field-unit.github.io/fishexe/" aria-label="Open the FISH.EXE fishing game">
-  <svg viewBox="0 0 92 46" role="img" aria-label="Radioactive pixel fish">
-    <polygon class="fishbody" points="8,23 25,9 59,10 78,23 59,36 25,37"/>
-    <polygon class="fishbody" points="8,23 0,8 0,38"/>
-    <rect class="fishdetail" x="62" y="18" width="5" height="5"/>
-    <circle class="rad" cx="43" cy="23" r="5"/>
-    <path class="rad" d="M43 13a10 10 0 0 1 8 4l-5 3a4 4 0 0 0-3-1z"/>
-    <path class="rad" d="M33 27a10 10 0 0 1 0-9l5 3a4 4 0 0 0 0 4z"/>
-    <path class="rad" d="M53 27a10 10 0 0 1-8 6v-6a4 4 0 0 0 3-2z"/>
-  </svg>
-  <span>CLICK TO GO FISHING</span>
-</a>
+<nav class="gamelinks" aria-label="Field Unit games">
+  <a class="gamelaunch fishlaunch" href="https://field-unit.github.io/fish-exe/" aria-label="Open the FISH.EXE fishing game">
+    <svg viewBox="0 0 92 46" role="img" aria-label="Radioactive pixel fish">
+      <polygon class="fishbody" points="8,23 25,9 59,10 78,23 59,36 25,37"/>
+      <polygon class="fishbody" points="8,23 0,8 0,38"/>
+      <rect class="fishdetail" x="62" y="18" width="5" height="5"/>
+      <circle class="rad" cx="43" cy="23" r="5"/>
+      <path class="rad" d="M43 13a10 10 0 0 1 8 4l-5 3a4 4 0 0 0-3-1z"/>
+      <path class="rad" d="M33 27a10 10 0 0 1 0-9l5 3a4 4 0 0 0 0 4z"/>
+      <path class="rad" d="M53 27a10 10 0 0 1-8 6v-6a4 4 0 0 0 3-2z"/>
+    </svg>
+    <span>CLICK TO GO FISHING</span>
+  </a>
+
+  <a class="gamelaunch trainlaunch" href="https://field-unit.github.io/train-exe/" aria-label="Open the TRAIN.EXE tram game">
+    <svg viewBox="0 0 96 46" role="img" aria-label="Pixel electric train">
+      <rect class="trainbody" x="11" y="7" width="70" height="31"/>
+      <polygon class="trainbody" points="81,12 92,20 92,35 81,38"/>
+      <rect class="trainwindow" x="19" y="13" width="16" height="11"/>
+      <rect class="trainwindow" x="40" y="13" width="16" height="11"/>
+      <rect class="trainwindow" x="61" y="13" width="13" height="11"/>
+      <rect class="trainlight" x="84" y="24" width="5" height="5"/>
+      <rect class="trainbody" x="20" y="38" width="13" height="5"/>
+      <rect class="trainbody" x="63" y="38" width="13" height="5"/>
+      <path class="trainbody" d="M28 7L37 0H55L64 7Z"/>
+      <line class="trainbody" x1="46" y1="0" x2="46" y2="7"/>
+    </svg>
+    <span>RIDE THE TRAIN</span>
+  </a>
+</nav>
 
 <div class="wrap">
   <main class="grid" id="grid"></main>
