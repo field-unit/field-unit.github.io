@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Field Unit Track Downloads</title>
+<style>
+:root{--bg:#080907;--panel:#0a0c09;--signal:#8CAA55;--admin:#698246;--off:#E4E2D6;--mid:#7d8375;--alert:#ff6a48}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--off);font-family:"Courier New",monospace}
+body{padding:20px}
+main{width:min(760px,100%);margin:0 auto}
+h1{font-size:22px;letter-spacing:2px;color:var(--signal)}
+.status{border:1px solid var(--admin);background:var(--panel);padding:14px;margin:18px 0;line-height:1.7}
+.track{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;margin:8px 0;padding:12px;border:1px solid var(--admin);color:var(--off);text-decoration:none;background:var(--panel)}
+.track:hover{border-color:var(--signal);color:var(--signal)}
+.track span{color:var(--alert)}.track em{font-size:11px;color:var(--mid);font-style:normal}
+.back{display:inline-block;margin-top:18px;border:1px solid var(--signal);padding:10px 12px;color:var(--signal);text-decoration:none}
+#locked{display:none}
+body.locked #downloads{display:none}
+body.locked #locked{display:block}
+@media(max-width:560px){.track{grid-template-columns:32px 1fr}.track em{grid-column:2}}
+</style>
+</head>
+<body class="locked">
+<main>
+  <h1>FIELD UNIT // TRACK ARCHIVE</h1>
+  <section class="status" id="locked">
+    ACCESS DENIED.<br>
+    EARN ALL FIVE GAME TICKETS BEFORE OPENING THE TRACK ARCHIVE.
+  </section>
+  <section id="downloads">
+    <div class="status">WEBSITE COMPLETE // 5 OF 5 TICKETS VERIFIED<br>THE FIELD UNIT DEMOS ARE NOW AVAILABLE BELOW.</div>
+    <a class="track" href="Nature_of_Freak_Demo.mp3" download><span>01</span><b>NATURE OF FREAK</b><em>DOWNLOAD MP3</em></a>
+<a class="track" href="nomemory_notreal_mthree.mp3" download><span>02</span><b>NOMEMORY NOTREAL</b><em>DOWNLOAD MP3</em></a>
+<a class="track" href="the_of_the_demo.mp3" download><span>03</span><b>THE OF THE</b><em>DOWNLOAD MP3</em></a>
+<a class="track" href="Curley_Cuh_Demo.mp3" download><span>04</span><b>CURLEY CUH</b><em>DOWNLOAD MP3</em></a>
+<a class="track" href="Pocket_Muck_Demo.mp3" download><span>05</span><b>POCKET MUCK</b><em>DOWNLOAD MP3</em></a>
+<a class="track" href="Medium_Slate_Demo.mp3" download><span>06</span><b>MEDIUM SLATE</b><em>DOWNLOAD MP3</em></a>
+<a class="track" href="LAN_33_Demo.mp3" download><span>07</span><b>LAN_33</b><em>DOWNLOAD MP3</em></a>
+<a class="track" href="Navvy_Demo.mp3" download><span>08</span><b>NAVVY</b><em>DOWNLOAD MP3</em></a>
+<a class="track" href="lbd_m3_demo.mp3" download><span>09</span><b>LBD+M3</b><em>DOWNLOAD MP3</em></a>
+  </section>
+  <a class="back" href="./">← RETURN TO FIELD UNIT</a>
+</main>
+<script>
+const KEY="fieldUnitTicketsV1";
+const IDS=["fishexe","trainexe","smashexe","dartsexe","pubexe"];
+let tickets={};
+try{tickets=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(err){}
+if(IDS.every(id=>tickets[id]))document.body.classList.remove("locked");
+</script>
+</body>
+</html>

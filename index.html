@@ -219,6 +219,177 @@ body.touch-ink-on #inkMode{
   }
 }
 
+
+/* ============ PERSISTENT GAME SHELL / FIVE-TICKET SYSTEM ============ */
+.ticket-console{
+  width:min(860px,calc(100% - 28px));
+  margin:-19px auto 34px;
+  border:1px solid var(--admin);
+  background:#0a0c09;
+  padding:12px;
+}
+.ticket-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+  font-size:9px;
+  line-height:1.5;
+  color:var(--signal);
+}
+.ticket-head strong{color:var(--off)}
+.ticket-slots{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:7px;
+}
+.ticket-slot{
+  min-width:0;
+  border:1px solid var(--dim);
+  padding:8px 5px;
+  color:var(--mid);
+  background:var(--bg);
+  font-size:7px;
+  line-height:1.5;
+  text-align:center;
+}
+.ticket-slot::before{
+  content:"□";
+  display:block;
+  margin-bottom:5px;
+  color:var(--dim);
+  font-size:16px;
+}
+.ticket-slot.earned{
+  color:var(--signal);
+  border-color:var(--admin);
+}
+.ticket-slot.earned::before{
+  content:"■";
+  color:var(--alert);
+}
+.ticket-unlock{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:10px;
+  min-height:38px;
+  border:1px solid var(--dim);
+  color:var(--dim);
+  text-decoration:none;
+  font-size:8px;
+  line-height:1.5;
+  text-align:center;
+  pointer-events:none;
+}
+.ticket-unlock.unlocked{
+  color:var(--off);
+  border-color:var(--signal);
+  pointer-events:auto;
+  animation:unlockPulse 1.2s steps(2,end) infinite;
+}
+@keyframes unlockPulse{50%{background:#1a2014}}
+.game-shell{
+  position:fixed;
+  inset:0;
+  z-index:140;
+  display:none;
+  grid-template-rows:auto minmax(0,1fr);
+  background:#080907;
+}
+.game-shell.on{display:grid}
+.game-shell-head{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px;
+  padding:8px 10px;
+  border-bottom:1px solid var(--signal);
+  background:#0a0c09;
+}
+.game-shell-head button{
+  all:unset;
+  cursor:pointer;
+  border:1px solid var(--admin);
+  padding:8px 10px;
+  color:var(--signal);
+  font-size:8px;
+  line-height:1.4;
+}
+.game-shell-title{
+  min-width:0;
+  color:var(--off);
+  font-size:9px;
+  line-height:1.5;
+  text-align:center;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+#gameFrame{
+  display:block;
+  width:100%;
+  height:100%;
+  border:0;
+  background:#0000aa;
+}
+body.game-open{overflow:hidden}
+.global-radio{
+  position:fixed;
+  right:10px;
+  bottom:10px;
+  z-index:160;
+  display:none;
+  width:min(310px,calc(100% - 20px));
+  border:2px double var(--signal);
+  background:#0a0c09;
+  padding:8px;
+  box-shadow:0 0 0 3px #080907;
+}
+.global-radio.on{display:block}
+body.game-open .global-radio{display:none}
+.global-radio-title{
+  margin-bottom:7px;
+  color:var(--off);
+  font-size:7px;
+  line-height:1.5;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.global-radio-controls{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:6px;
+}
+.global-radio button{
+  all:unset;
+  cursor:pointer;
+  border:1px solid var(--admin);
+  padding:7px 5px;
+  color:var(--signal);
+  font-size:7px;
+  text-align:center;
+}
+.global-radio button:hover{border-color:var(--signal)}
+@media(max-width:620px){
+  .ticket-slots{grid-template-columns:1fr}
+  .ticket-slot{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    text-align:left;
+  }
+  .ticket-slot::before{margin:0}
+  .game-shell-head{
+    grid-template-columns:auto 1fr;
+  }
+  #shellTicketCount{
+    grid-column:1/-1;
+    text-align:center;
+  }
+}
 /* ============ GRID ============ */
 .grid{
   display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
@@ -355,6 +526,41 @@ body.touch-ink-on #inkMode{
   </a>
 </nav>
 
+
+<section class="ticket-console" aria-label="Website completion tickets">
+  <div class="ticket-head">
+    <strong>FIELD UNIT COMPLETION RUN</strong>
+    <span id="ticketCount">0 / 5 TICKETS</span>
+  </div>
+  <div class="ticket-slots">
+    <div class="ticket-slot" data-ticket="fishexe">FISHEXE<br>10 KG FISH</div>
+    <div class="ticket-slot" data-ticket="trainexe">TRAINEXE<br>5-STREAK</div>
+    <div class="ticket-slot" data-ticket="smashexe">SMASHEXE<br>1,000 PTS</div>
+    <div class="ticket-slot" data-ticket="dartsexe">DARTSEXE<br>100 VISIT</div>
+    <div class="ticket-slot" data-ticket="pubexe">PUBEXE<br>≤ 6.00 SEC</div>
+  </div>
+  <a class="ticket-unlock" id="ticketUnlock" href="field-unit-downloads.html">
+    LOCKED // EARN ALL FIVE TICKETS TO UNLOCK THE TRACK DOWNLOADS
+  </a>
+</section>
+
+<section class="game-shell" id="gameShell" aria-hidden="true">
+  <div class="game-shell-head">
+    <button id="shellClose" type="button">← FIELD UNIT</button>
+    <div class="game-shell-title" id="shellTitle">FIELD UNIT GAME</div>
+    <div class="game-shell-title" id="shellTicketCount">0 / 5 TICKETS</div>
+  </div>
+  <iframe id="gameFrame" title="Field Unit game" allow="autoplay"></iframe>
+</section>
+
+<section class="global-radio" id="globalRadio" aria-label="Persistent Field Unit radio">
+  <div class="global-radio-title" id="globalRadioTitle">FIELD UNIT RADIO // WAITING</div>
+  <div class="global-radio-controls">
+    <button id="globalRadioToggle" type="button">PLAY</button>
+    <button id="globalRadioSkip" type="button">SKIP</button>
+    <button id="globalRadioStop" type="button">STOP</button>
+  </div>
+</section>
 <div class="wrap">
   <main class="grid" id="grid"></main>
   <div class="foot"><canvas id="footc" width="110" height="7" aria-hidden="true"></canvas></div>
@@ -817,6 +1023,199 @@ document.addEventListener("keydown",e=>{
     inkSetTouchMode(false);
   }
 });
+
+/* ============ persistent game shell / radio / ticket system ============ */
+const FU_TICKET_KEY="fieldUnitTicketsV1";
+const FU_GAME_IDS=["fishexe","trainexe","smashexe","dartsexe","pubexe"];
+const FU_GAME_TITLES={
+  fishexe:"FISHEXE",
+  trainexe:"TRAINEXE",
+  smashexe:"SMASHEXE",
+  dartsexe:"DARTSEXE",
+  pubexe:"PUBEXE"
+};
+const FU_PLAYLIST=[{title:"NATURE OF FREAK",artist:'FIELD UNIT',src:"https://field-unit.github.io/Nature_of_Freak_Demo.mp3"},{title:"NOMEMORY NOTREAL",artist:'FIELD UNIT',src:"https://field-unit.github.io/nomemory_notreal_mthree.mp3"},{title:"THE OF THE",artist:'FIELD UNIT',src:"https://field-unit.github.io/the_of_the_demo.mp3"},{title:"CURLEY CUH",artist:'FIELD UNIT',src:"https://field-unit.github.io/Curley_Cuh_Demo.mp3"},{title:"POCKET MUCK",artist:'FIELD UNIT',src:"https://field-unit.github.io/Pocket_Muck_Demo.mp3"},{title:"MEDIUM SLATE",artist:'FIELD UNIT',src:"https://field-unit.github.io/Medium_Slate_Demo.mp3"},{title:"LAN_33",artist:'FIELD UNIT',src:"https://field-unit.github.io/LAN_33_Demo.mp3"},{title:"NAVVY",artist:'FIELD UNIT',src:"https://field-unit.github.io/Navvy_Demo.mp3"},{title:"LBD+M3",artist:'FIELD UNIT',src:"https://field-unit.github.io/lbd_m3_demo.mp3"}];
+const fuShell=document.getElementById("gameShell");
+const fuFrame=document.getElementById("gameFrame");
+const fuShellTitle=document.getElementById("shellTitle");
+const fuShellClose=document.getElementById("shellClose");
+const fuShellTicketCount=document.getElementById("shellTicketCount");
+const fuTicketCount=document.getElementById("ticketCount");
+const fuUnlock=document.getElementById("ticketUnlock");
+const fuGlobalRadio=document.getElementById("globalRadio");
+const fuGlobalTitle=document.getElementById("globalRadioTitle");
+const fuGlobalToggle=document.getElementById("globalRadioToggle");
+const fuGlobalSkip=document.getElementById("globalRadioSkip");
+const fuGlobalStop=document.getElementById("globalRadioStop");
+const fuAudio=new Audio();
+fuAudio.preload="auto";
+fuAudio.volume=.34;
+const fuRadioState={started:false,musicOn:true,trackIndex:0,title:"WAITING FOR INPUT",artist:"FIELD UNIT"};
+
+function fuReadTickets(){
+  try{
+    const value=JSON.parse(localStorage.getItem(FU_TICKET_KEY)||"{}");
+    return value&&typeof value==="object"?value:{};
+  }catch(err){return {};}
+}
+function fuRenderTickets(){
+  const tickets=fuReadTickets();
+  let count=0;
+  document.querySelectorAll("[data-ticket]").forEach(slot=>{
+    const earned=!!tickets[slot.dataset.ticket];
+    slot.classList.toggle("earned",earned);
+    if(earned)count++;
+  });
+  fuTicketCount.textContent=count+" / 5 TICKETS";
+  fuShellTicketCount.textContent=count+" / 5 TICKETS";
+  const unlocked=count===5;
+  fuUnlock.classList.toggle("unlocked",unlocked);
+  fuUnlock.textContent=unlocked
+    ?"UNLOCKED // OPEN ALL FIELD UNIT TRACK DOWNLOADS"
+    :"LOCKED // EARN ALL FIVE TICKETS TO UNLOCK THE TRACK DOWNLOADS";
+  fuUnlock.setAttribute("aria-disabled",unlocked?"false":"true");
+}
+fuUnlock.addEventListener("click",event=>{
+  if(!fuUnlock.classList.contains("unlocked"))event.preventDefault();
+});
+
+function fuRadioSnapshot(){
+  return {
+    started:fuRadioState.started,
+    musicOn:fuRadioState.musicOn,
+    trackIndex:fuRadioState.trackIndex,
+    title:fuRadioState.title,
+    artist:fuRadioState.artist
+  };
+}
+function fuBroadcastRadio(){
+  fuGlobalTitle.textContent="FIELD UNIT RADIO // "+(fuRadioState.title||"WAITING");
+  fuGlobalToggle.textContent=fuRadioState.musicOn&&fuRadioState.started&&!fuAudio.paused?"PAUSE":"PLAY";
+  fuGlobalRadio.classList.toggle("on",fuRadioState.started);
+  if(fuFrame.contentWindow){
+    fuFrame.contentWindow.postMessage({type:"FU_RADIO_STATE",state:fuRadioSnapshot()},"*");
+  }
+}
+function fuSetTrack(index,autoplay=true){
+  fuRadioState.trackIndex=(index+FU_PLAYLIST.length)%FU_PLAYLIST.length;
+  const track=FU_PLAYLIST[fuRadioState.trackIndex];
+  fuRadioState.title=track.title;
+  fuRadioState.artist=track.artist;
+  fuRadioState.started=true;
+  fuAudio.pause();
+  fuAudio.src=track.src;
+  fuAudio.currentTime=0;
+  fuAudio.volume=.34;
+  if(autoplay&&fuRadioState.musicOn){
+    fuAudio.play().catch(()=>{});
+  }
+  fuBroadcastRadio();
+}
+function fuStartRadio(){
+  if(!fuRadioState.started){
+    fuRadioState.musicOn=true;
+    fuSetTrack(Math.floor(Math.random()*FU_PLAYLIST.length),true);
+  }else if(fuRadioState.musicOn){
+    fuAudio.play().catch(()=>{});
+    fuBroadcastRadio();
+  }
+}
+function fuToggleRadio(){
+  if(!fuRadioState.started){
+    fuStartRadio();
+    return;
+  }
+  fuRadioState.musicOn=!fuRadioState.musicOn;
+  if(fuRadioState.musicOn)fuAudio.play().catch(()=>{});
+  else fuAudio.pause();
+  fuBroadcastRadio();
+}
+function fuSkipRadio(){
+  fuRadioState.musicOn=true;
+  if(!fuRadioState.started)fuStartRadio();
+  else fuSetTrack(fuRadioState.trackIndex+1,true);
+}
+function fuStopRadio(){
+  fuAudio.pause();
+  fuRadioState.musicOn=false;
+  fuBroadcastRadio();
+}
+fuAudio.addEventListener("play",()=>{fuRadioState.musicOn=true;fuBroadcastRadio();});
+fuAudio.addEventListener("pause",fuBroadcastRadio);
+fuAudio.addEventListener("ended",()=>fuSetTrack(fuRadioState.trackIndex+1,true));
+fuGlobalToggle.addEventListener("click",fuToggleRadio);
+fuGlobalSkip.addEventListener("click",fuSkipRadio);
+fuGlobalStop.addEventListener("click",fuStopRadio);
+
+function fuGameIdFromHref(href){
+  try{
+    const url=new URL(href,location.href);
+    const part=url.pathname.split("/").filter(Boolean).pop();
+    return FU_GAME_IDS.includes(part)?part:null;
+  }catch(err){return null;}
+}
+function fuOpenGame(id,push=true){
+  if(!FU_GAME_IDS.includes(id))return;
+  fuStartRadio();
+  fuShell.classList.add("on");
+  fuShell.setAttribute("aria-hidden","false");
+  document.body.classList.add("game-open");
+  fuShellTitle.textContent=FU_GAME_TITLES[id]+" // FIELD UNIT";
+  fuFrame.src="https://field-unit.github.io/"+id+"/";
+  if(push)history.pushState({fuGame:id},"","#"+id);
+}
+function fuCloseGame(fromPop=false){
+  fuShell.classList.remove("on");
+  fuShell.setAttribute("aria-hidden","true");
+  document.body.classList.remove("game-open");
+  fuFrame.src="about:blank";
+  if(!fromPop&&location.hash)history.pushState({}, "", location.pathname+location.search);
+  fuRenderTickets();
+}
+document.querySelectorAll(".gamelaunch").forEach(link=>{
+  link.addEventListener("click",event=>{
+    const id=fuGameIdFromHref(link.href);
+    if(!id)return;
+    event.preventDefault();
+    fuOpenGame(id,true);
+  });
+});
+fuShellClose.addEventListener("click",()=>fuCloseGame(false));
+fuFrame.addEventListener("load",()=>{
+  setTimeout(()=>fuBroadcastRadio(),60);
+  setTimeout(()=>{
+    if(fuFrame.contentWindow)fuFrame.contentWindow.postMessage({type:"FU_TICKET_STATE"},"*");
+  },80);
+});
+window.addEventListener("message",event=>{
+  const data=event.data||{};
+  if(data.type==="FU_CLOSE_GAME"){
+    fuCloseGame(false);
+    return;
+  }
+  if(data.type==="FU_TICKET"){
+    fuRenderTickets();
+    if(fuFrame.contentWindow)fuFrame.contentWindow.postMessage({type:"FU_TICKET_STATE"},"*");
+    return;
+  }
+  if(data.type==="FU_RADIO"){
+    if(data.action==="start")fuStartRadio();
+    if(data.action==="toggle")fuToggleRadio();
+    if(data.action==="skip")fuSkipRadio();
+    if(data.action==="state")fuBroadcastRadio();
+  }
+});
+window.addEventListener("popstate",()=>{
+  const id=location.hash.replace("#","");
+  if(FU_GAME_IDS.includes(id))fuOpenGame(id,false);
+  else if(fuShell.classList.contains("on"))fuCloseGame(true);
+});
+window.addEventListener("storage",event=>{
+  if(event.key===FU_TICKET_KEY)fuRenderTickets();
+});
+fuRenderTickets();
+const fuInitialGame=location.hash.replace("#","");
+if(FU_GAME_IDS.includes(fuInitialGame))fuOpenGame(fuInitialGame,false);
 </script>
 </body>
 </html>
