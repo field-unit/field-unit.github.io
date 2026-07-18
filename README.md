@@ -1,13 +1,18 @@
-# Field Unit homepage — renamed game links
+# Field Unit homepage — visual bit reduction update
 
 Replace the current `index.html` in the root of the `field-unit.github.io`
 repository with this updated file.
 
-The game links now use the repository names without hyphens:
+What changed:
+- The existing 12BIT and 8BIT buttons still bit-reduce the audio.
+- They now also bit-reduce the graphics:
+  - hero glyph
+  - demo artwork / waveform tiles
+  - footer strip
+- 12BIT applies a lighter visual reduction.
+- 8BIT applies a chunkier, more reduced visual treatment.
 
-- FISHEXE → https://field-unit.github.io/fishexe/
-- TRAINEXE → https://field-unit.github.io/trainexe/
-- SMASHEXE → https://field-unit.github.io/smashexe/
-
-The existing fishing, train and smash graphics and their visible button labels
-are unchanged.
+The game links still use:
+- /fishexe/
+- /trainexe/
+- /smashexe/
