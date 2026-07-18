@@ -58,6 +58,68 @@ body::after{
 .fxbtn.on{color:var(--alert);border-color:var(--alert)}
 .fxbtn:disabled{color:var(--dim);border-color:var(--dim);cursor:not-allowed}
 
+.fishlaunch{
+  width:max-content;
+  max-width:calc(100% - 28px);
+  margin:-14px auto 34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  color:var(--signal);
+  text-decoration:none;
+  border:1px solid var(--dim);
+  background:#0a0c09;
+  padding:8px 12px;
+  font-size:9px;
+  line-height:1.5;
+  letter-spacing:1px;
+}
+.fishlaunch:hover,
+.fishlaunch:focus-visible{
+  color:var(--off);
+  border-color:var(--signal);
+}
+.fishlaunch svg{
+  width:76px;
+  height:38px;
+  flex:0 0 auto;
+  image-rendering:pixelated;
+  overflow:visible;
+}
+.fishlaunch .fishbody{
+  fill:var(--admin);
+  stroke:var(--signal);
+  stroke-width:2;
+}
+.fishlaunch .fishdetail{
+  fill:var(--bg);
+}
+.fishlaunch .rad{
+  fill:var(--alert);
+}
+.fishlaunch:hover svg{
+  animation:fishJolt .5s steps(3,end) infinite;
+}
+@keyframes fishJolt{
+  0%,100%{transform:translateX(0)}
+  33%{transform:translateX(3px)}
+  66%{transform:translateX(-2px)}
+}
+@media(max-width:520px){
+  .fishlaunch{
+    margin-top:-12px;
+    margin-bottom:25px;
+    gap:8px;
+    font-size:8px;
+    padding:8px 10px;
+  }
+  .fishlaunch svg{
+    width:62px;
+    height:32px;
+  }
+}
+
 
 /* ============ ORBIT INK ============ */
 #inkLayer{
@@ -177,6 +239,19 @@ body.touch-ink-on #inkMode{
   <button class="fxbtn touchonly" id="inkMode" type="button" aria-pressed="false" title="draw one floating mark">DRAW</button>
   <button class="fxbtn" id="inkClear" type="button" title="clear floating drawings">CLEAR INK</button>
 </div>
+
+<a class="fishlaunch" href="https://field-unit.github.io/fish-exe/" aria-label="Open the FISH.EXE fishing game">
+  <svg viewBox="0 0 92 46" role="img" aria-label="Radioactive pixel fish">
+    <polygon class="fishbody" points="8,23 25,9 59,10 78,23 59,36 25,37"/>
+    <polygon class="fishbody" points="8,23 0,8 0,38"/>
+    <rect class="fishdetail" x="62" y="18" width="5" height="5"/>
+    <circle class="rad" cx="43" cy="23" r="5"/>
+    <path class="rad" d="M43 13a10 10 0 0 1 8 4l-5 3a4 4 0 0 0-3-1z"/>
+    <path class="rad" d="M33 27a10 10 0 0 1 0-9l5 3a4 4 0 0 0 0 4z"/>
+    <path class="rad" d="M53 27a10 10 0 0 1-8 6v-6a4 4 0 0 0 3-2z"/>
+  </svg>
+  <span>CLICK TO GO FISHING</span>
+</a>
 
 <div class="wrap">
   <main class="grid" id="grid"></main>
