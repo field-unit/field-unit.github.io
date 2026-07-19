@@ -166,6 +166,194 @@ body::after{
 .publaunch .pubfoam{fill:var(--off)}
 .publaunch .pubhandle{fill:none;stroke:var(--signal);stroke-width:3}
 
+
+/* ============ ELECTRO DANCER ============ */
+#danceStage{
+  --dance-left:50%;
+  position:fixed;
+  inset:0;
+  z-index:72;
+  display:none;
+  overflow:hidden;
+  pointer-events:none;
+}
+#danceStage.on{display:block}
+body.game-open #danceStage{display:none}
+#danceStage::before{
+  content:"";
+  position:absolute;
+  left:var(--dance-left);
+  bottom:27px;
+  width:150px;
+  height:12px;
+  transform:translateX(-50%);
+  border-top:2px dashed var(--admin);
+  border-bottom:1px solid var(--dim);
+  animation:danceFloor .28s steps(2,end) infinite;
+}
+#electroDancer{
+  position:absolute;
+  left:var(--dance-left);
+  bottom:34px;
+  width:92px;
+  height:auto;
+  overflow:visible;
+  transform:translateX(-50%);
+  image-rendering:pixelated;
+  filter:drop-shadow(4px 4px 0 var(--bg));
+  animation:danceBody .42s steps(4,end) infinite;
+}
+#electroDancer .silhouette{
+  fill:var(--off);
+  stroke:var(--bg);
+  stroke-width:3;
+  vector-effect:non-scaling-stroke;
+}
+#electroDancer .joint{
+  transform-box:fill-box;
+}
+#electroDancer .head{
+  transform-origin:center bottom;
+  animation:danceHead .31s steps(3,end) infinite;
+}
+#electroDancer .torso{
+  transform-origin:center center;
+  animation:danceTorso .42s steps(4,end) infinite;
+}
+#electroDancer .upper-left{
+  transform-origin:88% 12%;
+  animation:danceArmLeft .32s steps(4,end) infinite;
+}
+#electroDancer .lower-left{
+  transform-origin:82% 10%;
+  animation:danceForeLeft .24s steps(3,end) infinite reverse;
+}
+#electroDancer .upper-right{
+  transform-origin:12% 12%;
+  animation:danceArmRight .29s steps(4,end) infinite;
+}
+#electroDancer .lower-right{
+  transform-origin:18% 10%;
+  animation:danceForeRight .23s steps(3,end) infinite;
+}
+#electroDancer .upper-leg-left{
+  transform-origin:62% 5%;
+  animation:danceLegLeft .38s steps(4,end) infinite;
+}
+#electroDancer .lower-leg-left{
+  transform-origin:50% 7%;
+  animation:danceShinLeft .31s steps(3,end) infinite;
+}
+#electroDancer .upper-leg-right{
+  transform-origin:38% 5%;
+  animation:danceLegRight .38s steps(4,end) infinite;
+}
+#electroDancer .lower-leg-right{
+  transform-origin:50% 7%;
+  animation:danceShinRight .27s steps(3,end) infinite reverse;
+}
+#electroDancer .pulse{
+  fill:var(--alert);
+  stroke:none;
+  opacity:.85;
+  animation:dancePulse .36s steps(2,end) infinite;
+}
+#danceStage.flip #electroDancer{
+  transform:translateX(-50%) scaleX(-1);
+}
+#danceStage.pose-b #electroDancer{
+  animation-duration:.31s;
+}
+#danceStage.pose-c #electroDancer{
+  animation-direction:reverse;
+  animation-duration:.36s;
+}
+#danceStage.pose-d #electroDancer{
+  transform:translateX(-50%) rotate(-5deg);
+}
+#danceStage.flip.pose-d #electroDancer{
+  transform:translateX(-50%) scaleX(-1) rotate(-5deg);
+}
+@keyframes danceFloor{
+  0%,100%{width:126px;opacity:.35}
+  50%{width:170px;opacity:.9}
+}
+@keyframes danceBody{
+  0%{translate:0 0;rotate:-5deg}
+  25%{translate:-8px -10px;rotate:8deg}
+  50%{translate:5px 1px;rotate:-10deg}
+  75%{translate:10px -7px;rotate:6deg}
+  100%{translate:0 0;rotate:-5deg}
+}
+@keyframes danceHead{
+  0%,100%{transform:rotate(-12deg) translateY(0)}
+  33%{transform:rotate(16deg) translateY(-4px)}
+  66%{transform:rotate(-4deg) translateY(2px)}
+}
+@keyframes danceTorso{
+  0%,100%{transform:skewX(-5deg) scaleY(1)}
+  25%{transform:skewX(13deg) scaleY(.92)}
+  50%{transform:skewX(-15deg) scaleY(1.05)}
+  75%{transform:skewX(8deg) scaleY(.96)}
+}
+@keyframes danceArmLeft{
+  0%,100%{transform:rotate(-122deg)}
+  25%{transform:rotate(28deg)}
+  50%{transform:rotate(-48deg)}
+  75%{transform:rotate(92deg)}
+}
+@keyframes danceForeLeft{
+  0%,100%{transform:rotate(-35deg)}
+  50%{transform:rotate(118deg)}
+}
+@keyframes danceArmRight{
+  0%,100%{transform:rotate(112deg)}
+  25%{transform:rotate(-36deg)}
+  50%{transform:rotate(65deg)}
+  75%{transform:rotate(-104deg)}
+}
+@keyframes danceForeRight{
+  0%,100%{transform:rotate(48deg)}
+  50%{transform:rotate(-126deg)}
+}
+@keyframes danceLegLeft{
+  0%,100%{transform:rotate(15deg)}
+  25%{transform:rotate(-42deg)}
+  50%{transform:rotate(52deg)}
+  75%{transform:rotate(-18deg)}
+}
+@keyframes danceShinLeft{
+  0%,100%{transform:rotate(-8deg)}
+  50%{transform:rotate(68deg)}
+}
+@keyframes danceLegRight{
+  0%,100%{transform:rotate(-22deg)}
+  25%{transform:rotate(48deg)}
+  50%{transform:rotate(-58deg)}
+  75%{transform:rotate(20deg)}
+}
+@keyframes danceShinRight{
+  0%,100%{transform:rotate(10deg)}
+  50%{transform:rotate(-72deg)}
+}
+@keyframes dancePulse{
+  0%,100%{opacity:.15;transform:scale(.6)}
+  50%{opacity:.95;transform:scale(1.25)}
+}
+@media(max-width:620px){
+  #electroDancer{
+    width:72px;
+    bottom:25px;
+  }
+  #danceStage::before{bottom:20px}
+}
+@media(prefers-reduced-motion:reduce){
+  #danceStage.on #electroDancer,
+  #danceStage.on #electroDancer *{
+    animation-duration:.9s;
+  }
+}
+
 /* ============ ORBIT INK ============ */
 #inkLayer{
   position:fixed;
@@ -454,6 +642,52 @@ body.game-open .global-radio{display:none}
   <button class="fxbtn" id="fx8"  aria-pressed="false" title="bit reduction — audio and visuals">8BIT</button>
   <button class="fxbtn touchonly" id="inkMode" type="button" aria-pressed="false" title="draw one floating mark">DRAW</button>
   <button class="fxbtn" id="inkClear" type="button" title="clear floating drawings">CLEAR INK</button>
+  <button class="fxbtn" id="danceMode" type="button" aria-pressed="false" title="summon an electro dancer">DANCE</button>
+</div>
+
+<div id="danceStage" aria-hidden="true">
+  <svg id="electroDancer" viewBox="0 0 140 240" role="img" aria-label="A small energetic dancing silhouette">
+    <circle class="pulse" cx="70" cy="116" r="55"/>
+    <g class="joint head">
+      <circle class="silhouette" cx="70" cy="28" r="18"/>
+    </g>
+
+    <g class="joint torso">
+      <polygon class="silhouette" points="53,49 87,49 96,125 78,143 61,143 44,125"/>
+    </g>
+
+    <g class="joint upper-left">
+      <polygon class="silhouette" points="49,56 37,60 17,109 31,116 59,74"/>
+      <g class="joint lower-left">
+        <polygon class="silhouette" points="20,103 8,109 19,160 34,156 32,112"/>
+        <circle class="silhouette" cx="20" cy="164" r="9"/>
+      </g>
+    </g>
+
+    <g class="joint upper-right">
+      <polygon class="silhouette" points="91,56 103,60 123,109 109,116 81,74"/>
+      <g class="joint lower-right">
+        <polygon class="silhouette" points="120,103 132,109 121,160 106,156 108,112"/>
+        <circle class="silhouette" cx="120" cy="164" r="9"/>
+      </g>
+    </g>
+
+    <g class="joint upper-leg-left">
+      <polygon class="silhouette" points="60,133 77,135 65,190 47,186"/>
+      <g class="joint lower-leg-left">
+        <polygon class="silhouette" points="48,180 66,184 56,226 39,223"/>
+        <polygon class="silhouette" points="37,218 59,220 64,232 30,232"/>
+      </g>
+    </g>
+
+    <g class="joint upper-leg-right">
+      <polygon class="silhouette" points="80,133 63,135 75,190 93,186"/>
+      <g class="joint lower-leg-right">
+        <polygon class="silhouette" points="92,180 74,184 84,226 101,223"/>
+        <polygon class="silhouette" points="103,218 81,220 76,232 110,232"/>
+      </g>
+    </g>
+  </svg>
 </div>
 
 <nav class="gamelinks" aria-label="Field Unit games">
@@ -1216,6 +1450,43 @@ window.addEventListener("storage",event=>{
 fuRenderTickets();
 const fuInitialGame=location.hash.replace("#","");
 if(FU_GAME_IDS.includes(fuInitialGame))fuOpenGame(fuInitialGame,false);
+
+/* ---------- high-energy electro dancer ---------- */
+const danceMode=document.getElementById("danceMode");
+const danceStage=document.getElementById("danceStage");
+let danceOn=false;
+let danceTimer=0;
+const dancePoses=["pose-b","pose-c","pose-d"];
+
+function danceShufflePose(){
+  danceStage.classList.remove("pose-b","pose-c","pose-d","flip");
+  if(Math.random()>.5)danceStage.classList.add("flip");
+  if(Math.random()>.25){
+    danceStage.classList.add(dancePoses[(Math.random()*dancePoses.length)|0]);
+  }
+  const edge=innerWidth<620?18:10;
+  const left=edge+Math.random()*(100-edge*2);
+  danceStage.style.setProperty("--dance-left",left.toFixed(1)+"%");
+}
+function danceSet(on){
+  danceOn=!!on;
+  danceStage.classList.toggle("on",danceOn);
+  danceStage.setAttribute("aria-hidden",danceOn?"false":"true");
+  danceMode.classList.toggle("on",danceOn);
+  danceMode.setAttribute("aria-pressed",danceOn?"true":"false");
+  danceMode.textContent=danceOn?"STOP DANCE":"DANCE";
+  clearInterval(danceTimer);
+  if(danceOn){
+    danceShufflePose();
+    danceTimer=setInterval(danceShufflePose,780);
+    try{fuStartRadio();}catch(err){}
+  }
+}
+danceMode.addEventListener("click",()=>danceSet(!danceOn));
+addEventListener("keydown",event=>{
+  if(event.key==="Escape"&&danceOn)danceSet(false);
+});
+
 </script>
 </body>
 </html>

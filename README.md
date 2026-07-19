@@ -1,22 +1,21 @@
-# Field Unit persistent game shell + five-ticket completion system
+# Field Unit main site — electro dancer update
 
 Upload `index.html` and `field-unit-downloads.html` to the root of the
 `field-unit.github.io` repository.
 
-What this adds:
-- Every game opens inside the Field Unit homepage instead of replacing it.
-- One persistent radio keeps the same demo playing while games are opened,
-  closed or changed.
-- Every game includes a FIELD UNIT back button.
-- Ticket progress is shared through browser local storage.
-- Earning all five tickets unlocks `field-unit-downloads.html`.
+This version preserves:
+- persistent radio and game shell
+- five-ticket completion system
+- unlocked track-download page
+- visual/audio bit reduction
+- floating ink drawing
+- all five game links
 
-Ticket goals:
-- FISHEXE: catch a fish weighing at least 10 kg
-- TRAINEXE: feed five chocolates in a row
-- SMASHEXE: reach 1,000 points
-- DARTSEXE: score at least 100 in one three-dart visit
-- PUBEXE: finish a pint in six seconds or less
-
-The download page links to the nine MP3 files already hosted in the main
-Field Unit repository.
+New feature:
+- A `DANCE` button in the main effects row.
+- It summons a small blocky human silhouette.
+- The dancer performs fast, angular, stepped electro-style movement.
+- The silhouette changes direction, position and pose while active.
+- The button changes to `STOP DANCE`.
+- Escape also dismisses the dancer.
+- Starting the dance wakes the persistent Field Unit radio.
