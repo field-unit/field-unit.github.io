@@ -170,6 +170,7 @@ body::after{
 /* ============ ELECTRO DANCER ============ */
 #danceStage{
   --dance-left:50%;
+  --dance-bottom:108px;
   position:fixed;
   inset:0;
   z-index:72;
@@ -183,25 +184,25 @@ body.game-open #danceStage{display:none}
   content:"";
   position:absolute;
   left:var(--dance-left);
-  bottom:27px;
+  bottom:var(--dance-bottom);
   width:150px;
   height:12px;
   transform:translateX(-50%);
   border-top:2px dashed var(--admin);
   border-bottom:1px solid var(--dim);
-  animation:danceFloor .28s steps(2,end) infinite;
+  animation:danceFloor .55s steps(2,end) infinite;
 }
 #electroDancer{
   position:absolute;
   left:var(--dance-left);
-  bottom:34px;
+  bottom:calc(var(--dance-bottom) + 7px);
   width:92px;
   height:auto;
   overflow:visible;
   transform:translateX(-50%);
   image-rendering:pixelated;
   filter:drop-shadow(4px 4px 0 var(--bg));
-  animation:danceBody .42s steps(4,end) infinite;
+  animation:danceBody .88s steps(4,end) infinite;
 }
 #electroDancer .silhouette{
   fill:var(--off);
@@ -214,59 +215,59 @@ body.game-open #danceStage{display:none}
 }
 #electroDancer .head{
   transform-origin:center bottom;
-  animation:danceHead .31s steps(3,end) infinite;
+  animation:danceHead .62s steps(3,end) infinite;
 }
 #electroDancer .torso{
   transform-origin:center center;
-  animation:danceTorso .42s steps(4,end) infinite;
+  animation:danceTorso .88s steps(4,end) infinite;
 }
 #electroDancer .upper-left{
   transform-origin:88% 12%;
-  animation:danceArmLeft .32s steps(4,end) infinite;
+  animation:danceArmLeft .70s steps(4,end) infinite;
 }
 #electroDancer .lower-left{
   transform-origin:82% 10%;
-  animation:danceForeLeft .24s steps(3,end) infinite reverse;
+  animation:danceForeLeft .56s steps(3,end) infinite reverse;
 }
 #electroDancer .upper-right{
   transform-origin:12% 12%;
-  animation:danceArmRight .29s steps(4,end) infinite;
+  animation:danceArmRight .66s steps(4,end) infinite;
 }
 #electroDancer .lower-right{
   transform-origin:18% 10%;
-  animation:danceForeRight .23s steps(3,end) infinite;
+  animation:danceForeRight .54s steps(3,end) infinite;
 }
 #electroDancer .upper-leg-left{
   transform-origin:62% 5%;
-  animation:danceLegLeft .38s steps(4,end) infinite;
+  animation:danceLegLeft .84s steps(4,end) infinite;
 }
 #electroDancer .lower-leg-left{
   transform-origin:50% 7%;
-  animation:danceShinLeft .31s steps(3,end) infinite;
+  animation:danceShinLeft .70s steps(3,end) infinite;
 }
 #electroDancer .upper-leg-right{
   transform-origin:38% 5%;
-  animation:danceLegRight .38s steps(4,end) infinite;
+  animation:danceLegRight .84s steps(4,end) infinite;
 }
 #electroDancer .lower-leg-right{
   transform-origin:50% 7%;
-  animation:danceShinRight .27s steps(3,end) infinite reverse;
+  animation:danceShinRight .62s steps(3,end) infinite reverse;
 }
 #electroDancer .pulse{
   fill:var(--alert);
   stroke:none;
   opacity:.85;
-  animation:dancePulse .36s steps(2,end) infinite;
+  animation:dancePulse .76s steps(2,end) infinite;
 }
 #danceStage.flip #electroDancer{
   transform:translateX(-50%) scaleX(-1);
 }
 #danceStage.pose-b #electroDancer{
-  animation-duration:.31s;
+  animation-duration:.72s;
 }
 #danceStage.pose-c #electroDancer{
   animation-direction:reverse;
-  animation-duration:.36s;
+  animation-duration:.82s;
 }
 #danceStage.pose-d #electroDancer{
   transform:translateX(-50%) rotate(-5deg);
@@ -279,11 +280,11 @@ body.game-open #danceStage{display:none}
   50%{width:170px;opacity:.9}
 }
 @keyframes danceBody{
-  0%{translate:0 0;rotate:-5deg}
-  25%{translate:-8px -10px;rotate:8deg}
-  50%{translate:5px 1px;rotate:-10deg}
-  75%{translate:10px -7px;rotate:6deg}
-  100%{translate:0 0;rotate:-5deg}
+  0%{translate:0 0;rotate:-4deg}
+  25%{translate:-5px -7px;rotate:6deg}
+  50%{translate:3px 1px;rotate:-7deg}
+  75%{translate:6px -5px;rotate:5deg}
+  100%{translate:0 0;rotate:-4deg}
 }
 @keyframes danceHead{
   0%,100%{transform:rotate(-12deg) translateY(0)}
@@ -343,9 +344,9 @@ body.game-open #danceStage{display:none}
 @media(max-width:620px){
   #electroDancer{
     width:72px;
-    bottom:25px;
+    bottom:calc(var(--dance-bottom) - 8px);
   }
-  #danceStage::before{bottom:20px}
+  #danceStage::before{bottom:calc(var(--dance-bottom) - 14px)}
 }
 @media(prefers-reduced-motion:reduce){
   #danceStage.on #electroDancer,
@@ -1478,7 +1479,7 @@ function danceSet(on){
   clearInterval(danceTimer);
   if(danceOn){
     danceShufflePose();
-    danceTimer=setInterval(danceShufflePose,780);
+    danceTimer=setInterval(danceShufflePose,1550);
     try{fuStartRadio();}catch(err){}
   }
 }
