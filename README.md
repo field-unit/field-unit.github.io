@@ -1,12 +1,13 @@
-# Field Unit — reimagined five-chapter package
+# Field Unit arcade five-game rebuild
 
-Upload `index.html` and `field-unit-downloads.html` to the root of the main Field Unit repository.
+Upload `index.html` and `field-unit-downloads.html` to the main repository.
 
-The homepage now launches five connected chapters inside a persistent shell, keeps the same Field Unit track playing between them, stores five transmission fragments in browser local storage, and unlocks the track archive when all five are recovered.
+Games:
+- fishexe
+- trainexe
+- ringroadexe
+- signalstepexe
+- pigeonexe
 
-New chapter repositories:
-- nightshiftexe
-- lasttrainexe
-- deadhighstreetexe
-- towpathexe
-- towersignalexe
+The persistent radio, completion tickets, archive unlock, visual bit reduction,
+ink drawing and electro dancer are preserved.
