@@ -27,10 +27,10 @@ body.locked #locked{display:block}
   <h1>FIELD UNIT // TRACK ARCHIVE</h1>
   <section class="status" id="locked">
     ACCESS DENIED.<br>
-    EARN ALL FIVE GAME TICKETS BEFORE OPENING THE TRACK ARCHIVE.
+    RECOVER ALL FIVE TRANSMISSION FRAGMENTS BEFORE OPENING THE TRACK ARCHIVE.
   </section>
   <section id="downloads">
-    <div class="status">WEBSITE COMPLETE // 5 OF 5 TICKETS VERIFIED<br>THE FIELD UNIT DEMOS ARE NOW AVAILABLE BELOW.</div>
+    <div class="status">WEBSITE COMPLETE // 5 OF 5 FRAGMENTS VERIFIED<br>THE FIELD UNIT DEMOS ARE NOW AVAILABLE BELOW.</div>
     <a class="track" href="Nature_of_Freak_Demo.mp3" download><span>01</span><b>NATURE OF FREAK</b><em>DOWNLOAD MP3</em></a>
 <a class="track" href="nomemory_notreal_mthree.mp3" download><span>02</span><b>NOMEMORY NOTREAL</b><em>DOWNLOAD MP3</em></a>
 <a class="track" href="the_of_the_demo.mp3" download><span>03</span><b>THE OF THE</b><em>DOWNLOAD MP3</em></a>
@@ -44,8 +44,8 @@ body.locked #locked{display:block}
   <a class="back" href="./">← RETURN TO FIELD UNIT</a>
 </main>
 <script>
-const KEY="fieldUnitTicketsV1";
-const IDS=["fishexe","trainexe","smashexe","dartsexe","pubexe"];
+const KEY="fieldUnitFragmentsV1";
+const IDS=["nightshiftexe","lasttrainexe","deadhighstreetexe","towpathexe","towersignalexe"];
 let tickets={};
 try{tickets=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(err){}
 if(IDS.every(id=>tickets[id]))document.body.classList.remove("locked");

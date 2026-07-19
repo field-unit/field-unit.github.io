@@ -1,10 +1,12 @@
-# Field Unit main site — electro dancer slowed and repositioned
+# Field Unit — reimagined five-chapter package
 
-Upload `index.html` and `field-unit-downloads.html` to the root of the
-`field-unit.github.io` repository.
+Upload `index.html` and `field-unit-downloads.html` to the root of the main Field Unit repository.
 
-Changes from the previous electro-dancer version:
-- The dancer animation is now noticeably slower and less frantic.
-- Pose switching is slower.
-- The dancer sits higher on the screen so it appears above the radio controls.
-- The download-unlock system and other homepage features are preserved.
+The homepage now launches five connected chapters inside a persistent shell, keeps the same Field Unit track playing between them, stores five transmission fragments in browser local storage, and unlocks the track archive when all five are recovered.
+
+New chapter repositories:
+- nightshiftexe
+- lasttrainexe
+- deadhighstreetexe
+- towpathexe
+- towersignalexe

@@ -355,6 +355,10 @@ body.game-open #danceStage{display:none}
   }
 }
 
+
+/* ============ REIMAGINED TRANSMISSION CHAPTER ICONS ============ */
+.shiftlaunch .machine,.trainchapter .carriage,.streetlaunch .shop,.towlaunch .lock,.towerlaunch .tower{fill:var(--admin);stroke:var(--signal);stroke-width:2}.shiftlaunch .lamp,.trainchapter .window,.streetlaunch .signal,.towlaunch .water,.towerlaunch .beam{fill:var(--alert)}.streetlaunch .shutter,.towlaunch .gate{stroke:var(--off);stroke-width:2}.towerlaunch .beam{stroke:var(--alert);stroke-width:3;fill:none}
+
 /* ============ ORBIT INK ============ */
 #inkLayer{
   position:fixed;
@@ -691,101 +695,44 @@ body.game-open .global-radio{display:none}
   </svg>
 </div>
 
-<nav class="gamelinks" aria-label="Field Unit games">
-  <a class="gamelaunch fishlaunch" href="https://field-unit.github.io/fishexe/" aria-label="Open the FISHEXE fishing game">
-    <svg viewBox="0 0 92 46" role="img" aria-label="Radioactive pixel fish">
-      <polygon class="fishbody" points="8,23 25,9 59,10 78,23 59,36 25,37"/>
-      <polygon class="fishbody" points="8,23 0,8 0,38"/>
-      <rect class="fishdetail" x="62" y="18" width="5" height="5"/>
-      <circle class="rad" cx="43" cy="23" r="5"/>
-      <path class="rad" d="M43 13a10 10 0 0 1 8 4l-5 3a4 4 0 0 0-3-1z"/>
-      <path class="rad" d="M33 27a10 10 0 0 1 0-9l5 3a4 4 0 0 0 0 4z"/>
-      <path class="rad" d="M53 27a10 10 0 0 1-8 6v-6a4 4 0 0 0 3-2z"/>
-    </svg>
-    <span>GO FISHING</span>
+<nav class="gamelinks" aria-label="Field Unit transmission chapters">
+  <a class="gamelaunch shiftlaunch" href="https://field-unit.github.io/nightshiftexe/" aria-label="Open NIGHTSHIFTEXE">
+    <svg viewBox="0 0 96 46"><rect class="machine" x="8" y="10" width="80" height="30"/><rect class="lamp" x="17" y="17" width="9" height="9"/><rect class="lamp" x="33" y="17" width="9" height="9"/><rect class="lamp" x="49" y="17" width="9" height="9"/><rect class="lamp" x="65" y="17" width="9" height="9"/><path class="machine" d="M18 40V45M78 40V45"/></svg><span>START NIGHT SHIFT</span>
   </a>
-
-  <a class="gamelaunch trainlaunch" href="https://field-unit.github.io/trainexe/" aria-label="Open the TRAINEXE tram game">
-    <svg viewBox="0 0 96 46" role="img" aria-label="Pixel electric train">
-      <rect class="trainbody" x="11" y="7" width="70" height="31"/>
-      <polygon class="trainbody" points="81,12 92,20 92,35 81,38"/>
-      <rect class="trainwindow" x="19" y="13" width="16" height="11"/>
-      <rect class="trainwindow" x="40" y="13" width="16" height="11"/>
-      <rect class="trainwindow" x="61" y="13" width="13" height="11"/>
-      <rect class="trainlight" x="84" y="24" width="5" height="5"/>
-      <rect class="trainbody" x="20" y="38" width="13" height="5"/>
-      <rect class="trainbody" x="63" y="38" width="13" height="5"/>
-      <path class="trainbody" d="M28 7L37 0H55L64 7Z"/>
-      <line class="trainbody" x1="46" y1="0" x2="46" y2="7"/>
-    </svg>
-    <span>RIDE THE TRAIN</span>
+  <a class="gamelaunch trainchapter" href="https://field-unit.github.io/lasttrainexe/" aria-label="Open LASTTRAINEXE">
+    <svg viewBox="0 0 96 46"><rect class="carriage" x="7" y="9" width="82" height="31"/><rect class="window" x="16" y="15" width="18" height="13"/><rect class="window" x="40" y="15" width="18" height="13"/><rect class="window" x="64" y="15" width="16" height="13"/><circle class="carriage" cx="27" cy="40" r="5"/><circle class="carriage" cx="70" cy="40" r="5"/></svg><span>CATCH LAST TRAIN</span>
   </a>
-
-  <a class="gamelaunch smashlaunch" href="https://field-unit.github.io/smashexe/" aria-label="Open the SMASHEXE town game">
-    <svg viewBox="0 0 96 46" role="img" aria-label="Pixel building and stone">
-      <rect class="smashbody" x="14" y="5" width="49" height="36"/>
-      <rect class="smashwindow" x="22" y="12" width="11" height="8"/>
-      <rect class="smashwindow" x="42" y="12" width="11" height="8"/>
-      <rect class="smashwindow" x="22" y="26" width="11" height="8"/>
-      <rect class="smashwindow" x="42" y="26" width="11" height="8"/>
-      <rect class="smashbody" x="66" y="9" width="18" height="26"/>
-      <rect class="smashwindow" x="69" y="14" width="12" height="10"/>
-      <circle class="smashstone" cx="84" cy="9" r="4"/>
-      <circle class="smashstone" cx="78" cy="6" r="2"/>
-    </svg>
-    <span>SMASH STUFF</span>
+  <a class="gamelaunch streetlaunch" href="https://field-unit.github.io/deadhighstreetexe/" aria-label="Open DEADHIGHSTREETEXE">
+    <svg viewBox="0 0 96 46"><rect class="shop" x="10" y="7" width="76" height="34"/><path class="shutter" d="M18 18H78M18 24H78M18 30H78M18 36H78"/><circle class="signal" cx="81" cy="8" r="4"/><circle class="signal" cx="88" cy="3" r="2"/></svg><span>SCAN DEAD HIGH STREET</span>
   </a>
-
-  <a class="gamelaunch dartslaunch" href="https://field-unit.github.io/dartsexe/" aria-label="Open the DARTSEXE darts game">
-    <svg viewBox="0 0 96 46" role="img" aria-label="Pixel dartboard and dart">
-      <circle class="dartboard" cx="35" cy="23" r="19"/>
-      <circle class="dartring" cx="35" cy="23" r="12"/>
-      <circle class="dartbull" cx="35" cy="23" r="4"/>
-      <line class="dartshaft" x1="54" y1="27" x2="84" y2="12"/>
-      <polygon class="dartflight" points="84,12 93,7 89,17"/>
-      <polygon class="dartflight" points="84,12 86,2 78,8"/>
-    </svg>
-    <span>PLAY DARTS</span>
+  <a class="gamelaunch towlaunch" href="https://field-unit.github.io/towpathexe/" aria-label="Open TOWPATHEXE">
+    <svg viewBox="0 0 96 46"><path class="water" d="M3 31Q19 23 35 31T67 31T99 31V43H3Z"/><rect class="lock" x="22" y="7" width="50" height="27"/><path class="gate" d="M47 8V34M22 20H72"/><circle class="lamp" cx="82" cy="11" r="4"/></svg><span>WALK THE TOWPATH</span>
   </a>
-
-  <a class="gamelaunch publaunch" href="https://field-unit.github.io/pubexe/" aria-label="Open the PUBEXE pint game">
-    <svg viewBox="0 0 96 46" role="img" aria-label="Pixel pint glass">
-      <rect class="pubglass" x="25" y="6" width="42" height="35"/>
-      <rect class="pubbeer" x="29" y="16" width="34" height="21"/>
-      <rect class="pubfoam" x="29" y="10" width="34" height="9"/>
-      <path class="pubhandle" d="M67 14H81V33H67"/>
-      <rect class="pubfoam" x="34" y="7" width="7" height="5"/>
-      <rect class="pubfoam" x="49" y="6" width="8" height="5"/>
-    </svg>
-    <span>GO TO THE PUB</span>
+  <a class="gamelaunch towerlaunch" href="https://field-unit.github.io/towersignalexe/" aria-label="Open TOWERSIGNALEXE">
+    <svg viewBox="0 0 96 46"><path class="tower" d="M28 43Q38 24 35 4H61Q58 24 68 43Z"/><path class="beam" d="M48 5L17 1M48 5L79 1M48 5V0"/><rect class="signal" x="43" y="17" width="10" height="8"/></svg><span>CLIMB THE TOWER</span>
   </a>
 </nav>
 
 
-<section class="ticket-console" aria-label="Website completion tickets">
-  <div class="ticket-head">
-    <strong>FIELD UNIT COMPLETION RUN</strong>
-    <span id="ticketCount">0 / 5 TICKETS</span>
-  </div>
+<section class="ticket-console" aria-label="Transmission fragment progress">
+  <div class="ticket-head"><strong>TRANSMISSION ASSEMBLY</strong><span id="ticketCount">0 / 5 FRAGMENTS</span></div>
   <div class="ticket-slots">
-    <div class="ticket-slot" data-ticket="fishexe">FISHEXE<br>10 KG FISH</div>
-    <div class="ticket-slot" data-ticket="trainexe">TRAINEXE<br>5-STREAK</div>
-    <div class="ticket-slot" data-ticket="smashexe">SMASHEXE<br>1,000 PTS</div>
-    <div class="ticket-slot" data-ticket="dartsexe">DARTSEXE<br>100 VISIT</div>
-    <div class="ticket-slot" data-ticket="pubexe">PUBEXE<br>≤ 6.00 SEC</div>
+    <div class="ticket-slot" data-fragment="nightshiftexe">RHYTHM<br>NIGHT SHIFT</div>
+    <div class="ticket-slot" data-fragment="lasttrainexe">RECORDING<br>LAST TRAIN</div>
+    <div class="ticket-slot" data-fragment="deadhighstreetexe">VOICE<br>DEAD STREET</div>
+    <div class="ticket-slot" data-fragment="towpathexe">ARTIFACT<br>TOWPATH</div>
+    <div class="ticket-slot" data-fragment="towersignalexe">SIGNAL<br>TOWER</div>
   </div>
-  <a class="ticket-unlock" id="ticketUnlock" href="field-unit-downloads.html">
-    LOCKED // EARN ALL FIVE TICKETS TO UNLOCK THE TRACK DOWNLOADS
-  </a>
+  <a class="ticket-unlock" id="ticketUnlock" href="field-unit-downloads.html">LOCKED // RECOVER ALL FIVE FRAGMENTS TO OPEN THE TRACK ARCHIVE</a>
 </section>
 
 <section class="game-shell" id="gameShell" aria-hidden="true">
   <div class="game-shell-head">
     <button id="shellClose" type="button">← FIELD UNIT</button>
     <div class="game-shell-title" id="shellTitle">FIELD UNIT GAME</div>
-    <div class="game-shell-title" id="shellTicketCount">0 / 5 TICKETS</div>
+    <div class="game-shell-title" id="shellTicketCount">0 / 5 FRAGMENTS</div>
   </div>
-  <iframe id="gameFrame" title="Field Unit game" allow="autoplay"></iframe>
+  <iframe id="gameFrame" title="Field Unit transmission chapter" allow="autoplay"></iframe>
 </section>
 
 <section class="global-radio" id="globalRadio" aria-label="Persistent Field Unit radio">
@@ -1259,198 +1206,29 @@ document.addEventListener("keydown",e=>{
   }
 });
 
-/* ============ persistent game shell / radio / ticket system ============ */
-const FU_TICKET_KEY="fieldUnitTicketsV1";
-const FU_GAME_IDS=["fishexe","trainexe","smashexe","dartsexe","pubexe"];
-const FU_GAME_TITLES={
-  fishexe:"FISHEXE",
-  trainexe:"TRAINEXE",
-  smashexe:"SMASHEXE",
-  dartsexe:"DARTSEXE",
-  pubexe:"PUBEXE"
-};
-const FU_PLAYLIST=[{title:"NATURE OF FREAK",artist:'FIELD UNIT',src:"https://field-unit.github.io/Nature_of_Freak_Demo.mp3"},{title:"NOMEMORY NOTREAL",artist:'FIELD UNIT',src:"https://field-unit.github.io/nomemory_notreal_mthree.mp3"},{title:"THE OF THE",artist:'FIELD UNIT',src:"https://field-unit.github.io/the_of_the_demo.mp3"},{title:"CURLEY CUH",artist:'FIELD UNIT',src:"https://field-unit.github.io/Curley_Cuh_Demo.mp3"},{title:"POCKET MUCK",artist:'FIELD UNIT',src:"https://field-unit.github.io/Pocket_Muck_Demo.mp3"},{title:"MEDIUM SLATE",artist:'FIELD UNIT',src:"https://field-unit.github.io/Medium_Slate_Demo.mp3"},{title:"LAN_33",artist:'FIELD UNIT',src:"https://field-unit.github.io/LAN_33_Demo.mp3"},{title:"NAVVY",artist:'FIELD UNIT',src:"https://field-unit.github.io/Navvy_Demo.mp3"},{title:"LBD+M3",artist:'FIELD UNIT',src:"https://field-unit.github.io/lbd_m3_demo.mp3"}];
-const fuShell=document.getElementById("gameShell");
-const fuFrame=document.getElementById("gameFrame");
-const fuShellTitle=document.getElementById("shellTitle");
-const fuShellClose=document.getElementById("shellClose");
-const fuShellTicketCount=document.getElementById("shellTicketCount");
-const fuTicketCount=document.getElementById("ticketCount");
-const fuUnlock=document.getElementById("ticketUnlock");
-const fuGlobalRadio=document.getElementById("globalRadio");
-const fuGlobalTitle=document.getElementById("globalRadioTitle");
-const fuGlobalToggle=document.getElementById("globalRadioToggle");
-const fuGlobalSkip=document.getElementById("globalRadioSkip");
-const fuGlobalStop=document.getElementById("globalRadioStop");
-const fuAudio=new Audio();
-fuAudio.preload="auto";
-fuAudio.volume=.34;
-const fuRadioState={started:false,musicOn:true,trackIndex:0,title:"WAITING FOR INPUT",artist:"FIELD UNIT"};
-
-function fuReadTickets(){
-  try{
-    const value=JSON.parse(localStorage.getItem(FU_TICKET_KEY)||"{}");
-    return value&&typeof value==="object"?value:{};
-  }catch(err){return {};}
-}
-function fuRenderTickets(){
-  const tickets=fuReadTickets();
-  let count=0;
-  document.querySelectorAll("[data-ticket]").forEach(slot=>{
-    const earned=!!tickets[slot.dataset.ticket];
-    slot.classList.toggle("earned",earned);
-    if(earned)count++;
-  });
-  fuTicketCount.textContent=count+" / 5 TICKETS";
-  fuShellTicketCount.textContent=count+" / 5 TICKETS";
-  const unlocked=count===5;
-  fuUnlock.classList.toggle("unlocked",unlocked);
-  fuUnlock.textContent=unlocked
-    ?"UNLOCKED // OPEN ALL FIELD UNIT TRACK DOWNLOADS"
-    :"LOCKED // EARN ALL FIVE TICKETS TO UNLOCK THE TRACK DOWNLOADS";
-  fuUnlock.setAttribute("aria-disabled",unlocked?"false":"true");
-}
-fuUnlock.addEventListener("click",event=>{
-  if(!fuUnlock.classList.contains("unlocked"))event.preventDefault();
-});
-
-function fuRadioSnapshot(){
-  return {
-    started:fuRadioState.started,
-    musicOn:fuRadioState.musicOn,
-    trackIndex:fuRadioState.trackIndex,
-    title:fuRadioState.title,
-    artist:fuRadioState.artist
-  };
-}
-function fuBroadcastRadio(){
-  fuGlobalTitle.textContent="FIELD UNIT RADIO // "+(fuRadioState.title||"WAITING");
-  fuGlobalToggle.textContent=fuRadioState.musicOn&&fuRadioState.started&&!fuAudio.paused?"PAUSE":"PLAY";
-  fuGlobalRadio.classList.toggle("on",fuRadioState.started);
-  if(fuFrame.contentWindow){
-    fuFrame.contentWindow.postMessage({type:"FU_RADIO_STATE",state:fuRadioSnapshot()},"*");
-  }
-}
-function fuSetTrack(index,autoplay=true){
-  fuRadioState.trackIndex=(index+FU_PLAYLIST.length)%FU_PLAYLIST.length;
-  const track=FU_PLAYLIST[fuRadioState.trackIndex];
-  fuRadioState.title=track.title;
-  fuRadioState.artist=track.artist;
-  fuRadioState.started=true;
-  fuAudio.pause();
-  fuAudio.src=track.src;
-  fuAudio.currentTime=0;
-  fuAudio.volume=.34;
-  if(autoplay&&fuRadioState.musicOn){
-    fuAudio.play().catch(()=>{});
-  }
-  fuBroadcastRadio();
-}
-function fuStartRadio(){
-  if(!fuRadioState.started){
-    fuRadioState.musicOn=true;
-    fuSetTrack(Math.floor(Math.random()*FU_PLAYLIST.length),true);
-  }else if(fuRadioState.musicOn){
-    fuAudio.play().catch(()=>{});
-    fuBroadcastRadio();
-  }
-}
-function fuToggleRadio(){
-  if(!fuRadioState.started){
-    fuStartRadio();
-    return;
-  }
-  fuRadioState.musicOn=!fuRadioState.musicOn;
-  if(fuRadioState.musicOn)fuAudio.play().catch(()=>{});
-  else fuAudio.pause();
-  fuBroadcastRadio();
-}
-function fuSkipRadio(){
-  fuRadioState.musicOn=true;
-  if(!fuRadioState.started)fuStartRadio();
-  else fuSetTrack(fuRadioState.trackIndex+1,true);
-}
-function fuStopRadio(){
-  fuAudio.pause();
-  fuRadioState.musicOn=false;
-  fuBroadcastRadio();
-}
-fuAudio.addEventListener("play",()=>{fuRadioState.musicOn=true;fuBroadcastRadio();});
-fuAudio.addEventListener("pause",fuBroadcastRadio);
-fuAudio.addEventListener("ended",()=>fuSetTrack(fuRadioState.trackIndex+1,true));
-fuGlobalToggle.addEventListener("click",fuToggleRadio);
-fuGlobalSkip.addEventListener("click",fuSkipRadio);
-fuGlobalStop.addEventListener("click",fuStopRadio);
-
-function fuGameIdFromHref(href){
-  try{
-    const url=new URL(href,location.href);
-    const part=url.pathname.split("/").filter(Boolean).pop();
-    return FU_GAME_IDS.includes(part)?part:null;
-  }catch(err){return null;}
-}
-function fuOpenGame(id,push=true){
-  if(!FU_GAME_IDS.includes(id))return;
-  fuStartRadio();
-  fuShell.classList.add("on");
-  fuShell.setAttribute("aria-hidden","false");
-  document.body.classList.add("game-open");
-  fuShellTitle.textContent=FU_GAME_TITLES[id]+" // FIELD UNIT";
-  fuFrame.src="https://field-unit.github.io/"+id+"/";
-  if(push)history.pushState({fuGame:id},"","#"+id);
-}
-function fuCloseGame(fromPop=false){
-  fuShell.classList.remove("on");
-  fuShell.setAttribute("aria-hidden","true");
-  document.body.classList.remove("game-open");
-  fuFrame.src="about:blank";
-  if(!fromPop&&location.hash)history.pushState({}, "", location.pathname+location.search);
-  fuRenderTickets();
-}
-document.querySelectorAll(".gamelaunch").forEach(link=>{
-  link.addEventListener("click",event=>{
-    const id=fuGameIdFromHref(link.href);
-    if(!id)return;
-    event.preventDefault();
-    fuOpenGame(id,true);
-  });
-});
-fuShellClose.addEventListener("click",()=>fuCloseGame(false));
-fuFrame.addEventListener("load",()=>{
-  setTimeout(()=>fuBroadcastRadio(),60);
-  setTimeout(()=>{
-    if(fuFrame.contentWindow)fuFrame.contentWindow.postMessage({type:"FU_TICKET_STATE"},"*");
-  },80);
-});
-window.addEventListener("message",event=>{
-  const data=event.data||{};
-  if(data.type==="FU_CLOSE_GAME"){
-    fuCloseGame(false);
-    return;
-  }
-  if(data.type==="FU_TICKET"){
-    fuRenderTickets();
-    if(fuFrame.contentWindow)fuFrame.contentWindow.postMessage({type:"FU_TICKET_STATE"},"*");
-    return;
-  }
-  if(data.type==="FU_RADIO"){
-    if(data.action==="start")fuStartRadio();
-    if(data.action==="toggle")fuToggleRadio();
-    if(data.action==="skip")fuSkipRadio();
-    if(data.action==="state")fuBroadcastRadio();
-  }
-});
-window.addEventListener("popstate",()=>{
-  const id=location.hash.replace("#","");
-  if(FU_GAME_IDS.includes(id))fuOpenGame(id,false);
-  else if(fuShell.classList.contains("on"))fuCloseGame(true);
-});
-window.addEventListener("storage",event=>{
-  if(event.key===FU_TICKET_KEY)fuRenderTickets();
-});
-fuRenderTickets();
-const fuInitialGame=location.hash.replace("#","");
-if(FU_GAME_IDS.includes(fuInitialGame))fuOpenGame(fuInitialGame,false);
+/* ============ persistent chapter shell / radio / fragment system ============ */
+const FU_FRAGMENT_KEY="fieldUnitFragmentsV1";
+const FU_GAME_IDS=["nightshiftexe","lasttrainexe","deadhighstreetexe","towpathexe","towersignalexe"];
+const FU_GAME_TITLES={nightshiftexe:"NIGHTSHIFTEXE",lasttrainexe:"LASTTRAINEXE",deadhighstreetexe:"DEADHIGHSTREETEXE",towpathexe:"TOWPATHEXE",towersignalexe:"TOWERSIGNALEXE"};
+const FU_PLAYLIST=[{title:"NATURE OF FREAK",artist:"FIELD UNIT",src:"https://field-unit.github.io/Nature_of_Freak_Demo.mp3"},{title:"NOMEMORY NOTREAL",artist:"FIELD UNIT",src:"https://field-unit.github.io/nomemory_notreal_mthree.mp3"},{title:"THE OF THE",artist:"FIELD UNIT",src:"https://field-unit.github.io/the_of_the_demo.mp3"},{title:"CURLEY CUH",artist:"FIELD UNIT",src:"https://field-unit.github.io/Curley_Cuh_Demo.mp3"},{title:"POCKET MUCK",artist:"FIELD UNIT",src:"https://field-unit.github.io/Pocket_Muck_Demo.mp3"},{title:"MEDIUM SLATE",artist:"FIELD UNIT",src:"https://field-unit.github.io/Medium_Slate_Demo.mp3"},{title:"LAN_33",artist:"FIELD UNIT",src:"https://field-unit.github.io/LAN_33_Demo.mp3"},{title:"NAVVY",artist:"FIELD UNIT",src:"https://field-unit.github.io/Navvy_Demo.mp3"},{title:"LBD+M3",artist:"FIELD UNIT",src:"https://field-unit.github.io/lbd_m3_demo.mp3"}];
+const fuShell=document.getElementById("gameShell"),fuFrame=document.getElementById("gameFrame"),fuShellTitle=document.getElementById("shellTitle"),fuShellClose=document.getElementById("shellClose"),fuShellTicketCount=document.getElementById("shellTicketCount"),fuTicketCount=document.getElementById("ticketCount"),fuUnlock=document.getElementById("ticketUnlock"),fuGlobalRadio=document.getElementById("globalRadio"),fuGlobalTitle=document.getElementById("globalRadioTitle"),fuGlobalToggle=document.getElementById("globalRadioToggle"),fuGlobalSkip=document.getElementById("globalRadioSkip"),fuGlobalStop=document.getElementById("globalRadioStop");
+const fuAudio=new Audio();fuAudio.preload="auto";fuAudio.volume=.34;const fuRadioState={started:false,musicOn:true,trackIndex:0,title:"WAITING FOR INPUT",artist:"FIELD UNIT"};
+function fuReadFragments(){try{const value=JSON.parse(localStorage.getItem(FU_FRAGMENT_KEY)||"{}");return value&&typeof value==="object"?value:{}}catch(err){return {}}}
+function fuRenderFragments(){const fragments=fuReadFragments();let count=0;document.querySelectorAll("[data-fragment]").forEach(slot=>{const earned=!!fragments[slot.dataset.fragment];slot.classList.toggle("earned",earned);if(earned)count++});fuTicketCount.textContent=count+" / 5 FRAGMENTS";fuShellTicketCount.textContent=count+" / 5 FRAGMENTS";const unlocked=count===5;fuUnlock.classList.toggle("unlocked",unlocked);fuUnlock.textContent=unlocked?"TRANSMISSION COMPLETE // OPEN FIELD UNIT TRACK ARCHIVE":"LOCKED // RECOVER ALL FIVE FRAGMENTS TO OPEN THE TRACK ARCHIVE";fuUnlock.setAttribute("aria-disabled",unlocked?"false":"true")}
+fuUnlock.addEventListener("click",event=>{if(!fuUnlock.classList.contains("unlocked"))event.preventDefault()});
+function fuRadioSnapshot(){return{started:fuRadioState.started,musicOn:fuRadioState.musicOn,trackIndex:fuRadioState.trackIndex,title:fuRadioState.title,artist:fuRadioState.artist}}
+function fuBroadcastRadio(){fuGlobalTitle.textContent="FIELD UNIT RADIO // "+(fuRadioState.title||"WAITING");fuGlobalToggle.textContent=fuRadioState.musicOn&&fuRadioState.started&&!fuAudio.paused?"PAUSE":"PLAY";fuGlobalRadio.classList.toggle("on",fuRadioState.started);if(fuFrame.contentWindow)fuFrame.contentWindow.postMessage({type:"FU_RADIO_STATE",state:fuRadioSnapshot()},"*")}
+function fuSetTrack(index,autoplay=true){fuRadioState.trackIndex=(index+FU_PLAYLIST.length)%FU_PLAYLIST.length;const track=FU_PLAYLIST[fuRadioState.trackIndex];fuRadioState.title=track.title;fuRadioState.artist=track.artist;fuRadioState.started=true;fuAudio.pause();fuAudio.src=track.src;fuAudio.currentTime=0;fuAudio.volume=.34;if(autoplay&&fuRadioState.musicOn)fuAudio.play().catch(()=>{});fuBroadcastRadio()}
+function fuStartRadio(){if(!fuRadioState.started){fuRadioState.musicOn=true;fuSetTrack(Math.floor(Math.random()*FU_PLAYLIST.length),true)}else if(fuRadioState.musicOn){fuAudio.play().catch(()=>{});fuBroadcastRadio()}}
+function fuToggleRadio(){if(!fuRadioState.started){fuStartRadio();return}fuRadioState.musicOn=!fuRadioState.musicOn;if(fuRadioState.musicOn)fuAudio.play().catch(()=>{});else fuAudio.pause();fuBroadcastRadio()}
+function fuSkipRadio(){fuRadioState.musicOn=true;if(!fuRadioState.started)fuStartRadio();else fuSetTrack(fuRadioState.trackIndex+1,true)}function fuStopRadio(){fuAudio.pause();fuRadioState.musicOn=false;fuBroadcastRadio()}
+fuAudio.addEventListener("play",()=>{fuRadioState.musicOn=true;fuBroadcastRadio()});fuAudio.addEventListener("pause",fuBroadcastRadio);fuAudio.addEventListener("ended",()=>fuSetTrack(fuRadioState.trackIndex+1,true));fuGlobalToggle.addEventListener("click",fuToggleRadio);fuGlobalSkip.addEventListener("click",fuSkipRadio);fuGlobalStop.addEventListener("click",fuStopRadio);
+function fuGameIdFromHref(href){try{const url=new URL(href,location.href),part=url.pathname.split("/").filter(Boolean).pop();return FU_GAME_IDS.includes(part)?part:null}catch(err){return null}}
+function fuOpenGame(id,push=true){if(!FU_GAME_IDS.includes(id))return;fuStartRadio();fuShell.classList.add("on");fuShell.setAttribute("aria-hidden","false");document.body.classList.add("game-open");fuShellTitle.textContent=FU_GAME_TITLES[id]+" // FIELD UNIT";fuFrame.src="https://field-unit.github.io/"+id+"/";if(push)history.pushState({fuGame:id},"","#"+id)}
+function fuCloseGame(fromPop=false){fuShell.classList.remove("on");fuShell.setAttribute("aria-hidden","true");document.body.classList.remove("game-open");fuFrame.src="about:blank";if(!fromPop&&location.hash)history.pushState({},"",location.pathname+location.search);fuRenderFragments()}
+document.querySelectorAll(".gamelaunch").forEach(link=>link.addEventListener("click",event=>{const id=fuGameIdFromHref(link.href);if(!id)return;event.preventDefault();fuOpenGame(id,true)}));fuShellClose.addEventListener("click",()=>fuCloseGame(false));fuFrame.addEventListener("load",()=>{setTimeout(()=>fuBroadcastRadio(),60);setTimeout(()=>{if(fuFrame.contentWindow)fuFrame.contentWindow.postMessage({type:"FU_FRAGMENT_STATE"},"*")},80)});
+window.addEventListener("message",event=>{const data=event.data||{};if(data.type==="FU_CLOSE_GAME"){fuCloseGame(false);return}if(data.type==="FU_FRAGMENT"){fuRenderFragments();if(fuFrame.contentWindow)fuFrame.contentWindow.postMessage({type:"FU_FRAGMENT_STATE"},"*");return}if(data.type==="FU_RADIO"){if(data.action==="start")fuStartRadio();if(data.action==="toggle")fuToggleRadio();if(data.action==="skip")fuSkipRadio();if(data.action==="state")fuBroadcastRadio()}});
+window.addEventListener("popstate",()=>{const id=location.hash.replace("#","");if(FU_GAME_IDS.includes(id))fuOpenGame(id,false);else if(fuShell.classList.contains("on"))fuCloseGame(true)});window.addEventListener("storage",event=>{if(event.key===FU_FRAGMENT_KEY)fuRenderFragments()});fuRenderFragments();const fuInitialGame=location.hash.replace("#","");if(FU_GAME_IDS.includes(fuInitialGame))fuOpenGame(fuInitialGame,false);
 
 /* ---------- high-energy electro dancer ---------- */
 const danceMode=document.getElementById("danceMode");
