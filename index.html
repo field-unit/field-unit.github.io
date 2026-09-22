@@ -49,128 +49,33 @@ body::after{
 }
 
 /* ============ FX ============ */
-.fxrow{display:flex;justify-content:center;gap:14px;margin:6px auto 30px}
+/* The buttons span the same column as the tiles, six tracks wide, so each pair of buttons sits over one column
+   of tiles: 12BIT 8BIT | (DRAW) CLEAR INK | DANCE RADIO. */
+.fxrow{
+  display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;
+  max-width:var(--col);margin:6px auto 30px;padding:0 14px;
+}
 .fxbtn{
   font-family:var(--term);font-size:11px;letter-spacing:1px;background:none;
-  color:var(--mid);border:1px solid var(--admin);padding:4px 16px;cursor:pointer;
+  color:var(--mid);border:1px solid var(--admin);padding:6px 4px;cursor:pointer;
+  white-space:nowrap;text-align:center;
+}
+#inkClear{grid-column:span 2}
+.fxrow:has(#inkMode.available) #inkClear{grid-column:auto}
+.fxnote{
+  max-width:var(--col);margin:-16px auto 26px;padding:0 14px;
+  font-size:8px;line-height:1.9;letter-spacing:.5px;color:var(--mid);text-align:center;
 }
 .fxbtn:hover{color:var(--signal);border-color:var(--signal)}
 .fxbtn.on{color:var(--alert);border-color:var(--alert)}
 .fxbtn:disabled{color:var(--dim);border-color:var(--dim);cursor:not-allowed}
 
-.gamelinks{
-  display:flex;
-  justify-content:center;
-  align-items:stretch;
-  flex-wrap:wrap;
-  gap:10px;
-  margin:-14px auto 34px;
-  padding:0 14px;
-}
-.gamelaunch{
-  min-width:260px;
-  max-width:calc(100% - 28px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-  color:var(--signal);
-  text-decoration:none;
-  border:1px solid var(--dim);
-  background:#0a0c09;
-  padding:8px 12px;
-  font-size:9px;
-  line-height:1.5;
-  letter-spacing:1px;
-}
-.gamelaunch:hover,
-.gamelaunch:focus-visible{
-  color:var(--off);
-  border-color:var(--signal);
-}
-.gamelaunch svg{
-  width:76px;
-  height:38px;
-  flex:0 0 auto;
-  image-rendering:pixelated;
-  overflow:visible;
-}
-.fishlaunch .fishbody{
-  fill:var(--admin);
-  stroke:var(--signal);
-  stroke-width:2;
-}
-.fishlaunch .fishdetail{fill:var(--bg)}
-.fishlaunch .rad{fill:var(--alert)}
-.trainlaunch .trainbody{
-  fill:var(--admin);
-  stroke:var(--signal);
-  stroke-width:2;
-}
-.trainlaunch .trainwindow{fill:var(--bg)}
-.trainlaunch .trainlight{fill:var(--alert)}
-.gamelaunch:hover svg{
-  animation:gameJolt .5s steps(3,end) infinite;
-}
-@keyframes gameJolt{
-  0%,100%{transform:translate(0,0)}
-  33%{transform:translate(3px,-1px)}
-  66%{transform:translate(-2px,1px)}
-}
-@media(max-width:620px){
-  .gamelinks{
-    margin-top:-12px;
-    margin-bottom:25px;
-    gap:8px;
-  }
-  .gamelaunch{
-    width:100%;
-    min-width:0;
-    gap:8px;
-    font-size:8px;
-    padding:8px 10px;
-  }
-  .gamelaunch svg{
-    width:62px;
-    height:32px;
-  }
-}
-
-
-
-.smashlaunch .smashbody{
-  fill:var(--admin);
-  stroke:var(--signal);
-  stroke-width:2;
-}
-.smashlaunch .smashwindow{fill:var(--bg)}
-.smashlaunch .smashstone{fill:var(--alert)}
-
-
-.dartslaunch .dartboard{
-  fill:var(--bg);
-  stroke:var(--signal);
-  stroke-width:2;
-}
-.dartslaunch .dartring{fill:none;stroke:var(--admin);stroke-width:3}
-.dartslaunch .dartbull{fill:var(--alert)}
-.dartslaunch .dartshaft{stroke:var(--signal);stroke-width:3}
-.dartslaunch .dartflight{fill:var(--admin)}
-
-.publaunch .pubglass{
-  fill:var(--bg);
-  stroke:var(--signal);
-  stroke-width:2;
-}
-.publaunch .pubbeer{fill:var(--admin)}
-.publaunch .pubfoam{fill:var(--off)}
-.publaunch .pubhandle{fill:none;stroke:var(--signal);stroke-width:3}
-
-
 /* ============ ELECTRO DANCER ============ */
+/* The robot is drawn small, through the same dither as the tiles, then blown up with whole pixels — so it is
+   made of the same green grain, and 12BIT and 8BIT take its pixels away along with everything else's. */
 #danceStage{
   --dance-left:50%;
-  --dance-bottom:108px;
+  --dance-bottom:104px;
   position:fixed;
   inset:0;
   z-index:72;
@@ -179,186 +84,20 @@ body::after{
   pointer-events:none;
 }
 #danceStage.on{display:block}
-body.game-open #danceStage{display:none}
-#danceStage::before{
-  content:"";
-  position:absolute;
-  left:var(--dance-left);
-  bottom:var(--dance-bottom);
-  width:150px;
-  height:12px;
-  transform:translateX(-50%);
-  border-top:2px dashed var(--admin);
-  border-bottom:1px solid var(--dim);
-  animation:danceFloor .55s steps(2,end) infinite;
-}
 #electroDancer{
   position:absolute;
   left:var(--dance-left);
-  bottom:calc(var(--dance-bottom) + 7px);
-  width:92px;
-  height:auto;
-  overflow:visible;
+  bottom:var(--dance-bottom);
+  width:108px;
   transform:translateX(-50%);
   image-rendering:pixelated;
-  filter:drop-shadow(4px 4px 0 var(--bg));
-  animation:danceBody .88s steps(4,end) infinite;
 }
-#electroDancer .silhouette{
-  fill:var(--off);
-  stroke:var(--bg);
-  stroke-width:3;
-  vector-effect:non-scaling-stroke;
-}
-#electroDancer .joint{
-  transform-box:fill-box;
-}
-#electroDancer .head{
-  transform-origin:center bottom;
-  animation:danceHead .62s steps(3,end) infinite;
-}
-#electroDancer .torso{
-  transform-origin:center center;
-  animation:danceTorso .88s steps(4,end) infinite;
-}
-#electroDancer .upper-left{
-  transform-origin:88% 12%;
-  animation:danceArmLeft .70s steps(4,end) infinite;
-}
-#electroDancer .lower-left{
-  transform-origin:82% 10%;
-  animation:danceForeLeft .56s steps(3,end) infinite reverse;
-}
-#electroDancer .upper-right{
-  transform-origin:12% 12%;
-  animation:danceArmRight .66s steps(4,end) infinite;
-}
-#electroDancer .lower-right{
-  transform-origin:18% 10%;
-  animation:danceForeRight .54s steps(3,end) infinite;
-}
-#electroDancer .upper-leg-left{
-  transform-origin:62% 5%;
-  animation:danceLegLeft .84s steps(4,end) infinite;
-}
-#electroDancer .lower-leg-left{
-  transform-origin:50% 7%;
-  animation:danceShinLeft .70s steps(3,end) infinite;
-}
-#electroDancer .upper-leg-right{
-  transform-origin:38% 5%;
-  animation:danceLegRight .84s steps(4,end) infinite;
-}
-#electroDancer .lower-leg-right{
-  transform-origin:50% 7%;
-  animation:danceShinRight .62s steps(3,end) infinite reverse;
-}
-#electroDancer .pulse{
-  fill:var(--alert);
-  stroke:none;
-  opacity:.85;
-  animation:dancePulse .76s steps(2,end) infinite;
-}
-#danceStage.flip #electroDancer{
-  transform:translateX(-50%) scaleX(-1);
-}
-#danceStage.pose-b #electroDancer{
-  animation-duration:.72s;
-}
-#danceStage.pose-c #electroDancer{
-  animation-direction:reverse;
-  animation-duration:.82s;
-}
-#danceStage.pose-d #electroDancer{
-  transform:translateX(-50%) rotate(-5deg);
-}
-#danceStage.flip.pose-d #electroDancer{
-  transform:translateX(-50%) scaleX(-1) rotate(-5deg);
-}
-@keyframes danceFloor{
-  0%,100%{width:126px;opacity:.35}
-  50%{width:170px;opacity:.9}
-}
-@keyframes danceBody{
-  0%{translate:0 0;rotate:-4deg}
-  25%{translate:-5px -7px;rotate:6deg}
-  50%{translate:3px 1px;rotate:-7deg}
-  75%{translate:6px -5px;rotate:5deg}
-  100%{translate:0 0;rotate:-4deg}
-}
-@keyframes danceHead{
-  0%,100%{transform:rotate(-12deg) translateY(0)}
-  33%{transform:rotate(16deg) translateY(-4px)}
-  66%{transform:rotate(-4deg) translateY(2px)}
-}
-@keyframes danceTorso{
-  0%,100%{transform:skewX(-5deg) scaleY(1)}
-  25%{transform:skewX(13deg) scaleY(.92)}
-  50%{transform:skewX(-15deg) scaleY(1.05)}
-  75%{transform:skewX(8deg) scaleY(.96)}
-}
-@keyframes danceArmLeft{
-  0%,100%{transform:rotate(-122deg)}
-  25%{transform:rotate(28deg)}
-  50%{transform:rotate(-48deg)}
-  75%{transform:rotate(92deg)}
-}
-@keyframes danceForeLeft{
-  0%,100%{transform:rotate(-35deg)}
-  50%{transform:rotate(118deg)}
-}
-@keyframes danceArmRight{
-  0%,100%{transform:rotate(112deg)}
-  25%{transform:rotate(-36deg)}
-  50%{transform:rotate(65deg)}
-  75%{transform:rotate(-104deg)}
-}
-@keyframes danceForeRight{
-  0%,100%{transform:rotate(48deg)}
-  50%{transform:rotate(-126deg)}
-}
-@keyframes danceLegLeft{
-  0%,100%{transform:rotate(15deg)}
-  25%{transform:rotate(-42deg)}
-  50%{transform:rotate(52deg)}
-  75%{transform:rotate(-18deg)}
-}
-@keyframes danceShinLeft{
-  0%,100%{transform:rotate(-8deg)}
-  50%{transform:rotate(68deg)}
-}
-@keyframes danceLegRight{
-  0%,100%{transform:rotate(-22deg)}
-  25%{transform:rotate(48deg)}
-  50%{transform:rotate(-58deg)}
-  75%{transform:rotate(20deg)}
-}
-@keyframes danceShinRight{
-  0%,100%{transform:rotate(10deg)}
-  50%{transform:rotate(-72deg)}
-}
-@keyframes dancePulse{
-  0%,100%{opacity:.15;transform:scale(.6)}
-  50%{opacity:.95;transform:scale(1.25)}
-}
+#danceStage.flip #electroDancer{transform:translateX(-50%) scaleX(-1)}
 @media(max-width:620px){
-  #electroDancer{
-    width:72px;
-    bottom:calc(var(--dance-bottom) - 8px);
-  }
-  #danceStage::before{bottom:calc(var(--dance-bottom) - 14px)}
-}
-@media(prefers-reduced-motion:reduce){
-  #danceStage.on #electroDancer,
-  #danceStage.on #electroDancer *{
-    animation-duration:.9s;
-  }
+  #electroDancer{width:82px}
+  #danceStage{--dance-bottom:92px}
 }
 
-
-.ringlaunch .road{fill:var(--bg);stroke:var(--signal);stroke-width:2}.ringlaunch .mark{fill:var(--alert)}.ringlaunch .car{fill:var(--admin);stroke:var(--off);stroke-width:2}
-.signallaunch .lane{fill:var(--bg);stroke:var(--admin);stroke-width:2}.signallaunch .note{fill:var(--alert)}.signallaunch .pad{fill:var(--signal)}
-.pigeonlaunch .bird{fill:var(--admin);stroke:var(--off);stroke-width:2}.pigeonlaunch .wing{fill:var(--signal)}.pigeonlaunch .pipe{fill:var(--bg);stroke:var(--admin);stroke-width:3}
 
 /* ============ ORBIT INK ============ */
 #inkLayer{
@@ -401,134 +140,24 @@ body.touch-ink-on #inkMode{
   border-color:var(--alert);
 }
 
-@media(max-width:520px){
-  .fxrow{
-    flex-wrap:wrap;
-    padding:0 12px;
-    gap:9px;
-  }
+/* Two rows of three where six buttons don't fit on one line (touch screens add DRAW); on phones without DRAW the
+   two bit buttons share the first row. */
+@media(max-width:900px){
+  .fxrow:has(#inkMode.available) .fxbtn,
+  .fxrow:has(#inkMode.available) #inkClear{grid-column:span 2}
+}
+@media(max-width:600px){
+  .fxrow{gap:9px}
   .fxbtn{
     font-size:9px;
-    padding:7px 10px;
+    padding:10px 2px;
+    grid-column:span 2;
   }
+  #fx16,#fx8{grid-column:span 3}
 }
 
 
-/* ============ PERSISTENT GAME SHELL / FIVE-TICKET SYSTEM ============ */
-.ticket-console{
-  width:min(860px,calc(100% - 28px));
-  margin:-19px auto 34px;
-  border:1px solid var(--admin);
-  background:#0a0c09;
-  padding:12px;
-}
-.ticket-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:10px;
-  font-size:9px;
-  line-height:1.5;
-  color:var(--signal);
-}
-.ticket-head strong{color:var(--off)}
-.ticket-slots{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:7px;
-}
-.ticket-slot{
-  min-width:0;
-  border:1px solid var(--dim);
-  padding:8px 5px;
-  color:var(--mid);
-  background:var(--bg);
-  font-size:7px;
-  line-height:1.5;
-  text-align:center;
-}
-.ticket-slot::before{
-  content:"□";
-  display:block;
-  margin-bottom:5px;
-  color:var(--dim);
-  font-size:16px;
-}
-.ticket-slot.earned{
-  color:var(--signal);
-  border-color:var(--admin);
-}
-.ticket-slot.earned::before{
-  content:"■";
-  color:var(--alert);
-}
-.ticket-unlock{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin-top:10px;
-  min-height:38px;
-  border:1px solid var(--dim);
-  color:var(--dim);
-  text-decoration:none;
-  font-size:8px;
-  line-height:1.5;
-  text-align:center;
-  pointer-events:none;
-}
-.ticket-unlock.unlocked{
-  color:var(--off);
-  border-color:var(--signal);
-  pointer-events:auto;
-  animation:unlockPulse 1.2s steps(2,end) infinite;
-}
-@keyframes unlockPulse{50%{background:#1a2014}}
-.game-shell{
-  position:fixed;
-  inset:0;
-  z-index:140;
-  display:none;
-  grid-template-rows:auto minmax(0,1fr);
-  background:#080907;
-}
-.game-shell.on{display:grid}
-.game-shell-head{
-  display:grid;
-  grid-template-columns:auto minmax(0,1fr) auto;
-  align-items:center;
-  gap:10px;
-  padding:8px 10px;
-  border-bottom:1px solid var(--signal);
-  background:#0a0c09;
-}
-.game-shell-head button{
-  all:unset;
-  cursor:pointer;
-  border:1px solid var(--admin);
-  padding:8px 10px;
-  color:var(--signal);
-  font-size:8px;
-  line-height:1.4;
-}
-.game-shell-title{
-  min-width:0;
-  color:var(--off);
-  font-size:9px;
-  line-height:1.5;
-  text-align:center;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-#gameFrame{
-  display:block;
-  width:100%;
-  height:100%;
-  border:0;
-  background:#0000aa;
-}
-body.game-open{overflow:hidden}
+/* ============ RADIO ============ */
 .global-radio{
   position:fixed;
   right:10px;
@@ -542,7 +171,7 @@ body.game-open{overflow:hidden}
   box-shadow:0 0 0 3px #080907;
 }
 .global-radio.on{display:block}
-body.game-open .global-radio{display:none}
+body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of the radio panel */
 .global-radio-title{
   margin-bottom:7px;
   color:var(--off);
@@ -567,23 +196,7 @@ body.game-open .global-radio{display:none}
   text-align:center;
 }
 .global-radio button:hover{border-color:var(--signal)}
-@media(max-width:620px){
-  .ticket-slots{grid-template-columns:1fr}
-  .ticket-slot{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    text-align:left;
-  }
-  .ticket-slot::before{margin:0}
-  .game-shell-head{
-    grid-template-columns:auto 1fr;
-  }
-  #shellTicketCount{
-    grid-column:1/-1;
-    text-align:center;
-  }
-}
+.global-radio button:focus-visible,.pbtn:focus-visible,.tile button.zoom:focus-visible{outline:2px solid var(--off);outline-offset:2px}
 /* ============ GRID ============ */
 .grid{
   display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
@@ -641,97 +254,24 @@ body.game-open .global-radio{display:none}
 </head>
 <body>
 
-<div class="hero"><canvas id="glyph" width="176" height="110" aria-label="null set"></canvas></div>
+<div class="hero"><canvas id="glyph" width="176" height="110" role="img" aria-label="null set"></canvas></div>
 
 <div class="fxrow">
-  <button class="fxbtn" id="fx16" aria-pressed="false" title="bit reduction — audio and visuals">12BIT</button>
-  <button class="fxbtn" id="fx8"  aria-pressed="false" title="bit reduction — audio and visuals">8BIT</button>
+  <button class="fxbtn" id="fx16" type="button" aria-pressed="false" title="bit crusher: gritty sampler — sound and picture">12BIT</button>
+  <button class="fxbtn" id="fx8"  type="button" aria-pressed="false" title="bit crusher: lo-fi games console — sound and picture">8BIT</button>
   <button class="fxbtn touchonly" id="inkMode" type="button" aria-pressed="false" title="draw one floating mark">DRAW</button>
   <button class="fxbtn" id="inkClear" type="button" title="clear floating drawings">CLEAR INK</button>
   <button class="fxbtn" id="danceMode" type="button" aria-pressed="false" title="summon an electro dancer">DANCE</button>
+  <button class="fxbtn" id="radioMode" type="button" aria-pressed="false" title="play the Field Unit radio">RADIO</button>
 </div>
+<p class="fxnote" id="fxNote" role="status" hidden>Opened from disk, 12BIT and 8BIT change the picture only: browsers mute sound sent through an effect there. To hear them, open the site with “Open music site locally.bat”, or online.</p>
 
 <div id="danceStage" aria-hidden="true">
-  <svg id="electroDancer" viewBox="0 0 140 240" role="img" aria-label="A small energetic dancing silhouette">
-    <circle class="pulse" cx="70" cy="116" r="55"/>
-    <g class="joint head">
-      <circle class="silhouette" cx="70" cy="28" r="18"/>
-    </g>
-
-    <g class="joint torso">
-      <polygon class="silhouette" points="53,49 87,49 96,125 78,143 61,143 44,125"/>
-    </g>
-
-    <g class="joint upper-left">
-      <polygon class="silhouette" points="49,56 37,60 17,109 31,116 59,74"/>
-      <g class="joint lower-left">
-        <polygon class="silhouette" points="20,103 8,109 19,160 34,156 32,112"/>
-        <circle class="silhouette" cx="20" cy="164" r="9"/>
-      </g>
-    </g>
-
-    <g class="joint upper-right">
-      <polygon class="silhouette" points="91,56 103,60 123,109 109,116 81,74"/>
-      <g class="joint lower-right">
-        <polygon class="silhouette" points="120,103 132,109 121,160 106,156 108,112"/>
-        <circle class="silhouette" cx="120" cy="164" r="9"/>
-      </g>
-    </g>
-
-    <g class="joint upper-leg-left">
-      <polygon class="silhouette" points="60,133 77,135 65,190 47,186"/>
-      <g class="joint lower-leg-left">
-        <polygon class="silhouette" points="48,180 66,184 56,226 39,223"/>
-        <polygon class="silhouette" points="37,218 59,220 64,232 30,232"/>
-      </g>
-    </g>
-
-    <g class="joint upper-leg-right">
-      <polygon class="silhouette" points="80,133 63,135 75,190 93,186"/>
-      <g class="joint lower-leg-right">
-        <polygon class="silhouette" points="92,180 74,184 84,226 101,223"/>
-        <polygon class="silhouette" points="103,218 81,220 76,232 110,232"/>
-      </g>
-    </g>
-  </svg>
+  <canvas id="electroDancer" width="72" height="132" role="img"
+          aria-label="A small robot dancing, drawn in green grain"></canvas>
 </div>
 
-<nav class="gamelinks" aria-label="Field Unit games">
-<a class="gamelaunch fishlaunch" data-game="fishexe" href="https://field-unit.github.io/fishexe/"><svg viewBox="0 0 92 46"><polygon class="fishbody" points="8,23 25,9 59,10 78,23 59,36 25,37"/><polygon class="fishbody" points="8,23 0,8 0,38"/><rect class="fishdetail" x="62" y="18" width="5" height="5"/><circle class="rad" cx="43" cy="23" r="5"/></svg><span>GO FISHING</span></a>
-<a class="gamelaunch trainlaunch" data-game="trainexe" href="https://field-unit.github.io/trainexe/"><svg viewBox="0 0 96 46"><rect class="trainbody" x="11" y="7" width="70" height="31"/><polygon class="trainbody" points="81,12 92,20 92,35 81,38"/><rect class="trainwindow" x="19" y="13" width="16" height="11"/><rect class="trainwindow" x="40" y="13" width="16" height="11"/><rect class="trainwindow" x="61" y="13" width="13" height="11"/><rect class="trainlight" x="84" y="24" width="5" height="5"/></svg><span>RIDE THE TRAIN</span></a>
-<a class="gamelaunch ringlaunch" data-game="ringroadexe" href="https://field-unit.github.io/ringroadexe/"><svg viewBox="0 0 96 46"><rect class="road" x="20" y="2" width="54" height="42"/><rect class="mark" x="45" y="5" width="5" height="9"/><rect class="mark" x="45" y="20" width="5" height="9"/><rect class="mark" x="45" y="35" width="5" height="7"/><rect class="car" x="30" y="19" width="18" height="25"/><rect class="car" x="53" y="4" width="14" height="21"/></svg><span>TAKE THE RING ROAD</span></a>
-<a class="gamelaunch signallaunch" data-game="signalstepexe" href="https://field-unit.github.io/signalstepexe/"><svg viewBox="0 0 96 46"><rect class="lane" x="9" y="3" width="16" height="40"/><rect class="lane" x="30" y="3" width="16" height="40"/><rect class="lane" x="51" y="3" width="16" height="40"/><rect class="lane" x="72" y="3" width="16" height="40"/><rect class="note" x="12" y="11" width="10" height="8"/><rect class="note" x="33" y="22" width="10" height="8"/><rect class="note" x="75" y="9" width="10" height="8"/><rect class="pad" x="11" y="34" width="12" height="6"/><rect class="pad" x="32" y="34" width="12" height="6"/><rect class="pad" x="53" y="34" width="12" height="6"/><rect class="pad" x="74" y="34" width="12" height="6"/></svg><span>FOLLOW THE SIGNAL</span></a>
-<a class="gamelaunch pigeonlaunch" data-game="pigeonexe" href="https://field-unit.github.io/pigeonexe/"><svg viewBox="0 0 96 46"><rect class="pipe" x="5" y="2" width="15" height="15"/><rect class="pipe" x="5" y="30" width="15" height="14"/><rect class="pipe" x="78" y="2" width="15" height="11"/><rect class="pipe" x="78" y="27" width="15" height="17"/><polygon class="bird" points="35,25 48,14 64,21 62,31 45,34"/><polygon class="wing" points="47,24 34,37 56,31"/></svg><span>FLY THE PIGEON</span></a>
-</nav>
-
-
-<section class="ticket-console" aria-label="Website completion tickets">
-  <div class="ticket-head">
-    <strong>FIELD UNIT COMPLETION RUN</strong>
-    <span id="ticketCount">0 / 5 TICKETS</span>
-  </div>
-  <div class="ticket-slots">
-<div class="ticket-slot" data-ticket="fishexe">FISHEXE<br>10 KG FISH</div>
-<div class="ticket-slot" data-ticket="trainexe">TRAINEXE<br>5-STREAK</div>
-<div class="ticket-slot" data-ticket="ringroadexe">RINGROADEXE<br>1,500 M</div>
-<div class="ticket-slot" data-ticket="signalstepexe">SIGNALSTEPEXE<br>25 COMBO</div>
-<div class="ticket-slot" data-ticket="pigeonexe">PIGEONEXE<br>15 GATES</div>
-</div>
-<a class="ticket-unlock" id="ticketUnlock" href="field-unit-downloads.html">
-    LOCKED // EARN ALL FIVE TICKETS TO UNLOCK THE TRACK DOWNLOADS
-  </a>
-</section>
-
-<section class="game-shell" id="gameShell" aria-hidden="true">
-  <div class="game-shell-head">
-    <button id="shellClose" type="button">← FIELD UNIT</button>
-    <div class="game-shell-title" id="shellTitle">FIELD UNIT GAME</div>
-    <div class="game-shell-title" id="shellTicketCount">0 / 5 TICKETS</div>
-  </div>
-  <iframe id="gameFrame" title="Field Unit game" allow="autoplay"></iframe>
-</section>
-
-<section class="global-radio" id="globalRadio" aria-label="Persistent Field Unit radio">
+<section class="global-radio" id="globalRadio" aria-label="Field Unit radio">
   <div class="global-radio-title" id="globalRadioTitle">FIELD UNIT RADIO // WAITING</div>
   <div class="global-radio-controls">
     <button id="globalRadioToggle" type="button">PLAY</button>
@@ -747,6 +287,7 @@ body.game-open .global-radio{display:none}
 <canvas id="inkLayer" aria-hidden="true"></canvas>
 <div class="lb" id="lb" aria-hidden="true"><img alt=""></div>
 
+<script src="art-thumbs.js"></script>
 <script>
 /* ================================================================
    POSTS — the only thing you edit. Newest first.
@@ -767,7 +308,8 @@ const POSTS = [
   { date:"November 25", title:"medium slate", audio:"Medium_Slate_Demo.mp3", art:"RedStaircaseBrickworkArtwork.jpg" },
   { date:"September 25", title:"LAN_33", audio:"LAN_33_Demo.mp3", art:"Canal_Bucket_Artwork6.jpg" },
   { date:"August 25", title:"navvy", audio:"Navvy_Demo.mp3", art:"NoParking3.jpg" },
-  { date:"July 25", title:"lbd+m3", audio:"lbd_m3_demo.mp3", art:"CloudArtwork3.jpg" }
+  { date:"July 25", title:"lbd+m3", audio:"lbd_m3_demo.mp3", art:"CloudArtwork3.jpg" },
+  { date:"June 25", title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" }
 ];
 
 /* ================================================================
@@ -784,7 +326,7 @@ const PALETTES=[
 ];
 let visFxMode=0;
 
-function paint(ctx,W,H,field,phase){
+function paint(ctx,W,H,field,phase,cutout){   // cutout: leave the darkest level clear, for the dancer
   const img=ctx.createImageData(W,H), d=img.data;
   const px=phase&3, py=(phase>>1)&3;
   const block=visFxMode===2?4:(visFxMode===1?2:1);
@@ -796,11 +338,12 @@ function paint(ctx,W,H,field,phase){
       let v=field((x+block*0.5)/W,(y+block*0.5)/H); v=v<0?0:v>1?1:v;
       const lv=v*top, b=lv|0, f=lv-b;
       const t=(BAYER[((y/block)+py)&3][((x/block)+px)&3]+0.5)/16;
-      const c=RGB[palette[f>t?Math.min(b+1,top):b]];
+      const lvl=f>t?Math.min(b+1,top):b;
+      const c=RGB[palette[lvl]], alpha=cutout&&!lvl?0:255;
       for(let yy=0;yy<block && y+yy<H;yy++){
         for(let xx=0;xx<block && x+xx<W;xx++){
           const i=((y+yy)*W+(x+xx))*4;
-          d[i]=c[0]; d[i+1]=c[1]; d[i+2]=c[2]; d[i+3]=255;
+          d[i]=c[0]; d[i+1]=c[1]; d[i+2]=c[2]; d[i+3]=alpha;
         }
       }
     }
@@ -880,13 +423,14 @@ POSTS.forEach((post,idx)=>{
 
   if(post.audio){
     tile.innerHTML=`
-      <div class="medium aud"><canvas width="192" height="72"></canvas></div>
-      <div class="arow"><button class="pbtn" aria-label="play">▶</button><span class="atime">--:--</span></div>
+      <div class="medium aud"><canvas width="192" height="72" aria-hidden="true"></canvas></div>
+      <div class="arow"><button class="pbtn" type="button" aria-label="play ${esc(post.title||"")}">▶</button><span class="atime">--:--</span></div>
       <div class="cap"><span>${esc(post.date||"")}</span><span class="t">${esc(post.title||"")}</span></div>`;
     const canvas=tile.querySelector("canvas");
     const p={canvas,ctx:canvas.getContext("2d"),W:192,H:72,
              btn:tile.querySelector(".pbtn"),timeEl:tile.querySelector(".atime"),
-             tile,prog:0,playing:false,seed:idx*3.7+1,audio:null,dur:0,err:false,artLum:null,artImg:null};
+             tile,prog:0,playing:false,seed:idx*3.7+1,audio:null,dur:0,err:false,artLum:null,artImg:null,
+             index:players.length,title:post.title};
     const a=new Audio(); a.preload="metadata"; a.src=post.audio; p.audio=a;
     a.addEventListener("loadedmetadata",()=>{p.dur=a.duration||0;p.timeEl.textContent="00:00";});
     a.addEventListener("error",()=>{p.err=true;p.btn.classList.add("err");p.btn.textContent="×";p.timeEl.textContent="∅";});
@@ -894,9 +438,10 @@ POSTS.forEach((post,idx)=>{
       if(p.dur){p.prog=a.currentTime/p.dur;p.timeEl.textContent=fmt(a.currentTime);}
       if(!animating) drawPlayer(p,perf());
     });
-    a.addEventListener("play",()=>{p.playing=true;p.tile.classList.add("playing");p.btn.textContent="‖";wake();});
-    a.addEventListener("pause",()=>{p.playing=false;p.tile.classList.remove("playing");p.btn.textContent="▶";});
-    a.addEventListener("ended",()=>{p.prog=0;});
+    // The radio follows whichever tile is playing, so the two always show the same track.
+    a.addEventListener("play",()=>{p.playing=true;p.tile.classList.add("playing");p.btn.textContent="‖";p.btn.setAttribute("aria-label","pause "+p.title);radio.index=p.index;fxWake();wake();fuRenderRadio();});
+    a.addEventListener("pause",()=>{p.playing=false;p.tile.classList.remove("playing");p.btn.textContent="▶";p.btn.setAttribute("aria-label","play "+p.title);fuRenderRadio();});
+    a.addEventListener("ended",()=>{p.prog=0;if(radio.on)radioPlay(p.index+1);else fuRenderRadio();});
     p.btn.addEventListener("click",()=>{
       if(p.err)return;
       if(a.paused){stopOthers(p);a.play();}else a.pause();
@@ -923,7 +468,8 @@ POSTS.forEach((post,idx)=>{
         }catch(e){ p.artImg=im; }       // local file:// fallback: direct draw
         drawPlayer(p,0.5);
       };
-      im.src=post.art;                  // if missing: stays on procedural grain
+      // The embedded small copy (art-thumbs.js) keeps the grain working when the site is opened from disk.
+      im.src=(window.FU_ART&&window.FU_ART[post.art])||post.art;   // if missing: stays on procedural grain
     }
     players.push(p);
   } else if(post.images&&post.images.length){
@@ -963,6 +509,7 @@ function redrawAllVisuals(t=perf()){
   paint(gctx,176,110,glyphField(t),ph);
   paint(fctx,110,7,footField(t),ph);
   players.forEach(p=>drawPlayer(p,t));
+  danceDraw();
 }
 
 /* ---------- animation loop (hero + footer + playing tiles) ---------- */
@@ -990,42 +537,76 @@ if(REDUCED){ paint(gctx,176,110,glyphField(0.5),0); paint(fctx,110,7,footField(0
 else frame();
 
 
-/* ---------- bit-reduction FX ---------- */
-const FXP=[null,{bits:12,hold:2},{bits:8,hold:4}];   // off | 12BIT (12-bit/24k) | 8BIT (8-bit/12k)
-const FX={ctx:null,mode:0,wired:false};
+/* ---------- bit-crusher FX ----------
+   Each sample is squeezed onto a few levels and held for several samples, which lowers the sample rate. The
+   levels are spaced µ-law fashion (fine near silence, coarse near full scale), so quiet passages turn grainy
+   instead of cutting out. The settings are well past the names' literal 12 and 8 bits, which on mastered music
+   are almost inaudible: 12BIT is a gritty sampler, 8BIT a lo-fi games console. */
+const FXP=[null,{levels:32,rate:12000},{levels:8,rate:6000}];   // off | 12BIT: 6-bit, 12 kHz | 8BIT: 4-bit, 6 kHz
+const FX={ctx:null,mode:0,node:null,send:null,sources:[],wiring:null};
 const fxB=[null,document.getElementById("fx16"),document.getElementById("fx8")];
+const fxNote=document.getElementById("fxNote");
+// Opened from disk, browsers mute any sound a page sends through an effect, so there the buttons change the
+// picture only and a note says so. Online, or served by "Open music site locally.bat", the sound changes too.
 const FXLOCAL=location.protocol==="file:";
-if(FXLOCAL){
-  fxB[1].disabled=fxB[2].disabled=true;
-  fxB[1].title=fxB[2].title="FX need the live site";
+
+class Crush{                              // runs in the audio worklet (below), or in the older fallback
+  constructor(sampleRate){ this.sr=sampleRate; this.p=null; this.phase=1; this.held=[0,0]; }
+  run(ins,outs){
+    if(!ins.length){ outs.forEach(o=>o.fill(0)); return; }
+    const src=c=>ins[Math.min(c,ins.length-1)];      // mono tracks feed both sides
+    const p=this.p;
+    if(!p){ outs.forEach((o,c)=>o.set(src(c))); return; }
+    const MU=255, LOG=Math.log1p(MU), L=p.levels, step=p.rate/this.sr, n=outs[0].length;
+    for(let i=0;i<n;i++){
+      this.phase+=step;
+      if(this.phase>=1){
+        this.phase%=1;
+        for(let c=0;c<outs.length;c++){
+          const x=src(c)[i];
+          const y=Math.round(Math.log1p(MU*Math.min(1,Math.abs(x)))/LOG*L)/L;
+          this.held[c]=Math.sign(x)*Math.expm1(y*LOG)/MU;
+        }
+      }
+      for(let c=0;c<outs.length;c++) outs[c][i]=this.held[c];
+    }
+  }
 }
-function fxWire(){
-  if(FX.wired)return;
+const CRUSH_WORKLET=Crush.toString()+`
+registerProcessor("fu-crush",class extends AudioWorkletProcessor{
+  constructor(){ super(); this.crush=new Crush(sampleRate); this.port.onmessage=e=>{ this.crush.p=e.data; }; }
+  process(inputs,outputs){ this.crush.run(inputs[0],outputs[0]); return true; }
+});`;
+
+function fxWire(){                        // once, on the first press: every track then plays through the crusher
+  if(FX.wiring)return FX.wiring;
   const AC=window.AudioContext||window.webkitAudioContext;
   FX.ctx=new AC();
-  const node=FX.ctx.createScriptProcessor(4096,2,2);
-  const st={c:0,v0:0,v1:0};
-  node.onaudioprocess=e=>{
-    const p=FXP[FX.mode];
-    const ib=e.inputBuffer, ob=e.outputBuffer;
-    const iL=ib.getChannelData(0), iR=ib.getChannelData(ib.numberOfChannels>1?1:0);
-    const oL=ob.getChannelData(0), oR=ob.getChannelData(1);
-    if(!p){oL.set(iL);oR.set(iR);return;}
-    const steps=1<<(p.bits-1);
-    for(let n=0;n<iL.length;n++){
-      if(st.c===0){
-        st.v0=Math.round(iL[n]*steps)/steps;
-        st.v1=Math.round(iR[n]*steps)/steps;
-      }
-      st.c=(st.c+1)%p.hold;
-      oL[n]=st.v0; oR[n]=st.v1;
+  FX.wiring=(async()=>{
+    let node;
+    try{
+      const url=URL.createObjectURL(new Blob([CRUSH_WORKLET],{type:"text/javascript"}));
+      await FX.ctx.audioWorklet.addModule(url);
+      node=new AudioWorkletNode(FX.ctx,"fu-crush",{outputChannelCount:[2]});
+      FX.send=p=>node.port.postMessage(p);
+    }catch(err){                          // no audio worklets: a script processor does the same on the page
+      node=FX.ctx.createScriptProcessor(2048,2,2);
+      const crush=new Crush(FX.ctx.sampleRate);
+      node.onaudioprocess=e=>crush.run([e.inputBuffer.getChannelData(0),e.inputBuffer.getChannelData(1)],
+                                       [e.outputBuffer.getChannelData(0),e.outputBuffer.getChannelData(1)]);
+      FX.send=p=>{crush.p=p;};
     }
-  };
-  node.connect(FX.ctx.destination);
-  players.forEach(p=>{
-    if(p.audio){ try{FX.ctx.createMediaElementSource(p.audio).connect(node);}catch(err){} }
-  });
-  FX.wired=true;
+    FX.send(FXP[FX.mode]);
+    node.connect(FX.ctx.destination);
+    FX.node=node;
+    players.forEach(p=>{
+      try{ const s=FX.ctx.createMediaElementSource(p.audio); s.connect(node); FX.sources.push(s); }catch(err){}
+    });
+  })();
+  return FX.wiring;
+}
+function fxWake(){                        // browsers start or pause the audio engine until someone presses play
+  if(FX.ctx&&FX.ctx.state!=="running")FX.ctx.resume().catch(()=>{});
 }
 function fxSet(m){
   FX.mode=(FX.mode===m)?0:m;
@@ -1035,13 +616,12 @@ function fxSet(m){
     fxB[k].classList.toggle("on",FX.mode===k);
     fxB[k].setAttribute("aria-pressed",FX.mode===k?"true":"false");
   });
-  if(FX.mode){ fxWire(); if(FX.ctx.state==="suspended")FX.ctx.resume(); }
+  if(FXLOCAL){ fxNote.hidden=!FX.mode; }
+  else if(FX.mode||FX.ctx){ fxWire(); fxWake(); if(FX.send)FX.send(FXP[FX.mode]); }
   redrawAllVisuals();
 }
-if(!FXLOCAL){
-  fxB[1].addEventListener("click",()=>fxSet(1));
-  fxB[2].addEventListener("click",()=>fxSet(2));
-}
+fxB[1].addEventListener("click",()=>fxSet(1));
+fxB[2].addEventListener("click",()=>fxSet(2));
 
 
 /* ---------- orbit ink: draw, release, float ---------- */
@@ -1204,156 +784,184 @@ document.addEventListener("keydown",e=>{
   }
 });
 
-/* ============ persistent game shell / radio / ticket system ============ */
-const FU_TICKET_KEY="fieldUnitTicketsV1";
-const FU_GAME_IDS=["fishexe","trainexe","ringroadexe","signalstepexe","pigeonexe"];
-const FU_GAME_TITLES={
-fishexe:"FISHEXE",trainexe:"TRAINEXE",ringroadexe:"RINGROADEXE",signalstepexe:"SIGNALSTEPEXE",pigeonexe:"PIGEONEXE"
-};
-const FU_PLAYLIST=[{title:"NATURE OF FREAK",artist:'FIELD UNIT',src:"https://field-unit.github.io/Nature_of_Freak_Demo.mp3"},{title:"NOMEMORY NOTREAL",artist:'FIELD UNIT',src:"https://field-unit.github.io/nomemory_notreal_mthree.mp3"},{title:"THE OF THE",artist:'FIELD UNIT',src:"https://field-unit.github.io/the_of_the_demo.mp3"},{title:"CURLEY CUH",artist:'FIELD UNIT',src:"https://field-unit.github.io/Curley_Cuh_Demo.mp3"},{title:"POCKET MUCK",artist:'FIELD UNIT',src:"https://field-unit.github.io/Pocket_Muck_Demo.mp3"},{title:"MEDIUM SLATE",artist:'FIELD UNIT',src:"https://field-unit.github.io/Medium_Slate_Demo.mp3"},{title:"LAN_33",artist:'FIELD UNIT',src:"https://field-unit.github.io/LAN_33_Demo.mp3"},{title:"NAVVY",artist:'FIELD UNIT',src:"https://field-unit.github.io/Navvy_Demo.mp3"},{title:"LBD+M3",artist:'FIELD UNIT',src:"https://field-unit.github.io/lbd_m3_demo.mp3"}];
-const fuShell=document.getElementById("gameShell");
-const fuFrame=document.getElementById("gameFrame");
-const fuShellTitle=document.getElementById("shellTitle");
-const fuShellClose=document.getElementById("shellClose");
-const fuShellTicketCount=document.getElementById("shellTicketCount");
-const fuTicketCount=document.getElementById("ticketCount");
-const fuUnlock=document.getElementById("ticketUnlock");
+/* ============ radio: plays the tiles in turn ============
+   There is one player per track: the radio just drives the tiles. Whatever is playing shows on its
+   tile and on the radio panel alike, and pressing a tile moves the radio to that track.
+   radio.on   carry on to the next track when one ends (RADIO, PLAY, SKIP, DANCE switch it on)
+   radio.stop STOP was pressed: DANCE won't restart the music until PLAY or RADIO is pressed
+   radio.index the current track (the last tile played), -1 before anything has played */
 const fuGlobalRadio=document.getElementById("globalRadio");
 const fuGlobalTitle=document.getElementById("globalRadioTitle");
 const fuGlobalToggle=document.getElementById("globalRadioToggle");
 const fuGlobalSkip=document.getElementById("globalRadioSkip");
 const fuGlobalStop=document.getElementById("globalRadioStop");
-const fuAudio=new Audio();
-fuAudio.preload="auto";
-fuAudio.volume=.34;
-const fuRadioState={started:false,musicOn:true,trackIndex:0,title:"WAITING FOR INPUT",artist:"FIELD UNIT"};
+const fuRadioMode=document.getElementById("radioMode");
+const radio={on:false,stop:false,index:-1};
 
-function fuReadTickets(){
-  try{
-    const value=JSON.parse(localStorage.getItem(FU_TICKET_KEY)||"{}");
-    return value&&typeof value==="object"?value:{};
-  }catch(err){return {};}
+function radioCurrent(){ return players[radio.index]||null; }
+function fuRenderRadio(){
+  const p=radioCurrent(), playing=!!(p&&p.playing);
+  fuGlobalTitle.textContent="FIELD UNIT RADIO // "+(p?String(p.title).toUpperCase():"WAITING");
+  fuGlobalToggle.textContent=playing?"PAUSE":"PLAY";
+  fuGlobalRadio.classList.toggle("on",radio.index>=0);
+  document.body.classList.toggle("radio-on",radio.index>=0);
+  fuRadioMode.classList.toggle("on",radio.on&&playing);
+  fuRadioMode.setAttribute("aria-pressed",radio.on&&playing?"true":"false");
 }
-function fuRenderTickets(){
-  const tickets=fuReadTickets();
-  let count=0;
-  document.querySelectorAll("[data-ticket]").forEach(slot=>{
-    const earned=!!tickets[slot.dataset.ticket];
-    slot.classList.toggle("earned",earned);
-    if(earned)count++;
-  });
-  fuTicketCount.textContent=count+" / 5 TICKETS";
-  fuShellTicketCount.textContent=count+" / 5 TICKETS";
-  const unlocked=count===5;
-  fuUnlock.classList.toggle("unlocked",unlocked);
-  fuUnlock.textContent=unlocked
-    ?"UNLOCKED // OPEN ALL FIELD UNIT TRACK DOWNLOADS"
-    :"LOCKED // EARN ALL FIVE TICKETS TO UNLOCK THE TRACK DOWNLOADS";
-  fuUnlock.setAttribute("aria-disabled",unlocked?"false":"true");
-}
-fuUnlock.addEventListener("click",event=>{
-  if(!fuUnlock.classList.contains("unlocked"))event.preventDefault();
-});
-
-function fuRadioSnapshot(){
-  return {
-    started:fuRadioState.started,
-    musicOn:fuRadioState.musicOn,
-    trackIndex:fuRadioState.trackIndex,
-    title:fuRadioState.title,
-    artist:fuRadioState.artist
-  };
-}
-function fuBroadcastRadio(){
-  fuGlobalTitle.textContent="FIELD UNIT RADIO // "+(fuRadioState.title||"WAITING");
-  fuGlobalToggle.textContent=fuRadioState.musicOn&&fuRadioState.started&&!fuAudio.paused?"PAUSE":"PLAY";
-  fuGlobalRadio.classList.toggle("on",fuRadioState.started);
-  if(fuFrame.contentWindow){
-    fuFrame.contentWindow.postMessage({type:"FU_RADIO_STATE",state:fuRadioSnapshot()},"*");
-  }
-}
-function fuSetTrack(index,autoplay=true){
-  fuRadioState.trackIndex=(index+FU_PLAYLIST.length)%FU_PLAYLIST.length;
-  const track=FU_PLAYLIST[fuRadioState.trackIndex];
-  fuRadioState.title=track.title;
-  fuRadioState.artist=track.artist;
-  fuRadioState.started=true;
-  fuAudio.pause();
-  fuAudio.src=track.src;
-  fuAudio.currentTime=0;
-  fuAudio.volume=.34;
-  if(autoplay&&fuRadioState.musicOn){
-    fuAudio.play().catch(()=>{});
-  }
-  fuBroadcastRadio();
-}
-function fuStartRadio(){
-  if(!fuRadioState.started){
-    fuRadioState.musicOn=true;
-    fuSetTrack(Math.floor(Math.random()*FU_PLAYLIST.length),true);
-  }else if(fuRadioState.musicOn){
-    fuAudio.play().catch(()=>{});
-    fuBroadcastRadio();
-  }
-}
-function fuToggleRadio(){
-  if(!fuRadioState.started){
-    fuStartRadio();
+function radioPlay(index){               // play a track by its tile, skipping any that failed to load
+  for(let n=0;n<players.length;n++){
+    const p=players[((index+n)%players.length+players.length)%players.length];
+    if(p.err)continue;
+    stopOthers(p);
+    if(p.audio.ended)p.audio.currentTime=0;
+    p.audio.play().catch(()=>{});
     return;
   }
-  fuRadioState.musicOn=!fuRadioState.musicOn;
-  if(fuRadioState.musicOn)fuAudio.play().catch(()=>{});
-  else fuAudio.pause();
-  fuBroadcastRadio();
+}
+function radioStart(){                   // RADIO / PLAY: resume the current track, or pick one
+  radio.on=true; radio.stop=false;
+  const p=radioCurrent();
+  if(p&&p.playing){fuRenderRadio();return;}   // already playing: just carry on into the next tracks
+  radioPlay(p?radio.index:Math.floor(Math.random()*players.length));
+}
+function fuStartRadio(){                 // DANCE: starts the radio, but never after STOP
+  if(radio.stop||players.some(p=>p.playing))return;
+  radioStart();
+}
+function fuToggleRadio(){                // PLAY/PAUSE on the panel
+  const p=radioCurrent();
+  if(p&&p.playing)p.audio.pause();
+  else radioStart();
+}
+function fuRadioButton(){                // the RADIO button: switch the radio on, or stop it
+  const p=radioCurrent();
+  if(radio.on&&p&&p.playing)fuStopRadio();
+  else radioStart();
 }
 function fuSkipRadio(){
-  fuRadioState.musicOn=true;
-  if(!fuRadioState.started)fuStartRadio();
-  else fuSetTrack(fuRadioState.trackIndex+1,true);
+  radio.on=true; radio.stop=false;
+  radioPlay(radio.index+1);
 }
 function fuStopRadio(){
-  fuAudio.pause();
-  fuRadioState.musicOn=false;
-  fuBroadcastRadio();
+  radio.on=false; radio.stop=true;
+  players.forEach(p=>{ if(!p.audio.paused)p.audio.pause(); });
+  fuRenderRadio();
 }
-fuAudio.addEventListener("play",()=>{fuRadioState.musicOn=true;fuBroadcastRadio();});
-fuAudio.addEventListener("pause",fuBroadcastRadio);
-fuAudio.addEventListener("ended",()=>fuSetTrack(fuRadioState.trackIndex+1,true));
 fuGlobalToggle.addEventListener("click",fuToggleRadio);
 fuGlobalSkip.addEventListener("click",fuSkipRadio);
 fuGlobalStop.addEventListener("click",fuStopRadio);
+fuRadioMode.addEventListener("click",fuRadioButton);
 
-function fuOpenGame(id){
-  if(!FU_GAME_IDS.includes(id))return;
-  fuStartRadio();fuShell.classList.add("on");fuShell.setAttribute("aria-hidden","false");document.body.classList.add("game-open");
-  fuShellTitle.textContent=FU_GAME_TITLES[id]+" // FIELD UNIT";
-  fuFrame.src="https://field-unit.github.io/"+id+"/";
-}
-function fuCloseGame(){fuShell.classList.remove("on");fuShell.setAttribute("aria-hidden","true");document.body.classList.remove("game-open");fuFrame.src="about:blank";fuRenderTickets();}
-document.querySelectorAll(".gamelaunch").forEach(link=>{link.addEventListener("click",event=>{const id=link.dataset.game;if(!FU_GAME_IDS.includes(id))return;event.preventDefault();fuOpenGame(id);});});
-fuShellClose.addEventListener("click",fuCloseGame);
-fuFrame.addEventListener("load",()=>{setTimeout(()=>fuBroadcastRadio(),60);setTimeout(()=>{if(fuFrame.contentWindow)fuFrame.contentWindow.postMessage({type:"FU_TICKET_STATE"},"*");},80);});
-window.addEventListener("message",event=>{const data=event.data||{};if(data.type==="FU_CLOSE_GAME"){fuCloseGame();return;}if(data.type==="FU_TICKET"){fuRenderTickets();if(fuFrame.contentWindow)fuFrame.contentWindow.postMessage({type:"FU_TICKET_STATE"},"*");return;}if(data.type==="FU_RADIO"){if(data.action==="start")fuStartRadio();if(data.action==="toggle")fuToggleRadio();if(data.action==="skip")fuSkipRadio();if(data.action==="state")fuBroadcastRadio();}});
-window.addEventListener("storage",event=>{if(event.key===FU_TICKET_KEY)fuRenderTickets();});
-fuRenderTickets();
-
-/* ---------- high-energy electro dancer ---------- */
+/* ---------- the dancer: a robot, in the same grain as everything else ----------
+   Ten joints, and a pose is ten whole angles. The clock steps from one pose to the next and nothing moves in
+   between — no easing anywhere — which is what makes it read as a machine rather than a person. The figure is
+   a handful of capsules sampled into the same Bayer-dithered ramp the artwork uses, so it is a cloud of green
+   dots rather than a silhouette, and 12BIT and 8BIT coarsen it exactly as they coarsen a tile: bigger blocks,
+   fewer greens. At 8BIT the robot is about fifteen pixels wide. */
 const danceMode=document.getElementById("danceMode");
 const danceStage=document.getElementById("danceStage");
-let danceOn=false;
-let danceTimer=0;
-const dancePoses=["pose-b","pose-c","pose-d"];
+const danceCanvas=document.getElementById("electroDancer");
+const dctx=danceCanvas.getContext("2d");
+const DANCE_W=72, DANCE_H=132, DANCE_SOFT=2.1, DEG=Math.PI/180;
 
-function danceShufflePose(){
-  danceStage.classList.remove("pose-b","pose-c","pose-d","flip");
-  if(Math.random()>.5)danceStage.classList.add("flip");
-  if(Math.random()>.25){
-    danceStage.classList.add(dancePoses[(Math.random()*dancePoses.length)|0]);
-  }
-  const edge=innerWidth<620?18:10;
-  const left=edge+Math.random()*(100-edge*2);
-  danceStage.style.setProperty("--dance-left",left.toFixed(1)+"%");
+/* A pose: [torso, head, upper arm L, forearm L, upper arm R, forearm R, thigh L, shin L, thigh R, shin R,
+   bob], angles in degrees from straight down, forearms and shins relative to the limb above them. All whole
+   multiples of 15. */
+const DANCE_POSES=[
+  [  0,   0, -90,   0,  90,   0,   0,   0,   0,   0, 0],
+  [ -5,  15, -90, -75,  90,  75,   0,   0,   0,   0, 2],
+  [  5, -15, -45, -90, 135,   0,  15, -30, -15,   0, 0],
+  [  0,   0,-135,  45,  45, -90, -15,   0,  15, -30, 1],
+  [-10,  15, -90,  90,  90, -90,   0,   0,   0,   0,-1],
+  [ 10,   0, -30,-120, 120,  30,  30, -45,  -5,   0, 0],
+  [  0, -15,-105, -45, 105,  45, -20,   0,  20, -45, 2],
+  [  5,  15, -60, -90, 150, -30,   0,   0,   0,   0, 0]
+];
+
+/* One pose as a list of parts, worked out from the hip up and down. A part is either a box
+   [1,cx,cy,halfW,halfH,angle] or a rod [0,x0,y0,x1,y1,radius]. The head and body are boxes and the limbs are
+   thin rods that stop short of each other, so the joints stay as gaps and the thing reads as built. */
+function danceParts(p){
+  const hx=36, hy=76+p[10];
+  const out=[];
+  const reach=(x,y,deg,len)=>[x+Math.sin(deg*DEG)*len, y+Math.cos(deg*DEG)*len];
+  const torso=p[0], head=torso+p[1];
+  const [sx,sy]=reach(hx,hy,torso+180,26);                  // up the spine to the shoulders
+  out.push([1,(hx+sx)/2,(hy+sy)/2,9,14,torso*DEG]);         // the body
+  const [nx,ny]=reach(sx,sy,head+180,4);
+  out.push([0,sx,sy,nx,ny,2]);                              // a short neck
+  const [hdx,hdy]=reach(nx,ny,head+180,8);
+  out.push([1,hdx,hdy,7,6,head*DEG]);                       // a square head
+  out.push([1,hdx,hdy-6.5,2,1.5,head*DEG]);                 // and its aerial
+  const px=Math.cos(torso*DEG)*12, py=Math.sin(torso*DEG)*12;
+  [[-1,2,3],[1,4,5]].forEach(([side,upper,fore])=>{
+    const ax=sx+px*side, ay=sy+py*side+1;
+    out.push([1,ax,ay,3,3,0]);                              // shoulder block
+    const [ex,ey]=reach(ax,ay,p[upper],16);
+    const [ex2,ey2]=reach(ax,ay,p[upper],13);
+    const [wx,wy]=reach(ex,ey,p[upper]+p[fore],14);
+    const [ex3,ey3]=reach(ex,ey,p[upper]+p[fore],3);
+    out.push([0,ax,ay,ex2,ey2,2.5], [0,ex3,ey3,wx,wy,2.5], [1,wx,wy,2.5,2.5,0]);
+  });
+  [[-1,6,7],[1,8,9]].forEach(([side,thigh,shin])=>{
+    const lx=hx+5.5*side, ly=hy+2;
+    const [kx,ky]=reach(lx,ly,p[thigh],19);
+    const [kx2,ky2]=reach(lx,ly,p[thigh],16);
+    const [fx,fy]=reach(kx,ky,p[thigh]+p[shin],18);
+    const [kx3,ky3]=reach(kx,ky,p[thigh]+p[shin],3);
+    out.push([0,lx,ly,kx2,ky2,3], [1,kx,ky,2.5,2.5,0], [0,kx3,ky3,fx,fy,2.5],
+             [1,fx+1.5*side,fy+1.5,4,1.8,0]);               // a foot
+  });
+  return out;
 }
+
+function danceDist(x,y,c){
+  if(c[0]){                                                 // a box, turned on the spot
+    const dx=x-c[1], dy=y-c[2], co=Math.cos(-c[5]), si=Math.sin(-c[5]);
+    const qx=Math.abs(dx*co-dy*si)-c[3], qy=Math.abs(dx*si+dy*co)-c[4];
+    return Math.hypot(Math.max(qx,0),Math.max(qy,0))+Math.min(Math.max(qx,qy),0);
+  }
+  const ax=c[3]-c[1], ay=c[4]-c[2], l=ax*ax+ay*ay;          // a rod
+  let s=l?((x-c[1])*ax+(y-c[2])*ay)/l:0;
+  s=s<0?0:s>1?1:s;
+  const qx=c[1]+ax*s-x, qy=c[2]+ay*s-y;
+  return Math.sqrt(qx*qx+qy*qy)-c[5];
+}
+
+function danceField(parts,seed){
+  return (u,v)=>{
+    const x=u*DANCE_W, y=v*DANCE_H;
+    let best=0;
+    for(let i=0;i<parts.length;i++){
+      const d=danceDist(x,y,parts[i]);
+      if(d<DANCE_SOFT){
+        const s=d<=0?1:1-d/DANCE_SOFT;
+        if(s>best)best=s;
+      }
+    }
+    if(y>DANCE_H-3)best=Math.max(best,(((x/5)|0)&1)?0.55:0.1);   // the dashed floor it stands on
+    if(best<=0)return 0;
+    // Kept around the middle of the ramp, where the dither speckles most: never a solid silhouette.
+    return best*(0.44+0.52*noise(x*0.6+seed*0.7,y*0.6-seed*0.4))*(0.82+0.36*noise(x*0.12,y*0.12+seed*0.25));
+  };
+}
+
+let danceOn=false, danceTimer=0, danceMoveTimer=0, dancePose=0;
+
+function danceDraw(){
+  if(!danceOn)return;
+  paint(dctx,DANCE_W,DANCE_H,danceField(danceParts(DANCE_POSES[dancePose%DANCE_POSES.length]),dancePose),dancePose*3,true);
+}
+
+// Where it stands, and which way it faces: it hops somewhere else every few seconds.
+function danceShufflePose(){
+  danceStage.classList.toggle("flip",Math.random()>.5);
+  const edge=innerWidth<620?18:10;
+  danceStage.style.setProperty("--dance-left",(edge+Math.random()*(100-edge*2)).toFixed(1)+"%");
+  dancePose+=1+((Math.random()*3)|0);
+  danceDraw();
+}
+
 function danceSet(on){
   danceOn=!!on;
   danceStage.classList.toggle("on",danceOn);
@@ -1361,11 +969,12 @@ function danceSet(on){
   danceMode.classList.toggle("on",danceOn);
   danceMode.setAttribute("aria-pressed",danceOn?"true":"false");
   danceMode.textContent=danceOn?"STOP DANCE":"DANCE";
-  clearInterval(danceTimer);
+  clearInterval(danceTimer); clearInterval(danceMoveTimer);
   if(danceOn){
     danceShufflePose();
-    danceTimer=setInterval(danceShufflePose,1550);
-    try{fuStartRadio();}catch(err){}
+    danceTimer=setInterval(()=>{ if(!document.hidden){ dancePose++; danceDraw(); } },REDUCED?460:165);
+    danceMoveTimer=setInterval(danceShufflePose,1550);
+    if(!players.some(p=>p.playing))fuStartRadio();
   }
 }
 danceMode.addEventListener("click",()=>danceSet(!danceOn));

@@ -1,0 +1,7 @@
+# Only for this PC — these never go to the repository behind the site.
+Open music site locally.bat
+tools/
+__pycache__/
+*.pyc
+Thumbs.db
+desktop.ini
