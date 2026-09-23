@@ -1,30 +1,82 @@
 # Field Unit — music site
 
 Live at **https://field-unit.co.uk/** (GitHub Pages, repository `field-unit/field-unit.github.io`; the `CNAME`
-file in this folder is what gives it the domain). Twelve demo tracks with their artwork, the radio, the CHIP FX
-switch, floating ink drawings and a dancing robot. No games, no tickets, no downloads.
+file in this folder is what gives it the domain). Twelve demo tracks with their artwork, the radio, the fx dice,
+a logo that talks when you spin it, and a dancing robot. No games, no tickets, no downloads.
 
 ## The controls
 
-One row of pixel symbols under the logo. Each is a real button with its name for screen readers, a tooltip on
-hover or keyboard focus, and a lit corner and filled face when it is on (not colour alone). The line underneath
-says what just changed, and **?** opens a key with every name, for touch screens, where there is no hover.
+The logo itself is one (below). Under it, one row of pixel symbols. Each is a real button with its name for screen
+readers, a tooltip on hover or keyboard focus, and a lit corner and filled face when it is on (not colour alone).
+The line underneath says what just changed, and **?** opens a key with every name, for touch screens, where there is
+no hover.
 
 | Symbol | Name | What it does |
 |---|---|---|
-| a chip round a square wave | Chip effect | Sound and picture together (below) |
-| a pencil and a trail | Draw | Touch screens only: turns drawing on, so a swipe draws a mark instead of scrolling; off again after each mark |
-| an eraser over a line | Clear drawings | Removes the floating drawings, and nothing else |
+| a die | FX dice | Rolls one of six effects on the sound and the picture; press again for off (below) |
 | a dancing figure | Dancer | The robot dances on the page, and starts the radio if nothing is playing |
 | a radio | Radio | Plays the tracks one after another |
 | an envelope | Contact | A small panel for getting in touch (below) |
 
-On a computer, drawing is with the mouse anywhere on the page, as before.
+## The talking ∅ (23 Sep 2026)
+
+Scroll over the logo, or swipe sideways across it on a phone (or drag it with a mouse), and it says "field unit".
+An up-and-down swipe still scrolls the page, so nobody gets stuck on it.
+
+- **It turns like a flywheel.** Each notch of the wheel adds speed, and once you stop it runs down by itself over a
+  few seconds. The faster it turns, the quicker and higher it says it — about natural speed for one notch, up to
+  2.4 times as fast flat out, a word every third of a second — and the louder and brighter. As it slows the words
+  slow, drop and fade, and the slash comes back round to where it belongs.
+- **Each time it's set going from still, it's a new voice:** a pitch between about 80 and 160 Hz, a longer or
+  shorter throat, flat or sung, and now and then a growl, a whisper, a doubled octave, a ring-modulated buzz or a
+  vibrato. Spinning it harder while it's going keeps the same voice.
+- **A tap** (a click, or Enter with it focused) says it once in a new voice and flips the slash over; a tap while
+  it's turning stops it. The arrow keys spin it, and Esc stops it.
+- A scroll that began on the page carries on scrolling the page when the logo passes under the pointer; one that
+  begins on the logo keeps turning it until you pause.
+- Browsers don't let a scroll start sound. Before the first tap or click on the page it turns silently and the
+  line under the buttons says "tap the ∅ first".
+- **The voice is made in the page, not recorded:** a buzz from a model of the vocal folds, sent through five
+  resonances, three of them moving through the shapes of the two words, with noise for the f, the d and the t. The timing and
+  the shapes follow a measured spoken "field unit" (the stress on field, the u fronted, the d run into the y). Each
+  new voice is rendered once, in a few milliseconds, then played like tape at the speed of the spin.
+- **The dice's face is on it too.** It goes into the same audio bus as the tracks: chip plays a crunched take (held
+  at 9.6 kHz like the tracks' chip copies, sixteen companded steps each way), slow plays it at 0.84, and dub, swirl,
+  radio and cave treat it as they treat the music. It never pulls the tracks into the audio graph by itself, and it
+  works with the page opened from disk.
+- With reduced motion set, it talks and brightens but doesn't turn.
+- Checked with Windows' en-GB speech recogniser as a rough, independent listener: every one of 18 test voices comes
+  out as "field unit" or its near-twin "sealed unit" (they differ only in the first sound, and the recogniser barely
+  separates them even for a recorded voice).
+
+## The fx dice (23 Sep 2026)
+
+Press the die and a small 3D die, drawn in the same dithered grain as everything else, bounces along the top of the
+buttons as if they were a shelf, turning a quarter at a time, and lands with one face up. Its faces are colours, not
+numbers, and each is an effect on the sound and the picture together. It sits on the shelf while the effect is on,
+the button lights in the face's colour, and the line underneath names it. Press again: off, back to the original
+sound and picture. Press again: another roll, never the same face twice running. Presses while it rolls are ignored.
+
+| Face | Sound | Picture |
+|---|---|---|
+| chip — crunched | every track swaps to its rendered chip copy (below) | 4-pixel blocks, three greens |
+| dub — tape echo | repeats at 0.36 s that darken and wobble as they fade | teal, with a faint repeat trailing each shape |
+| slow — down a gear | the tracks play at 0.84, and the pitch drops with them | amber, the grain crawling at under half speed |
+| swirl — phased | a slow six-stage phaser | purple, 2-pixel blocks, the logo twisting |
+| radio — far off | a narrow band, 420 Hz to 2.8 kHz, gently overdriven | red, a line slipping sideways now and then |
+| cave — big room | a long, dark 3.2 s reverb behind the dry sound | blue, everything a little lighter |
+
+- Dub, swirl, radio and cave run live in the browser's audio graph, built the first time one of them is rolled
+  (inside the press, so the browser lets it sound). From then on every copy of every track goes through it: a dry
+  path, plus the rolled effect faded in or out over a tenth of a second, and a safety limiter just under full scale
+  for when the two add up. A page opened from disk can't send the tracks through it, so there the dice rolls only
+  chip and slow.
+- Nothing is remembered between visits; every visit starts with the dice off.
 
 ## Contact (23 Sep 2026)
 
 The envelope opens a small panel under the controls; Esc or × closes it and focus goes back to the envelope. It
-never touches the music, and drawing is off inside it.
+never touches the music.
 
 - **Now:** there is no form service yet, so the panel shows the site's own address,
   fieldofunits@gmail.com, as a mail link. A Send button that only pretended to send would be worse than none.
@@ -43,10 +95,11 @@ never touches the music, and drawing is off inside it.
     that the subject names the site.
 - A copy opened from disk never shows the form, only the address.
 
-## CHIP FX (23 Sep 2026)
+## The chip face (was the CHIP FX switch, 23 Sep 2026)
 
-One switch in place of 12BIT and 8BIT. On, every track plays in a treated version of the same recording and the
-page's grain gets coarser to match; off, the original and the normal picture come back.
+CHIP FX came in as one switch in place of 12BIT and 8BIT, and is now one face of the dice. When it's rolled, every
+track plays in a treated version of the same recording and the page's grain gets coarser to match; off, the
+original and the normal picture come back.
 
 - **The sound is rendered once, not approximated live.** An effects-only treatment was approved on Tuckshop:
   the original stereo mix narrowed a little, the bass kept clean below 175 Hz, the upper band saturated, held at
@@ -63,21 +116,20 @@ page's grain gets coarser to match; off, the original and the normal picture com
     afresh and compares it with the approved WAV: no sample differs by more than one 24-bit step.
   - Every treated file decodes to exactly the length of its original, and a browser decodes each pair onto the same
     timeline (checked by cross-correlation: at most one sample apart), so no offsets are needed.
-- **Switching mid-track** keeps the music going. The other version is fetched only when it's wanted; while it
-  loads the current one plays on and the switch's light blinks. When it's ready it is started at the same point
-  in the song and cross-faded in over 60 ms, and the picture changes at that moment. Only the latest press counts,
-  so repeated presses settle on the last one. Paused, it swaps silently and stays paused. The radio and every tile
-  play in whichever version is chosen. At most three treated files are kept loaded at once.
-- **If a treated file can't load**, the original keeps playing, the switch stays off and the line under the
-  switches says so; pressing again tries again. If one fails while playing, the original carries on from the
-  same place.
+- **Switching mid-track** keeps the music going. The other version is fetched only when it's wanted (the die
+  starts fetching it as it rolls); while it loads the current one plays on and the dice's light blinks. When it's
+  ready it is started at the same point in the song and cross-faded in over 60 ms, and the picture changes at that
+  moment. Only the latest press counts. Paused, it swaps silently and stays paused. The radio and every tile play in
+  whichever version is chosen. At most three treated files are kept loaded at once.
+- **If a treated file can't load**, the original keeps playing, the dice goes back to off and the line under the
+  buttons says so; rolling again can bring chip up again. If one fails while playing, the original carries on from
+  the same place.
 - **The picture:** the logo, the artwork on every tile, the footer strip and the dancer are drawn with 4-pixel
-  blocks and three greens instead of five (the old 8BIT look), and the floating ink is drawn at one sixth size
-  and blown up with square pixels in the same three greens. Drawings, the dancer, the radio and the logo's motion
-  all carry on through a switch. Text, buttons and focus outlines stay sharp.
-- The old bit crusher, its audio worklet and the two buttons are gone. No sound goes through Web Audio any more,
-  so everything, CHIP FX included, also works with `index.html` opened straight from disk.
-- Normal is the default on every visit; the choice isn't remembered, and nothing ever plays on its own.
+  blocks and three greens instead of five (the old 8BIT look). The dancer, the radio and the logo's motion all
+  carry on through a change. Text, buttons and focus outlines stay sharp.
+- The old bit crusher, its audio worklet and the two buttons are gone. The chip face needs no Web Audio, so it
+  works with `index.html` opened straight from disk.
+- Nothing ever plays on its own.
 
 ## Earlier changes
 
@@ -91,6 +143,8 @@ page's grain gets coarser to match; off, the original and the normal picture com
   `POSTS` too, so they aren't in the page at all. The order of the list is unchanged, newest first.
 - **22 Sep:** the dancer became a robot drawn in grain: ten joints stepping between poses with no easing, boxes
   and rods with gaps at the joints. Published on field-unit.co.uk.
+- **23 Sep:** the draw tool (floating ink drawings, with its clear button) removed; the talking ∅ took its place as
+  the page's odd thing to play with. The CHIP FX switch became the fx dice.
 
 ## Adding a track
 
@@ -98,7 +152,7 @@ page's grain gets coarser to match; off, the original and the normal picture com
 2. Add a line to `POSTS` near the top of `index.html`'s script — newest first, oldest last:
    `{ title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" },`
 3. `python tools/make_art_thumbs.py` adds a small copy of the artwork to `art-thumbs.js`.
-4. `python tools/chip_fx.py` renders its CHIP FX version and updates the manifest (the others are left alone).
+4. `python tools/chip_fx.py` renders its chip version and updates the manifest (the others are left alone).
 5. Publish (below).
 
 A WAV can be converted here without extra software:
@@ -113,7 +167,7 @@ sf.write("Track.mp3", d, sr, format="MP3", subtype="MPEG_LAYER_III",
 ## Preview locally
 
 Double-click **`Open music site locally.bat`**, or run `python tools/serve.py` in this folder and open
-http://127.0.0.1:8160/. `tools/serve.py` answers byte ranges as GitHub Pages does, so seeking and the CHIP FX
+http://127.0.0.1:8160/. `tools/serve.py` answers byte ranges as GitHub Pages does, so seeking and the chip
 hand-over behave as they will online; Python's own `http.server` doesn't, and seeking fails there. Offline, the
 pixel font (Press Start 2P, from Google Fonts) falls back to the system monospace.
 

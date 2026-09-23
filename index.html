@@ -46,7 +46,10 @@ body::after{
 #glyph{
   width:min(340px,72vw);aspect-ratio:16/10;display:block;
   image-rendering:pixelated;image-rendering:crisp-edges;
+  cursor:grab;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;
+  touch-action:pan-y pinch-zoom;              /* a sideways swipe turns it; an up-and-down one still scrolls the page */
 }
+#glyph:active{cursor:grabbing}
 
 /* ============ CONTROLS ============ */
 /* One row of pixel symbols, each a real button with its name for screen readers and a tooltip on hover or focus.
@@ -54,9 +57,16 @@ body::after{
    screens, where there is no hover. */
 .sprite{display:none}
 .fxrow{
+  position:relative;                          /* the buttons' top edge is the die's shelf */
   display:flex;flex-wrap:wrap;justify-content:center;gap:10px;
   max-width:var(--col);margin:6px auto 8px;padding:0 14px;
 }
+/* the dice: lit in the colour of the face it landed on */
+.fxbtn.dice.on{color:var(--fxc);border-color:var(--fxc);background:var(--fxbg)}
+.fxbtn.dice[aria-pressed="true"]::before{background:var(--fxc);border-color:var(--fxc)}
+#fxDie{position:absolute;left:0;top:0;width:40px;height:40px;image-rendering:pixelated;image-rendering:crisp-edges;
+  pointer-events:none;z-index:6;opacity:0;transition:opacity .2s}
+#fxDie.show{opacity:1}
 .fxbtn{
   position:relative;display:grid;place-items:center;width:52px;height:44px;padding:0;
   font-family:var(--term);font-size:11px;line-height:1;color:var(--mid);background:none;
@@ -112,7 +122,7 @@ body::after{
 
 /* ============ ELECTRO DANCER ============ */
 /* The robot is drawn small, through the same dither as the tiles, then blown up with whole pixels — so it is
-   made of the same green grain, and CHIP FX takes its pixels away along with everything else's. */
+   made of the same green grain, and the dice's chip face takes its pixels away along with everything else's. */
 #danceStage{
   --dance-left:50%;
   --dance-bottom:104px;
@@ -138,42 +148,6 @@ body::after{
   #danceStage{--dance-bottom:92px}
 }
 
-
-/* ============ ORBIT INK ============ */
-#inkLayer{
-  position:fixed;
-  inset:0;
-  width:100%;
-  height:100%;
-  z-index:65;
-  pointer-events:none;
-  image-rendering:pixelated;
-  image-rendering:crisp-edges;
-}
-body.inking,
-body.inking *{
-  cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 21l4-1L20 7l-3-3L4 17z' fill='%23E4E2D6' stroke='%230e100d' stroke-width='1.2'/%3E%3Cpath d='M14.8 6.2l3 3' stroke='%238CAA55' stroke-width='1.5'/%3E%3C/svg%3E") 3 21,crosshair!important;
-  user-select:none!important;
-}
-#inkClear.flash{
-  color:var(--off);
-  border-color:var(--off);
-}
-
-.touchonly{display:none!important}
-.touchonly.available{display:grid!important}
-
-body.touch-ink-on{
-  overscroll-behavior:none;
-}
-
-body.touch-ink-on,
-body.touch-ink-on *{
-  touch-action:none!important;
-  user-select:none!important;
-  -webkit-user-select:none!important;
-  -webkit-touch-callout:none!important;
-}
 
 @media(max-width:600px){
   .fxrow{gap:8px}
@@ -278,48 +252,45 @@ body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of 
 </head>
 <body>
 
-<div class="hero"><canvas id="glyph" width="176" height="110" role="img" aria-label="null set"></canvas></div>
+<div class="hero"><canvas id="glyph" width="176" height="110" tabindex="0" role="button" aria-label="the ∅ talks: press to hear it, arrow keys to spin it"></canvas></div>
 
-﻿<svg class="sprite" aria-hidden="true" focusable="false">
-  <symbol id="i-chip" viewBox="0 0 12 12"><path d="M4 0h1v1h-1zM7 0h1v1h-1zM4 1h1v1h-1zM7 1h1v1h-1zM2 2h8v1h-8zM2 3h1v1h-1zM9 3h1v1h-1zM2 4h1v1h-1zM5 4h3v1h-3zM9 4h1v1h-1zM2 5h1v1h-1zM5 5h1v1h-1zM7 5h1v1h-1zM9 5h1v1h-1zM2 6h1v1h-1zM5 6h1v1h-1zM7 6h1v1h-1zM9 6h1v1h-1zM2 7h4v1h-4zM7 7h3v1h-3zM2 8h1v1h-1zM9 8h1v1h-1zM2 9h8v1h-8zM4 10h1v1h-1zM7 10h1v1h-1zM4 11h1v1h-1zM7 11h1v1h-1z"/></symbol>
-  <symbol id="i-draw" viewBox="0 0 12 12"><path d="M9 0h2v1h-2zM8 1h4v1h-4zM7 2h4v1h-4zM6 3h4v1h-4zM5 4h4v1h-4zM4 5h4v1h-4zM3 6h4v1h-4zM3 7h3v1h-3zM2 8h2v1h-2zM2 9h1v1h-1zM0 10h1v1h-1zM3 10h2v1h-2zM1 11h2v1h-2zM5 11h1v1h-1z"/></symbol>
-  <symbol id="i-clear" viewBox="0 0 12 12"><path d="M7 0h1v1h-1zM6 1h3v1h-3zM5 2h5v1h-5zM4 3h3v1h-3zM8 3h3v1h-3zM3 4h3v1h-3zM7 4h3v1h-3zM2 5h3v1h-3zM6 5h3v1h-3zM3 6h1v1h-1zM5 6h3v1h-3zM4 7h3v1h-3zM5 8h1v1h-1zM0 10h2v1h-2zM4 10h2v1h-2zM8 10h2v1h-2zM2 11h2v1h-2zM6 11h2v1h-2zM10 11h2v1h-2z"/></symbol>
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-null" viewBox="0 0 12 12"><path d="M11 0h1v1h-1zM4 1h4v1h-4zM10 1h1v1h-1zM2 2h2v1h-2zM8 2h2v1h-2zM2 3h1v1h-1zM8 3h2v1h-2zM1 4h1v1h-1zM7 4h1v1h-1zM10 4h1v1h-1zM1 5h1v1h-1zM6 5h1v1h-1zM10 5h1v1h-1zM1 6h1v1h-1zM5 6h1v1h-1zM10 6h1v1h-1zM1 7h1v1h-1zM4 7h1v1h-1zM10 7h1v1h-1zM2 8h2v1h-2zM9 8h1v1h-1zM2 9h2v1h-2zM8 9h2v1h-2zM1 10h1v1h-1zM4 10h4v1h-4zM0 11h1v1h-1z"/></symbol>
   <symbol id="i-dance" viewBox="0 0 12 12"><path d="M9 0h1v1h-1zM5 1h2v1h-2zM9 1h1v1h-1zM5 2h2v1h-2zM8 2h1v1h-1zM6 3h2v1h-2zM4 4h4v1h-4zM6 5h1v1h-1zM6 6h1v1h-1zM5 7h3v1h-3zM4 8h1v1h-1zM8 8h1v1h-1zM3 9h1v1h-1zM9 9h1v1h-1zM4 10h1v1h-1zM8 10h1v1h-1zM3 11h2v1h-2zM8 11h2v1h-2z"/></symbol>
+  <symbol id="i-die" viewBox="0 0 12 12"><path d="M1 0h10v1h-10zM0 1h1v10h-1zM11 1h1v10h-1zM1 11h10v1h-10zM2 2h2v2h-2zM5 5h2v2h-2zM8 8h2v2h-2z"/></symbol>
   <symbol id="i-mail" viewBox="0 0 12 12"><path d="M0 2h12v1h-12zM0 3h2v1h-2zM10 3h2v1h-2zM0 4h1v1h-1zM2 4h1v1h-1zM9 4h1v1h-1zM11 4h1v1h-1zM0 5h1v1h-1zM3 5h1v1h-1zM8 5h1v1h-1zM11 5h1v1h-1zM0 6h1v1h-1zM4 6h1v1h-1zM7 6h1v1h-1zM11 6h1v1h-1zM0 7h1v1h-1zM5 7h2v1h-2zM11 7h1v1h-1zM0 8h1v1h-1zM11 8h1v1h-1zM0 9h12v1h-12z"/></symbol>
   <symbol id="i-radio" viewBox="0 0 12 12"><path d="M9 0h1v1h-1zM8 1h1v1h-1zM7 2h1v1h-1zM6 3h1v1h-1zM1 4h10v1h-10zM1 5h1v1h-1zM10 5h1v1h-1zM1 6h1v1h-1zM3 6h2v1h-2zM8 6h1v1h-1zM10 6h1v1h-1zM1 7h1v1h-1zM3 7h2v1h-2zM7 7h3v1h-3zM1 8h1v1h-1zM3 8h2v1h-2zM8 8h1v1h-1zM10 8h1v1h-1zM1 9h1v1h-1zM10 9h1v1h-1zM1 10h10v1h-10z"/></symbol>
 </svg>
 <div class="fxrow" role="group" aria-label="Controls">
-  <button class="fxbtn" id="chipFx" type="button" aria-pressed="false" aria-label="Chip effect" data-tip="Chip effect — sound and picture"><svg class="ico" aria-hidden="true"><use href="#i-chip"/></svg></button>
-  <button class="fxbtn touchonly" id="inkMode" type="button" aria-pressed="false" aria-label="Draw on the page" data-tip="Draw on the page"><svg class="ico" aria-hidden="true"><use href="#i-draw"/></svg></button>
-  <button class="fxbtn" id="inkClear" type="button" aria-label="Clear drawings" data-tip="Clear drawings"><svg class="ico" aria-hidden="true"><use href="#i-clear"/></svg></button>
-  <button class="fxbtn" id="danceMode" type="button" aria-pressed="false" aria-label="Dancer" data-tip="Show dancer"><svg class="ico" aria-hidden="true"><use href="#i-dance"/></svg></button>
-  <button class="fxbtn" id="radioMode" type="button" aria-pressed="false" aria-label="Radio" data-tip="Field Unit radio"><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg></button>
-  <button class="fxbtn" id="contactBtn" type="button" aria-expanded="false" aria-controls="contactPanel" aria-label="Contact" data-tip="Contact"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg></button>
-  <button class="fxbtn" id="fxHelp" type="button" aria-expanded="false" aria-controls="fxKey" aria-label="What the buttons do" data-tip="What the buttons do">?</button>
+  <button class="fxbtn dice" id="fxDice" type="button" aria-pressed="false" aria-label="fx dice" data-tip="roll the dice"><svg class="ico" aria-hidden="true"><use href="#i-die"/></svg></button>
+  <button class="fxbtn" id="danceMode" type="button" aria-pressed="false" aria-label="dancer" data-tip="dancer"><svg class="ico" aria-hidden="true"><use href="#i-dance"/></svg></button>
+  <button class="fxbtn" id="radioMode" type="button" aria-pressed="false" aria-label="radio" data-tip="radio"><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg></button>
+  <button class="fxbtn" id="contactBtn" type="button" aria-expanded="false" aria-controls="contactPanel" aria-label="contact" data-tip="contact"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg></button>
+  <button class="fxbtn" id="fxHelp" type="button" aria-expanded="false" aria-controls="fxKey" aria-label="what the buttons do" data-tip="key">?</button>
+  <canvas id="fxDie" width="20" height="20" aria-hidden="true"></canvas>
 </div>
 <p class="fxstatus" id="fxStatus" role="status"></p>
 <div class="fxkey" id="fxKey" hidden>
   <ul>
-    <li><svg class="ico" aria-hidden="true"><use href="#i-chip"/></svg><span><b>Chip effect</b>Sound and picture together: a gritty, lo-fi treatment of the same recording, and a coarser picture.</span></li>
-    <li class="touchonly" id="keyDraw"><svg class="ico" aria-hidden="true"><use href="#i-draw"/></svg><span><b>Draw</b>Turns drawing on, so a swipe draws a mark instead of scrolling. Turns itself off after each mark.</span></li>
-    <li><svg class="ico" aria-hidden="true"><use href="#i-clear"/></svg><span><b>Clear drawings</b>Removes the floating drawings. The music and the dancer carry on.</span></li>
-    <li><svg class="ico" aria-hidden="true"><use href="#i-dance"/></svg><span><b>Dancer</b>A small robot dances on the page, and starts the radio if nothing is playing.</span></li>
-    <li><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg><span><b>Radio</b>Plays the tracks one after another.</span></li>
-    <li><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span><b>Contact</b>A way to get in touch. The music carries on.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-null"/></svg><span><b>the ∅</b>scroll over it or swipe across it and it talks. harder, faster. tap to stop.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-die"/></svg><span><b>dice</b>rolls one of six: chip, dub, slow, swirl, radio, cave. sound and picture. again for off.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-dance"/></svg><span><b>dancer</b>a robot. starts the radio if it's quiet.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg><span><b>radio</b>everything, one after another.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span><b>contact</b>get in touch.</span></li>
   </ul>
 </div>
 <div class="contact" id="contactPanel" role="dialog" aria-labelledby="contactTitle" hidden>
-  <div class="contact-head"><h2 id="contactTitle">CONTACT</h2><button class="contact-close" id="contactClose" type="button" aria-label="Close contact">&#215;</button></div>
+  <div class="contact-head"><h2 id="contactTitle">contact</h2><button class="contact-close" id="contactClose" type="button" aria-label="close">&#215;</button></div>
   <form id="contactForm" novalidate hidden>
-    <label>YOUR EMAIL (for a reply)<input name="email" type="email" autocomplete="email" required maxlength="254"></label>
-    <label>MESSAGE<textarea name="message" required maxlength="2000"></textarea></label>
-    <label>NAME (optional)<input name="name" type="text" autocomplete="name" maxlength="100"></label>
-    <label class="hp" aria-hidden="true">Leave this empty<input name="_gotcha" type="text" tabindex="-1" autocomplete="off"></label>
-    <button class="contact-send" id="contactSend" type="submit">SEND</button>
+    <label>your email (for a reply)<input name="email" type="email" autocomplete="email" required maxlength="254"></label>
+    <label>message<textarea name="message" required maxlength="2000"></textarea></label>
+    <label>name (optional)<input name="name" type="text" autocomplete="name" maxlength="100"></label>
+    <label class="hp" aria-hidden="true">leave this empty<input name="_gotcha" type="text" tabindex="-1" autocomplete="off"></label>
+    <button class="contact-send" id="contactSend" type="submit">send</button>
     <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
     <p class="contact-note" id="contactNote"></p>
   </form>
-  <p class="contact-fallback" id="contactFallback">Write to Field Unit at <a id="contactMail" href="mailto:fieldofunits@gmail.com">fieldofunits@gmail.com</a></p>
+  <p class="contact-fallback" id="contactFallback">write to <a id="contactMail" href="mailto:fieldofunits@gmail.com">fieldofunits@gmail.com</a></p>
 </div>
 
 <div id="danceStage" aria-hidden="true">
@@ -340,7 +311,6 @@ body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of 
   <div class="foot"><canvas id="footc" width="110" height="7" aria-hidden="true"></canvas></div>
 </div>
 
-<canvas id="inkLayer" aria-hidden="true"></canvas>
 <div class="lb" id="lb" aria-hidden="true"><img alt=""></div>
 
 <script src="art-thumbs.js"></script>
@@ -376,27 +346,53 @@ const RAMP=["#0e100d","#2b331f","#698246","#8CAA55","#E4E2D6"];
 const RGB=RAMP.map(h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]);
 const BAYER=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
 const REDUCED=matchMedia("(prefers-reduced-motion: reduce)").matches;
-/* The two looks. CHIP FX coarsens every grain canvas together — the logo, the artwork, the footer, the dancer —
-   with bigger blocks and three greens instead of five; the floating ink has its own pass (below). */
+/* The looks. Every grain canvas (the logo, the artwork, the footer, the dancer) is drawn through the current one.
+   Normal is the five greens. Each face of the fx dice brings its own: chip coarsens the blocks to three greens;
+   the others tint the ramp and add one small thing each. */
+const hexRGB=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+const RAMPS={
+  dub:["#0b1112","#163337","#2e737a","#5fb3ad","#e0efe9"],
+  slow:["#12100a","#3a2c15","#86622a","#d09a44","#f1e4c9"],
+  swirl:["#100d14","#2c2140","#654c94","#a58ad4","#ece4f5"],
+  radio:["#130b0c","#3d1b20","#8a3d47","#cf7680","#f5e2e2"],
+  cave:["#0a0d14","#18263d","#35578b","#6d99d4","#e1eaf6"]
+};
+const tinted=k=>RAMPS[k].map(hexRGB);
 const LOOK={
   normal:{block:1,palette:[0,1,2,3,4]},
-  chip:{block:4,palette:[0,2,4]}
+  chip:{block:4,palette:[0,2,4]},
+  dub:{block:1,palette:[0,1,2,3,4],rgb:tinted("dub"),echo:0.05},        // a faint repeat trailing each shape
+  slow:{block:1,palette:[0,1,2,3,4],rgb:tinted("slow"),speed:0.45},     // the grain crawls at under half speed
+  swirl:{block:2,palette:[0,1,2,3,4],rgb:tinted("swirl"),warp:0.55},    // the logo twists
+  radio:{block:1,palette:[0,1,2,3,4],rgb:tinted("radio"),scan:true},    // now and then a line slips sideways
+  cave:{block:1,palette:[0,1,2,3,4],rgb:tinted("cave"),lift:0.06}       // everything a little lighter, as if lit
 };
 let look=LOOK.normal;
+// The effects' shared state, set up here so the tiles below can already be routed and slowed as they're made.
+const fxAudio={ctx:null,input:null,dry:null,out:null,chain:null,media:false,routed:new WeakSet()};
+const dice={face:null,last:null,rolling:false};
+// The talking ∅ (its engine is further down): how fast it's turning and where it's got to, how lit it is, and its voice.
+const voice={vel:0,yaw:0,tap:0,tapTo:0,glow:0,flash:0,level:0,slow:true,buf:null,chip:null,len:0,pos:0,
+  bus:null,tone:null,srcs:[],raf:0,at:0,painted:0,onceTill:0,side:1,hintAt:-1e9};
 
 function paint(ctx,W,H,field,phase,cutout){   // cutout: leave the darkest level clear, for the dancer
   const img=ctx.createImageData(W,H), d=img.data;
   const px=phase&3, py=(phase>>1)&3;
-  const block=look.block, palette=look.palette;
+  const block=look.block, palette=look.palette, rgb=look.rgb||RGB, lift=look.lift||0, echo=look.echo||0;
   const top=palette.length-1;
 
   for(let y=0;y<H;y+=block){
+    // radio: every so often a line is pushed a few pixels sideways, and it moves on each frame
+    const slip=look.scan&&((((y/block)|0)+phase*7)%29===0)?3:0;
     for(let x=0;x<W;x+=block){
-      let v=field((x+block*0.5)/W,(y+block*0.5)/H); v=v<0?0:v>1?1:v;
+      const u=(x+slip+block*0.5)/W, w=(y+block*0.5)/H;
+      let v=field(u,w);
+      if(echo){ const e=field(u-echo,w)*0.5; if(e>v)v=e; }
+      v+=lift; v=v<0?0:v>1?1:v;
       const lv=v*top, b=lv|0, f=lv-b;
       const t=(BAYER[((y/block)+py)&3][((x/block)+px)&3]+0.5)/16;
       const lvl=f>t?Math.min(b+1,top):b;
-      const c=RGB[palette[lvl]], alpha=cutout&&!lvl?0:255;
+      const c=rgb[palette[lvl]], alpha=cutout&&!lvl?0:255;
       for(let yy=0;yy<block && y+yy<H;yy++){
         for(let xx=0;xx<block && x+xx<W;xx++){
           const i=((y+yy)*W+(x+xx))*4;
@@ -420,18 +416,27 @@ function noise(x,y){
 const glyph=document.getElementById("glyph");
 const gctx=glyph.getContext("2d");
 function glyphField(t){
+  const warp=look.warp||0;
+  const turn=REDUCED?0:voice.yaw+voice.tap, tc=Math.cos(turn), ts=Math.sin(turn);   // spun: the slash turns in the ring
+  const lit=Math.min(1,voice.glow+voice.flash);                                       // and it brightens as it talks
   return (u,v)=>{
-    const dx=(u-0.5)*1.6, dy=(v-0.5);
-    const d=Math.hypot(dx,dy);
+    let dx=(u-0.5)*1.6, dy=(v-0.5);
+    if(turn)[dx,dy]=[dx*tc+dy*ts,dy*tc-dx*ts];       // clockwise as it's pushed right or scrolled down
+    let d=Math.hypot(dx,dy);
+    if(warp){                            // swirl: the middle turns further than the edge, slowly back and forth
+      const a=warp*Math.sin(t*0.5)*Math.max(0,1-d/0.55), c=Math.cos(a), s=Math.sin(a);
+      [dx,dy]=[dx*c-dy*s,dx*s+dy*c];
+      d=Math.hypot(dx,dy);
+    }
     const ring=Math.max(0,1-Math.abs(d-0.30)/0.075);          // circle
     // slash at 45°
     const s=Math.abs(dx*0.7071+dy*0.7071);
     const inCirc=d<0.42?1:Math.max(0,1-(d-0.42)/0.06);
     const slash=Math.max(0,1-s/0.05)*inCirc;
     // interior glow + drifting grain
-    const glow=Math.max(0,0.42-d)*0.9;
+    const glow=Math.max(0,0.42-d)*(0.9+0.8*lit*(look.block>2?0.4:1));   // less under chip, where it'd go solid white
     const gr=noise(u*26+t*0.7,v*16-t*0.5)*0.30;
-    return Math.min(1,Math.max(ring,slash)*0.98+glow*0.55+gr*(d<0.5?1:0.35));
+    return Math.min(1,Math.max(ring,slash)*0.98+glow*0.55+gr*(d<0.5?1:0.35)+lit*0.04);
   };
 }
 /* ---------- footer strip ---------- */
@@ -473,6 +478,8 @@ function stopOthers(me){
    radio; the other one is silent, whether it is loading, waiting or being faded out. */
 function trackAudio(p,src,preload){
   const a=new Audio(); a.preload=preload; a.src=src;
+  fxRoute(a);                                      // once the live effects exist, every copy goes through them
+  if(dice.face&&dice.face.rate)fxRateOne(a,dice.face.rate);
   const live=()=>a===p.audio;
   a.addEventListener("loadedmetadata",()=>{ if(a===p.orig){p.dur=a.duration||0;if(!p.playing)p.timeEl.textContent="00:00";} });
   a.addEventListener("error",()=>{
@@ -483,7 +490,7 @@ function trackAudio(p,src,preload){
     if(!live())return;
     if(p.dur){p.prog=a.currentTime/p.dur;p.timeEl.textContent=fmt(a.currentTime);}
     if(a.readyState>0){ p.lastT=a.currentTime; p.lastTAt=performance.now(); }   // where it was, should this copy fail
-    if(!animating) drawPlayer(p,perf());
+    if(!animating) drawPlayer(p,clock());
   });
   // The radio follows whichever tile is playing, so the two always show the same track.
   a.addEventListener("play",()=>{ if(!live())return; p.playing=true;p.tile.classList.add("playing");p.btn.textContent="‖";p.btn.setAttribute("aria-label","pause "+p.title);radio.index=p.index;wake();fuRenderRadio(); });
@@ -495,6 +502,7 @@ function trackAudio(p,src,preload){
 // Play a track in whichever version is chosen, from where it was (or from the start once it has ended).
 function startTrack(p){
   chipSettle();
+  fxWake();
   stopOthers(p);
   const want=chip.on&&p.fxSrc?chipAlt(p):p.orig;
   if(want!==p.audio){
@@ -533,7 +541,7 @@ POSTS.forEach((post,idx)=>{
              btn:tile.querySelector(".pbtn"),timeEl:tile.querySelector(".atime"),
              tile,prog:0,playing:false,seed:idx*3.7+1,audio:null,dur:0,err:false,artLum:null,artImg:null,
              index:players.length,title:post.title};
-    // Two copies of the recording can stand behind a tile: the original, and its CHIP FX version, fetched only
+    // Two copies of the recording can stand behind a tile: the original, and its chip version, fetched only
     // when someone asks for it (tools/chip_fx.py makes them). p.audio is whichever is the track at the moment.
     const fx=window.FU_CHIP_FX&&FU_CHIP_FX.tracks?Object.values(FU_CHIP_FX.tracks).find(v=>v.original===post.audio):null;
     p.fxSrc=fx?fx.fx:null;
@@ -602,7 +610,7 @@ function drawPlayer(p,t){
   paint(p.ctx,p.W,p.H,audioField(p,t),REDUCED?0:(t*8)|0);
 }
 
-function redrawAllVisuals(t=perf()){
+function redrawAllVisuals(t=clock()){
   const ph=REDUCED?0:(t*8)|0;
   paint(gctx,176,110,glyphField(t),ph);
   paint(fctx,110,7,footField(t),ph);
@@ -612,14 +620,17 @@ function redrawAllVisuals(t=perf()){
 
 /* ---------- animation loop (hero + footer + playing tiles) ---------- */
 const perf=()=>performance.now()/1000;
+// The picture's own time: it runs slower under the slow face, without jumping when the look changes.
+let clockT=0, clockAt=perf();
+function clock(){ const n=perf(); clockT+=(n-clockAt)*(look.speed||1); clockAt=n; return clockT; }
 let animating=false, rafId=0, lastTick=-1;
 function frame(){
-  const t=perf();
+  const t=clock();
   const tick=(t*12)|0;                 // ~12fps crawl — authentic + cheap
   if(tick!==lastTick){
     lastTick=tick;
     const ph=tick;
-    paint(gctx,176,110,glyphField(t),ph);
+    if(!voice.raf)paint(gctx,176,110,glyphField(t),ph);   // while it's turning, the voice's loop draws it, more often
     paint(fctx,110,7,footField(t),ph);
     players.forEach(p=>{if(p.playing)drawPlayer(p,t);});
   }
@@ -635,15 +646,15 @@ if(REDUCED){ paint(gctx,176,110,glyphField(0.5),0); paint(fctx,110,7,footField(0
 else frame();
 
 
-/* ---------- CHIP FX: one switch for sound and picture ----------
+/* ---------- chip: one face of the fx dice ----------
    Every track has a second copy, made once by tools/chip_fx.py with the treatment approved on Tuckshop
-   (23 Sep 2026): the same recording, filtered, held at 9.6 kHz, quantised and blended back — no new notes. The
-   switch hands a playing track over to the other copy at the same moment in the song, with a 60 ms cross-fade,
+   (23 Sep 2026): the same recording, filtered, held at 9.6 kHz, quantised and blended back — no new notes. Chip on
+   or off hands a playing track over to the other copy at the same moment in the song, with a 60 ms cross-fade,
    and changes the picture at the same instant. While the other copy loads, the one playing carries on and the
-   switch's light blinks; if it can't load, nothing changes and the line under the switches says so. Only the most
-   recent press can take effect. Nothing is fetched until it is wanted, and only a few copies are kept at once. */
+   dice's light blinks; if it can't load, the dice goes back to off and the line under the buttons says so. Only
+   the most recent change can take effect. Nothing is fetched until it is wanted, and only a few copies are kept. */
 const chip={on:false,want:null,gen:0};
-const chipBtn=document.getElementById("chipFx");
+const diceBtn=document.getElementById("fxDice");
 const fxStatus=document.getElementById("fxStatus");
 const VOLUME_WORKS=(()=>{ try{ const a=new Audio(); a.volume=.5; return a.volume===.5; }catch(e){ return false; } })();
 const ALT_KEEP=3, altUsed=[];
@@ -660,7 +671,7 @@ function once(el,type,ms){
   });
 }
 
-function chipAlt(p){                  // a track's CHIP FX copy, made on first use; the least recently used let go
+function chipAlt(p){                  // a track's chip copy, made on first use; the least recently used let go
   if(!p.alt)p.alt=trackAudio(p,p.fxSrc,"auto");
   const i=altUsed.indexOf(p); if(i>=0)altUsed.splice(i,1); altUsed.push(p);
   while(altUsed.length>ALT_KEEP){
@@ -676,18 +687,14 @@ function chipDrop(p){
   try{ a.pause(); a.removeAttribute("src"); a.load(); }catch(e){}
 }
 
-function chipCommit(on){              // the switch and the picture change together
+function chipCommit(on){              // the sound and the picture change together
   chip.on=on;
-  look=on?LOOK.chip:LOOK.normal;
-  document.documentElement.dataset.chip=on?"on":"off";
-  chipBtn.classList.remove("pending");
-  chipBtn.classList.toggle("on",on);
-  chipBtn.setAttribute("aria-pressed",on?"true":"false");
+  diceBtn.classList.remove("pending");
+  if(on)look=LOOK.chip; else if(look===LOOK.chip)look=LOOK.normal;
   redrawAllVisuals();
 }
 
-function chipToggle(){
-  const want=!(chip.want===null?chip.on:chip.want);
+function chipSet(want){
   const gen=++chip.gen;
   const p=players.find(q=>q.playing)||radioCurrent();
   const to=p?(want?(p.fxSrc?chipAlt(p):null):p.orig):null;
@@ -695,17 +702,17 @@ function chipToggle(){
     // Nothing to hand over: the picture changes now, and the next track plays in the chosen version.
     chip.want=null;
     chipCommit(want);
-    say(want?(p&&!p.fxSrc?"Chip effect on (this track has no chip version)":"Chip effect on"):"Chip effect off");
+    if(want)say(p&&!p.fxSrc?"chip — picture only on this one":FACE.chip.say);
     return;
   }
   chip.want=want;
-  chipBtn.classList.add("pending");
-  say(want?"Chip effect: loading…":"Back to the original…");
+  if(want){ diceBtn.classList.add("pending"); say("chip — loading…"); }
   chipHandover(p,p.audio,to,gen).then(ok=>{
-    if(gen!==chip.gen)return;         // a newer press, a new track or a seek has taken over
+    if(gen!==chip.gen)return;         // a newer roll, a new track or a seek has taken over
     chip.want=null;
-    if(ok){ chipCommit(want); say(want?"Chip effect on":"Chip effect off"); }
-    else{ chipBtn.classList.remove("pending"); say("The chip effect couldn't load. Press it again to try once more."); if(want)chipDrop(p); }
+    if(ok){ chipCommit(want); if(want)say(FACE.chip.say); }
+    else if(want){ chipDrop(p); diceOff("chip didn't load"); }
+    else chipCommit(false);
   });
 }
 
@@ -715,7 +722,7 @@ function chipSettle(){
   const want=chip.want;
   chip.want=null; chip.gen++;
   chipCommit(want);
-  say(want?"Chip effect on":"Chip effect off");
+  if(want)say(FACE.chip.say);
 }
 
 async function chipHandover(p,from,to,gen){
@@ -762,7 +769,7 @@ async function chipHandover(p,from,to,gen){
   }catch(e){ return false; }
 }
 
-// A CHIP FX copy that fails while it is the track: the original carries on from the same place.
+// A chip copy that fails while it is the track: the original carries on from the same place.
 function chipLost(p,a){
   if(a!==p.alt)return;
   if(p.audio===a){
@@ -771,11 +778,542 @@ function chipLost(p,a){
     p.audio=p.orig; p.orig.currentTime=at;
     if(was)p.orig.play().catch(()=>{});
     chip.gen++; chip.want=null; chipCommit(false);
-    say("The chip effect couldn't load, so the original is playing.");
+    if(dice.face===FACE.chip)diceOff("chip dropped out — back to the original");
   }
   p.alt=null;
 }
-chipBtn.addEventListener("click",chipToggle);
+
+/* ---------- the live effects: dub, swirl, radio, cave ----------
+   Built with the browser's audio graph the first time one is rolled (inside the click, so the browser lets it
+   sound). From then on every copy of every track is routed through it: a dry path, plus the rolled effect mixed in,
+   faded over a tenth of a second either way. A page opened from disk can't do this, so there the dice rolls only
+   chip and slow. Slow needs no graph: the tracks just play at 0.84, and the pitch drops with it.
+   The talking ∅ uses the same bus, on its own if need be: it makes its voice itself, so it works from disk too,
+   and it doesn't pull the tracks into the graph (they only go through it once a live effect is rolled). */
+const AC=window.AudioContext||window.webkitAudioContext;
+const LIVE_OK=!!AC&&/^https?:$/.test(location.protocol);
+function fxCtx(){                            // the context and the bus, made on first need
+  const A=fxAudio;
+  if(A.ctx||!AC)return A.ctx;
+  try{ if(navigator.audioSession)navigator.audioSession.type="playback"; }catch(e){}   // play past the silent switch
+  const ctx=new AC();
+  A.ctx=ctx; A.input=ctx.createGain(); A.dry=ctx.createGain(); A.out=ctx.createGain();
+  // a safety limiter just under full scale, for when the dry sound and an effect add up; the tracks alone
+  // (mastered below it) pass through untouched
+  const lim=ctx.createDynamicsCompressor();
+  lim.threshold.value=-0.5; lim.knee.value=0; lim.ratio.value=20; lim.attack.value=0.002; lim.release.value=0.12;
+  A.input.connect(A.dry); A.dry.connect(A.out); A.out.connect(lim); lim.connect(ctx.destination);
+  return ctx;
+}
+function fxGraph(){                          // the bus with the tracks going through it, on the web only
+  if(!LIVE_OK)return null;
+  const ctx=fxCtx();
+  if(ctx&&!fxAudio.media){ fxAudio.media=true; players.forEach(p=>[p.orig,p.alt].forEach(fxRoute)); }
+  return ctx;
+}
+function fxRoute(a){
+  const A=fxAudio;
+  if(!a||!A.media||A.routed.has(a))return;
+  try{ A.ctx.createMediaElementSource(a).connect(A.input); A.routed.add(a); }catch(e){}
+}
+function fxWake(){ const c=fxAudio.ctx; if(c&&c.state!=="running")c.resume().catch(()=>{}); }
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden)fxWake(); });
+
+function softClip(k){
+  const n=1024, c=new Float32Array(n);
+  for(let i=0;i<n;i++){ const x=i/(n-1)*2-1; c[i]=Math.tanh(k*x)/Math.tanh(k); }
+  return c;
+}
+function roomTail(ctx,seconds,decay){      // a made-up room: stereo noise dying away
+  const n=Math.floor(ctx.sampleRate*seconds), b=ctx.createBuffer(2,n,ctx.sampleRate);
+  for(let ch=0;ch<2;ch++){ const d=b.getChannelData(ch); for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,decay); }
+  return b;
+}
+// Each builder returns the effect's input and output, the level of its output, the dry level to sit beside it,
+// and anything that has to be stopped when it goes.
+const FX_BUILD={
+  dub(ctx){                                  // tape echo: repeats that darken and wobble as they fade
+    const inp=ctx.createGain(), out=ctx.createGain();
+    const hp=ctx.createBiquadFilter(); hp.type="highpass"; hp.frequency.value=220;
+    const delay=ctx.createDelay(2); delay.delayTime.value=0.36;
+    const fb=ctx.createGain(); fb.gain.value=0.45;
+    const lp=ctx.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=2100;
+    const wob=ctx.createOscillator(), wobDepth=ctx.createGain();
+    wob.frequency.value=0.35; wobDepth.gain.value=0.0025; wob.connect(wobDepth).connect(delay.delayTime); wob.start();
+    inp.connect(hp).connect(delay); delay.connect(lp); lp.connect(fb).connect(delay); lp.connect(out);
+    return {inp,out,wet:0.5,dry:0.8,stop:[wob]};
+  },
+  swirl(ctx){                                // a slow phaser: six all-pass stages swept by one LFO
+    const inp=ctx.createGain(), out=ctx.createGain();
+    const lfo=ctx.createOscillator(), depth=ctx.createGain();
+    lfo.frequency.value=0.16; depth.gain.value=480; lfo.connect(depth);
+    let node=inp;
+    for(let i=0;i<6;i++){
+      const ap=ctx.createBiquadFilter(); ap.type="allpass"; ap.frequency.value=720+i*110; ap.Q.value=0.7;
+      depth.connect(ap.frequency); node.connect(ap); node=ap;
+    }
+    node.connect(out); lfo.start();
+    return {inp,out,wet:0.62,dry:0.62,stop:[lfo]};
+  },
+  radio(ctx){                                // far off: a narrow band, gently overdriven
+    const inp=ctx.createGain(), out=ctx.createGain();
+    const hp=ctx.createBiquadFilter(); hp.type="highpass"; hp.frequency.value=420; hp.Q.value=0.8;
+    const lp=ctx.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=2800; lp.Q.value=1.1;
+    const drive=ctx.createWaveShaper(); drive.curve=softClip(2.2); drive.oversample="2x";
+    inp.connect(hp).connect(lp).connect(drive).connect(out);
+    return {inp,out,wet:1,dry:0,stop:[]};
+  },
+  cave(ctx){                                 // a big room: a long, dark reverb behind the dry sound
+    const inp=ctx.createGain(), out=ctx.createGain();
+    const pre=ctx.createDelay(0.2); pre.delayTime.value=0.03;
+    const room=ctx.createConvolver(); room.buffer=roomTail(ctx,3.2,2.6);
+    const lp=ctx.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=4500;
+    inp.connect(pre).connect(room).connect(lp).connect(out);
+    return {inp,out,wet:0.48,dry:0.8,stop:[]};
+  }
+};
+function fxChain(id){
+  const A=fxAudio;
+  if(!A.ctx)return;
+  const now=A.ctx.currentTime;
+  if(A.chain){                               // the old effect fades out, then is taken apart
+    const old=A.chain; A.chain=null;
+    old.out.gain.cancelScheduledValues(now); old.out.gain.setTargetAtTime(0,now,0.04);
+    setTimeout(()=>{ try{ A.input.disconnect(old.inp); old.out.disconnect(); old.stop.forEach(s=>s.stop()); }catch(e){} },400);
+  }
+  A.dry.gain.cancelScheduledValues(now);
+  if(!id||!FX_BUILD[id]){ A.dry.gain.setTargetAtTime(1,now,0.04); return; }
+  const c=FX_BUILD[id](A.ctx);
+  c.out.gain.value=0;
+  A.input.connect(c.inp); c.out.connect(A.out);
+  c.out.gain.setTargetAtTime(c.wet,now,0.05);
+  A.dry.gain.setTargetAtTime(c.dry,now,0.05);
+  A.chain=c;
+  fxWake();
+}
+function fxRateOne(a,rate){
+  a.preservesPitch=a.mozPreservesPitch=a.webkitPreservesPitch=(rate===1);
+  a.defaultPlaybackRate=rate; a.playbackRate=rate;
+}
+function fxRate(rate){ players.forEach(p=>[p.orig,p.alt].forEach(a=>{ if(a)fxRateOne(a,rate); })); }
+
+/* ---------- the die ----------
+   A cube with a colour on each face in place of numbers, drawn in the same dithered grain as the rest: a 20-pixel
+   canvas, blown up square. Rolled, it bounces along the top of the buttons as if they were a shelf, turning a
+   quarter at a time, and comes to rest with the rolled face on top; it sits there while the effect is on. */
+const FACE={
+  chip:{id:"chip",say:"chip — crunched",ramp:["#0e100d","#2b331f","#698246","#8CAA55","#E4E2D6"]},
+  dub:{id:"dub",say:"dub — tape echo",ramp:RAMPS.dub,live:true},
+  slow:{id:"slow",say:"slow — down a gear",ramp:RAMPS.slow,rate:0.84},
+  swirl:{id:"swirl",say:"swirl — phased",ramp:RAMPS.swirl,live:true},
+  radio:{id:"radio",say:"radio — far off",ramp:RAMPS.radio,live:true},
+  cave:{id:"cave",say:"cave — big room",ramp:RAMPS.cave,live:true}
+};
+Object.values(FACE).forEach(f=>{ f.rgb=f.ramp.map(hexRGB); f.hex=f.ramp[3]; });
+// Opposite faces: chip/dub on x, slow/swirl on y, radio/cave on z (the cube's own axes).
+const DIE_FACES=[
+  {n:[1,0,0],f:FACE.chip},{n:[-1,0,0],f:FACE.dub},{n:[0,1,0],f:FACE.slow},
+  {n:[0,-1,0],f:FACE.swirl},{n:[0,0,1],f:FACE.radio},{n:[0,0,-1],f:FACE.cave}
+];
+const dieCv=document.getElementById("fxDie"), dieCx=dieCv.getContext("2d"), DIE_N=20;
+const mat=(a,b)=>a.map(r=>[0,1,2].map(j=>r[0]*b[0][j]+r[1]*b[1][j]+r[2]*b[2][j]));
+const app=(m,v)=>[0,1,2].map(i=>m[i][0]*v[0]+m[i][1]*v[1]+m[i][2]*v[2]);
+const rx=a=>[[1,0,0],[0,Math.cos(a),-Math.sin(a)],[0,Math.sin(a),Math.cos(a)]];
+const ry=a=>[[Math.cos(a),0,Math.sin(a)],[0,1,0],[-Math.sin(a),0,Math.cos(a)]];
+const rz=a=>[[Math.cos(a),-Math.sin(a),0],[Math.sin(a),Math.cos(a),0],[0,0,1]];
+const DIE_VIEW=mat(rx(0.72),ry(-0.62));        // seen from above and to one side, so the top face reads first
+const DIE_LIGHT=(()=>{ const l=[-0.35,0.85,0.45], m=Math.hypot(...l); return l.map(x=>x/m); })();
+function faceUp(face){                        // the cube turned so this face is on top, a random quarter about the vertical
+  const n=DIE_FACES.find(d=>d.f===face).n, h=Math.PI/2;
+  const base=n[0]===1?rz(h):n[0]===-1?rz(-h):n[1]===1?rz(0):n[1]===-1?rx(Math.PI):n[2]===1?rx(-h):rx(h);
+  return mat(ry(h*((Math.random()*4)|0)),base);
+}
+function dieDraw(M){
+  const C=mat(DIE_VIEW,M), S=5.4, mid=DIE_N/2;
+  const P=v=>{ const c=app(C,v); return [mid+c[0]*S, mid-c[1]*S+0.8]; };
+  const faces=[];
+  for(const d of DIE_FACES){
+    const nc=app(C,d.n);
+    if(nc[2]<=0.02)continue;                   // facing away
+    // the face's corners, going round it
+    const ax=d.n.findIndex(x=>x!==0), s=d.n[ax], [i,j]=[0,1,2].filter(k=>k!==ax);
+    const corner=(a,b)=>{ const v=[0,0,0]; v[ax]=s; v[i]=a; v[j]=b; return P(v); };
+    const q=[corner(-1,-1),corner(1,-1),corner(1,1),corner(-1,1)];
+    const light=Math.max(0,app(M,d.n).reduce((acc,x,k)=>acc+x*DIE_LIGHT[k],0));
+    faces.push({q,rgb:d.f.rgb,shade:0.22+0.5*light});   // kept off white, so each face shows its colour
+  }
+  const img=dieCx.createImageData(DIE_N,DIE_N), px=img.data;
+  for(let y=0;y<DIE_N;y++)for(let x=0;x<DIE_N;x++){
+    const X=x+0.5, Y=y+0.5;
+    for(const f of faces){
+      let pos=0, neg=0, edge=9;
+      for(let k=0;k<4;k++){
+        const [x1,y1]=f.q[k], [x2,y2]=f.q[(k+1)%4];
+        const ex=x2-x1, ey=y2-y1, len=Math.hypot(ex,ey)||1;
+        const cr=(ex*(Y-y1)-ey*(X-x1))/len;     // signed distance from this side
+        if(cr>0.001)pos++; else if(cr<-0.001)neg++;
+        edge=Math.min(edge,Math.abs(cr));
+      }
+      if(pos&&neg)continue;                     // on both sides of the outline: not in this face
+      // outlined edges; inside, the face's own colour in four tones, dithered by how much light it catches
+      let lvl=0;
+      if(edge>0.62){
+        const v=f.shade*3, b=Math.min(2,v|0), t=(BAYER[y&3][x&3]+0.5)/16;
+        lvl=1+(v-b>t?Math.min(b+1,3):b);
+      }
+      const c=f.rgb[lvl], o=(y*DIE_N+x)*4;
+      px[o]=c[0]; px[o+1]=c[1]; px[o+2]=c[2]; px[o+3]=255;
+      break;
+    }
+  }
+  dieCx.putImageData(img,0,0);
+}
+let dieRest=null;                              // where the die sits, as an offset from the dice button
+function diePlace(x,y){ dieCv.style.transform="translate("+x.toFixed(1)+"px,"+y.toFixed(1)+"px)"; }
+function dieShelf(){                           // the dice button's top-left corner, inside the row
+  return {x:diceBtn.offsetLeft, y:diceBtn.offsetTop, w:diceBtn.offsetWidth, rowW:diceBtn.parentElement.clientWidth};
+}
+function dieRoll(face){
+  return new Promise(done=>{
+    const sh=dieShelf(), size=40, edge=21.6;   // on screen, a quarter turn moves it along by one edge of the cube
+    const turns=5+((Math.random()*2)|0);
+    const x0=sh.x+(sh.w-size)/2, dist=Math.min(turns*edge, Math.max(0,sh.rowW-size-x0));
+    const y0=sh.y-size+3;                      // resting on the buttons' top edge
+    const F=faceUp(face), dur=REDUCED?0:1050, t0=performance.now();
+    dieRest={dx:x0+dist-sh.x, dy:y0-sh.y};
+    dieCv.classList.add("show");
+    const step=now=>{
+      const k=dur?Math.min(1,(now-t0)/dur):1, e=1-Math.pow(1-k,3);
+      const hop=dur?15*Math.abs(Math.sin(e*Math.PI*3))*Math.pow(1-e,1.4):0;
+      diePlace(x0+dist*e,y0-hop);
+      dieDraw(mat(rz(turns*Math.PI/2*(1-e)),F));   // rolling to the right turns it clockwise, a quarter per edge
+      if(k<1)requestAnimationFrame(step); else done();
+    };
+    requestAnimationFrame(step);
+  });
+}
+function dieHide(){ dieCv.classList.remove("show"); dieRest=null; }
+addEventListener("resize",()=>{ if(dieRest){ const sh=dieShelf(); diePlace(sh.x+dieRest.dx,sh.y+dieRest.dy); } });
+
+/* ---------- the fx dice ----------
+   Press: the die rolls, and when it lands its face's effect comes on, on the sound and the picture together. Press
+   again: off. Press again: another roll, never the same face twice running. */
+function diceRoll(){
+  const pool=Object.values(FACE).filter(f=>(LIVE_OK||!f.live)&&f!==dice.last);
+  const face=pool[(Math.random()*pool.length)|0];
+  dice.rolling=true; dice.last=face;
+  say("rolling…");
+  if(face.live)fxGraph();                      // made inside the press, so the browser lets it sound
+  if(face===FACE.chip){ const p=players.find(q=>q.playing)||radioCurrent(); if(p&&p.fxSrc)chipAlt(p); }  // start fetching now
+  dieRoll(face).then(()=>{ dice.rolling=false; diceApply(face); });
+}
+function diceApply(face){
+  dice.face=face;
+  diceBtn.style.setProperty("--fxc",face.hex);
+  diceBtn.style.setProperty("--fxbg","rgba("+face.rgb[3].join(",")+",.14)");
+  diceBtn.classList.add("on");
+  diceBtn.setAttribute("aria-pressed","true");
+  diceBtn.dataset.tip="fx off";
+  if(face===FACE.chip){ chipSet(true); return; }   // the picture changes when the chip copy takes over
+  look=LOOK[face.id];
+  redrawAllVisuals();
+  if(face.rate)fxRate(face.rate);
+  if(face.live)fxChain(face.id);
+  say(face.say);
+}
+function diceOff(message){
+  const face=dice.face;
+  dice.face=null;
+  diceBtn.classList.remove("on","pending");
+  diceBtn.setAttribute("aria-pressed","false");
+  diceBtn.dataset.tip="roll the dice";
+  dieHide();
+  if(face===FACE.chip||chip.on||chip.want)chipSet(false);
+  fxRate(1);
+  fxChain(null);
+  look=LOOK.normal;
+  redrawAllVisuals();
+  say(message||"fx off");
+}
+diceBtn.addEventListener("click",()=>{
+  if(dice.rolling)return;                      // let it land
+  if(dice.face)diceOff(); else diceRoll();
+});
+
+/* ---------- the ∅ talks ----------
+   Scroll over the logo, or swipe across it on a phone, and it says "field unit". It turns like a flywheel: each
+   push adds speed, and once you stop it runs down slowly by itself. The faster it turns, the quicker and higher it
+   says it, and the louder and brighter; as it runs down the words slow, drop and fade, and the slash comes round to
+   where it belongs. Set going from still, it's a new voice each time. A tap says it once, or stops it.
+   Nothing is recorded: the voice is made here, a buzz sent through resonances that move through the shapes of the
+   words, with a little noise for the f, the d and the t. It goes into the same bus as the tracks, so the dice's face
+   is on it too: chip crunches it, slow drops it, and the others colour it as they colour the music. */
+const VOICE={WAKE:1.6,STOP:0.45,FULL:10,MAX:14,DRAG:0.8};    // speeds: sets a new voice going, too slow to talk, flat out, top
+const VOICE_HINT="tap the ∅ first";
+
+// The two words, a sound at a time: how long it lasts (seconds), the first three resonances (Hz), how much buzz,
+// which noise (1 the f, 2 the d let go, 3 the t let go) and how much, the nasal murmur, and the pitch against the
+// voice's own. Timed and shaped after a spoken "field unit": the stress on field, the u fronted, the d run into the y.
+const WORDS=[
+  ["",  .012,300,1500,2500,0,  0,0,   0,1   ],
+  ["f", .090,300,1500,2500,0,  1,.015,0,1   ],
+  ["ee",.110,290,2300,3000,1,  0,0,   0,1.03],
+  ["l", .100,400,1100,2600,.8, 0,0,   0,1.2 ],
+  ["d", .035,220,1800,2700,.14,0,0,   0,1.12],   // held: a low hum
+  ["dy",.040,260,2000,2800,.3, 2,.10, 0,1   ],   // let go, into the y
+  ["y", .070,250,2400,3000,.8, 0,0,   0,.93 ],
+  ["oo",.120,310,1600,2350,1,  0,0,   0,.88 ],
+  ["n", .065,230,1700,2600,.55,0,0,   1,.8  ],
+  ["i", .100,450,2000,2700,.85,0,0,   0,.72 ],
+  ["t", .065,400,1900,2650,0,  0,0,   0,.7  ],   // held: nothing
+  ["t'",.090,400,1900,2650,0,  3,.14, 0,.7  ],   // let go, and a breath
+  ["",  .030,400,1900,2650,0,  0,0,   0,.7  ]
+];
+// Each noise: its corner or centre (Hz), narrowness, high-pass or band, and how gently it comes and goes (s). The f
+// is soft and flat, above a kilohertz, and fades into the vowel; the two let-go noises are sharper and quicker.
+const WORD_NOISE=[null,[1100,.5,"hp",.012],[3000,1.2,"bp",.003],[4500,1.4,"bp",.003]];
+
+// The words in one voice (c), at sample rate sr: the plain take, and a crunched one for the chip face.
+function voiceRender(sr,c){
+  const T=1/sr, n=Math.ceil(WORDS.reduce((s,w)=>s+w[1],0)*sr);
+  const buzz=new Float32Array(n), hiss=new Float32Array(n);
+  const band=WORD_NOISE.map(b=>{                 // each noise shaped once, all at the same loudness
+    if(!b)return null;
+    const w=2*Math.PI*Math.min(b[0],sr*0.45)*T, cw=Math.cos(w), al=Math.sin(w)/(2*b[1]), a0=1+al, hp=b[2]==="hp";
+    const k0=(hp?(1+cw)/2:al)/a0, k1=(hp?-(1+cw):0)/a0, k2=(hp?(1+cw)/2:-al)/a0, a1=-2*cw/a0, a2=(1-al)/a0;
+    const o=new Float32Array(n);
+    let x1=0,x2=0,y1=0,y2=0,e=0;
+    for(let i=0;i<n;i++){ const x=Math.random()*2-1, y=k0*x+k1*x1+k2*x2-a1*y1-a2*y2; x2=x1; x1=x; y2=y1; y1=y; o[i]=y; e+=y*y; }
+    const k=1/Math.sqrt(e/n||1);
+    for(let i=0;i<n;i++)o[i]*=k;
+    return o;
+  });
+  // everything moves smoothly from one sound's shape to the next: the resonances and the pitch smoothed twice over
+  const kF=1-Math.exp(-T/0.014), kA=1-Math.exp(-T/0.008), kN=1-Math.exp(-T/0.01), kP=1-Math.exp(-T/0.03);
+  const kH=WORD_NOISE.map(b=>b?1-Math.exp(-T/b[3]):0), kLow=1-Math.exp(-2*Math.PI*350*T);
+  const F=WORDS[0].slice(2,5), F2=F.slice(), env=[0,0,0,0];
+  let av=0, nas=0, p1=1, p2=1;
+  const R=[0,0,0,0,0].map(()=>[0,0]), co=[0,0,0,0,0].map(()=>[0,0,0]);
+  const res=(f,bw,o)=>{ const r=Math.exp(-Math.PI*bw*T), C=-r*r, B=2*r*Math.cos(2*Math.PI*f*T); o[0]=1-B-C; o[1]=B; o[2]=C; };
+  const tp=c.oq*0.7, tn=c.oq*0.3;              // the vocal folds: open for part of each cycle, closing faster than opening
+  const fold=p=>p<tp?0.5*(1-Math.cos(Math.PI*p/tp)):p<c.oq?Math.cos(Math.PI*(p-tp)/(2*tn)):0;
+  let seg=0, segStart=0, segEnd=WORDS[0][1], ph=0, ph2=0, pulse=0, amp=1, jit=1, g1=0, g2=0, low=0;
+  for(let i=0;i<n;i++){
+    const t=i*T;
+    while(t>=segEnd&&seg<WORDS.length-1){ seg++; segStart=segEnd; segEnd+=WORDS[seg][1]; }
+    const w=WORDS[seg];
+    for(let k=0;k<3;k++){ F[k]+=(w[2+k]-F[k])*kF; F2[k]+=(F[k]-F2[k])*kF; }
+    av+=(w[5]-av)*kA; nas+=(w[8]-nas)*kN; p1+=(w[9]-p1)*kP; p2+=(p1-p2)*kP;
+    for(let b=1;b<4;b++){
+      let to=w[6]===b?w[7]:0;
+      if(b===3&&to)to*=Math.exp(-(t-segStart)/0.035);   // the t's release dies away
+      env[b]+=(to-env[b])*kH[b];
+    }
+    // the buzz: pulses at the pitch, each a touch uneven in time and strength, with the voice's own quirks
+    const f0=c.root*(1+(p2-1)*(1-c.mono))*jit*(c.vibDepth?Math.pow(2,c.vibDepth/12*Math.sin(2*Math.PI*c.vib*t)):1);
+    ph+=f0*T;
+    if(ph>=1){
+      ph-=1; pulse++; jit=1+(Math.random()-0.5)*0.012;
+      amp=(1+(Math.random()-0.5)*0.08)*(c.growl&&(pulse&1)?1-c.growl:1);   // growl: every other pulse weaker
+    }
+    const g=fold(ph);
+    let src=(g-g1)/(f0*T)*amp; g1=g;
+    if(c.oct){ ph2+=f0*c.oct*T; if(ph2>=1)ph2-=1; const h=fold(ph2); src+=(h-g2)/(f0*c.oct*T)*0.35; g2=h; }
+    const white=Math.random()*2-1;
+    src=c.whisper?white*3:src+white*c.breath*(0.3+0.7*g)*6;
+    let y=src*av;
+    if((i&7)===0){                               // the resonances, recalculated every few samples
+      const tr=c.tract, wide=nas*50, lim=sr*0.45;
+      res(Math.min(F2[0]*tr,lim),70+wide,co[0]); res(Math.min(F2[1]*tr,lim),100+wide*2,co[1]);
+      res(Math.min(F2[2]*tr,lim),160+wide*4,co[2]); res(Math.min(3500*tr,lim),250,co[3]); res(Math.min(4500*tr,lim),320,co[4]);
+    }
+    for(let k=0;k<5;k++){ const r=R[k], q=co[k], o=q[0]*y+q[1]*r[0]+q[2]*r[1]; r[1]=r[0]; r[0]=o; y=o; }
+    low+=(y-low)*kLow;
+    y=y*(1-nas)+low*1.2*nas;                     // the n: mostly low, through the nose
+    if(c.ring)y*=1-c.ringMix+c.ringMix*Math.sin(2*Math.PI*c.ring*t);
+    buzz[i]=y;
+    hiss[i]=env[1]*band[1][i]+env[2]*band[2][i]+env[3]*band[3][i];
+  }
+  // the buzz's loudest 20 ms sets the scale; the noises were made to sit at their levels against it
+  const win=Math.round(0.02*sr);
+  let e=0, top=0;
+  for(let i=0;i<n;i++){ e+=buzz[i]*buzz[i]; if(i>=win){ e-=buzz[i-win]*buzz[i-win]; if(e>top)top=e; } }
+  const kb=1/Math.sqrt(top/win||1), out=new Float32Array(n), dc=1-2*Math.PI*40*T;
+  let hp=0, last=0, peak=0;
+  for(let i=0;i<n;i++){ const x=buzz[i]*kb+hiss[i]; hp=dc*(hp+x-last); last=x; out[i]=hp; }
+  const fi=Math.round(0.002*sr), fo=Math.round(0.01*sr);
+  for(let i=0;i<fi;i++)out[i]*=i/fi;
+  for(let i=0;i<fo;i++)out[n-1-i]*=i/fo;
+  for(let i=0;i<n;i++)peak=Math.max(peak,Math.abs(out[i]));
+  for(let i=0;i<n;i++)out[i]*=0.5/(peak||1);
+  // chip: held at 9.6 kHz, as the tracks' chip copies are, and cut to sixteen steps each way, spaced like an old phone
+  // line's so the quiet f and t come through as crunch rather than vanishing
+  const crunched=new Float32Array(n), hold=Math.max(2,Math.round(sr/9600)), mu=64, lmu=Math.log(1+mu);
+  let held=0;
+  for(let i=0;i<n;i++){
+    if(i%hold===0){ const x=out[i]*2, s=x<0?-1:1, q=Math.round(Math.log(1+mu*Math.abs(x))/lmu*16)/16; held=s*(Math.pow(1+mu,q)-1)/mu*0.5; }
+    crunched[i]=held;
+  }
+  return {plain:out,chip:crunched,len:n/sr};
+}
+
+function voiceStrike(){                          // set going from still: a new voice, never quite the same twice
+  const ctx=fxAudio.ctx, r=(a,b)=>a+Math.random()*(b-a), p=x=>Math.random()<x;
+  const c={root:110*Math.pow(2,r(-0.45,0.55)), tract:r(0.95,1.18), mono:p(0.4)?r(0.7,1):r(0,0.35), oq:r(0.4,0.62),
+    growl:p(0.25)?r(0.25,0.5):0, breath:r(0.02,0.2), whisper:p(0.1), oct:p(0.2)?(p(0.5)?0.5:2):0,
+    ring:p(0.25)?r(30,90):0, ringMix:r(0.3,0.6), vib:r(4,7), vibDepth:p(0.45)?r(0.1,0.5):0};
+  const v=voiceRender(ctx.sampleRate,c), take=d=>{ const b=ctx.createBuffer(1,d.length,ctx.sampleRate); b.getChannelData(0).set(d); return b; };
+  voice.buf=take(v.plain); voice.chip=take(v.chip); voice.len=v.len;
+}
+function voiceWake(){                            // the context, and the voice's own level and tone, into the bus
+  const ctx=fxCtx();
+  if(!ctx)return null;
+  if(!voice.bus){
+    voice.bus=ctx.createGain(); voice.bus.gain.value=0;
+    voice.tone=ctx.createBiquadFilter(); voice.tone.type="lowpass"; voice.tone.frequency.value=3000; voice.tone.Q.value=0.4;
+    voice.bus.connect(voice.tone); voice.tone.connect(fxAudio.input);
+  }
+  fxWake();
+  return ctx;
+}
+function voiceSay(rate,spread,once){
+  const ctx=fxAudio.ctx, s=ctx.createBufferSource();
+  s.buffer=chip.on||dice.face===FACE.chip?voice.chip:voice.buf;
+  s.playbackRate.value=rate; s.once=once;
+  let end=s;
+  if(spread&&ctx.createStereoPanner){            // quick repeats lean left and right
+    const pan=ctx.createStereoPanner(); voice.side=-voice.side; pan.pan.value=voice.side*0.35*spread;
+    s.connect(pan); end=pan;
+  }
+  end.connect(voice.bus);
+  voice.srcs.push(s);
+  s.onended=()=>{ const i=voice.srcs.indexOf(s); if(i>=0)voice.srcs.splice(i,1); try{ end.disconnect(); s.disconnect(); }catch(e){} };
+  s.start();
+}
+const voiceSlowBy=()=>dice.face&&dice.face.rate||1;
+const voiceRate=x=>(0.6+1.8*Math.pow(x,1.1))*voiceSlowBy();     // about natural speed for one push, 2.4 times flat out
+const voiceGap=x=>0.9*(1-x)*(1-x)-0.12;                          // the pause between, gone (a slight overlap) flat out
+
+let voiceDrag=null, voiceLastDrag=null, voicePageWheel=-1e9;
+function voiceGo(){ if(!voice.raf){ voice.at=performance.now(); voice.raf=requestAnimationFrame(voiceTick); } }
+function voiceTick(now){
+  voice.raf=0;
+  const gone=Math.max(0,(now-voice.at)/1000), dt=Math.min(0.05,gone);
+  voice.at=now;
+  voice.vel*=Math.exp(-VOICE.DRAG*gone);                        // in real time, so a tab left hidden comes back still
+  if(voiceDrag&&now-voiceDrag.t>60)voice.vel*=Math.exp(-10*dt); // a finger resting on it holds it
+  if(Math.abs(voice.vel)<0.1)voice.vel=0;
+  const speed=Math.abs(voice.vel), x=Math.min(1,speed/VOICE.FULL);
+  // the picture: the slash turns with it, and comes round to its place as it slows
+  voice.yaw+=voice.vel*0.6*dt;
+  if(speed<1.2&&!voiceDrag){ const home=Math.round(voice.yaw/Math.PI)*Math.PI; voice.yaw+=(home-voice.yaw)*(1-Math.exp(-7*(1-speed/1.2)*dt)); }
+  voice.tap+=(voice.tapTo-voice.tap)*(1-Math.exp(-9*dt));
+  voice.flash*=Math.exp(-5*dt);
+  // the sound: coming up from still is what makes a new voice; spinning it harder just makes the same one quicker
+  const ctx=fxAudio.ctx, live=!!(ctx&&voice.bus&&ctx.state==="running");
+  if(voice.slow&&speed>VOICE.WAKE&&live){ voiceStrike(); voice.slow=false; voice.pos=Infinity; }
+  else if(speed<VOICE.STOP)voice.slow=true;
+  let level=0;
+  if(live&&voice.buf){
+    const rate=voiceRate(x), t=ctx.currentTime, once=t<voice.onceTill;
+    voice.srcs.forEach(s=>{ if(!s.once)s.playbackRate.setTargetAtTime(rate,t,0.05); });   // like tape: words under way follow it
+    if(speed>=VOICE.STOP){
+      level=Math.min(1,0.25+0.95*Math.pow(x,0.75));
+      voice.pos+=dt*rate;
+      if(voice.pos>=voice.len*(1+voiceGap(x))){ voice.pos=0; voiceSay(rate,x,false); }
+    }
+    if(once)level=Math.max(level,0.62);
+    if(level!==voice.level){ voice.bus.gain.setTargetAtTime(level,t,level>voice.level?0.03:0.3); voice.level=level; }
+    voice.tone.frequency.setTargetAtTime(1800+Math.pow(once?Math.max(x,0.45):x,1.5)*10000,t,0.12);   // brighter the faster
+  }
+  voice.glow+=(level-voice.glow)*(1-Math.exp(-(level>voice.glow?12:3)*dt));
+  const home=Math.round(voice.yaw/Math.PI)*Math.PI;
+  const busy=speed>0||!!voiceDrag||Math.abs(voice.tapTo-voice.tap)>0.002||Math.abs(voice.yaw-home)>0.002||
+    voice.glow>0.004||voice.flash>0.004||voice.srcs.length>0;
+  if(!busy){ voice.yaw=voice.tap=voice.tapTo=voice.glow=voice.flash=0; }   // still: back exactly where it belongs
+  if(!busy||now-voice.painted>=33){ voice.painted=now; paint(gctx,176,110,glyphField(clock()),REDUCED?0:(clock()*12)|0); }
+  if(busy)voice.raf=requestAnimationFrame(voiceTick);
+}
+function voicePush(dv){                          // a scroll or an arrow key: more speed, either way round
+  voice.vel=Math.max(-VOICE.MAX,Math.min(VOICE.MAX,voice.vel+dv));
+  voiceWake();
+  voiceGo();
+  voiceLocked();
+}
+function voiceLocked(){                          // a scroll can't unlock sound on its own; now and then, say so
+  setTimeout(()=>{
+    const c=fxAudio.ctx;
+    if(c&&c.state!=="running"&&performance.now()-voice.hintAt>5000){ voice.hintAt=performance.now(); say(VOICE_HINT); }
+  },300);
+}
+function voiceOnce(){                            // a tap: a new voice says it once, and the slash flips over
+  voice.tapTo+=Math.PI; voice.flash=0.9;
+  voiceGo();
+  const ctx=voiceWake();
+  if(!ctx)return;
+  if(fxStatus.textContent===VOICE_HINT)say("");
+  const go=()=>{
+    if(ctx.state!=="running")return;
+    voiceStrike();
+    const rate=voiceSlowBy();
+    voice.onceTill=ctx.currentTime+voice.len/rate+0.1;
+    voice.level=0.62; voice.bus.gain.setTargetAtTime(0.62,ctx.currentTime,0.008);
+    voiceSay(rate,0,true);
+    voiceGo();
+  };
+  if(ctx.state==="running")go(); else ctx.resume().then(go,()=>{});
+}
+
+// Scrolling over it turns it. A scroll that began on the page carries on scrolling the page when the logo passes
+// under the pointer; one that begins on the logo keeps turning it until you pause.
+addEventListener("wheel",e=>{ if(e.target!==glyph)voicePageWheel=e.timeStamp; },{passive:true});
+glyph.addEventListener("wheel",e=>{
+  if(e.ctrlKey)return;                           // a pinch on a trackpad: zoom as usual
+  if(e.timeStamp-voicePageWheel<220){ voicePageWheel=e.timeStamp; return; }
+  e.preventDefault();
+  const px=e.deltaMode===1?16:e.deltaMode===2?400:1;
+  const raw=(Math.abs(e.deltaY)>=Math.abs(e.deltaX)?e.deltaY:e.deltaX)*px;
+  voicePush(Math.max(-2.2,Math.min(2.2,raw/90))*2.6);
+},{passive:false});
+// Swiping across it (or dragging it with a mouse) spins it at the speed of the swipe; a hand on it stops it.
+glyph.addEventListener("pointerdown",e=>{
+  if(e.button)return;
+  voiceDrag={id:e.pointerId,x:e.clientX,t:performance.now(),moved:0,grab:Math.abs(voice.vel)>VOICE.STOP};
+  if(voiceDrag.grab)voice.vel=0;
+  try{ glyph.setPointerCapture(e.pointerId); }catch(err){}
+  voiceWake();                                   // a mouse press can start the sound; a touch has to wait for the lift
+  voiceGo();
+});
+glyph.addEventListener("pointermove",e=>{
+  const d=voiceDrag;
+  if(!d||e.pointerId!==d.id)return;
+  const now=performance.now(), dx=e.clientX-d.x, dt=Math.max(4,now-d.t);
+  d.x=e.clientX; d.t=now; d.moved+=Math.abs(dx);
+  if(d.moved<6)return;
+  const v=Math.max(-VOICE.MAX,Math.min(VOICE.MAX,dx/dt*1000/110));   // a quick flick runs it flat out
+  voice.vel+=(v-voice.vel)*0.5;
+  voiceGo();
+});
+glyph.addEventListener("pointerup",e=>{
+  const d=voiceDrag;
+  if(!d||e.pointerId!==d.id)return;
+  voiceDrag=null; voiceLastDrag=d;
+  voiceWake();                                   // lifting a finger is what lets a phone make a sound
+  if(d.moved>=6)voiceLocked();
+  voiceGo();
+});
+glyph.addEventListener("pointercancel",e=>{ if(voiceDrag&&e.pointerId===voiceDrag.id){ voiceDrag=null; voiceGo(); } });
+glyph.addEventListener("touchend",()=>{ voiceWake(); },{passive:true});   // older phones only count the touch's own end
+glyph.addEventListener("click",()=>{
+  const d=voiceLastDrag;
+  voiceLastDrag=null;
+  if(d&&(d.moved>=6||d.grab))return;             // that was a swipe, or a hand stopping it
+  voiceOnce();
+});
+glyph.addEventListener("keydown",e=>{
+  if(e.key==="Enter"||e.key===" "){ e.preventDefault(); if(!e.repeat)voiceOnce(); }
+  else if(/^Arrow(Right|Down|Left|Up)$/.test(e.key)){ e.preventDefault(); voicePush(/Right|Down/.test(e.key)?2.9:-2.9); }
+});
 
 // The key to the symbols, for anyone who can't hover to see their names.
 const fxHelp=document.getElementById("fxHelp"), fxKey=document.getElementById("fxKey");
@@ -784,8 +1322,8 @@ fxHelp.addEventListener("click",()=>keySet(fxKey.hidden));
 
 /* ---------- contact ----------
    A small panel under the controls. With a form endpoint (a hosted form service, set up and verified for the site), your
-   email and message go through it; without one, as now and in any copy opened from disk, the panel shows
-   his address instead, and no Send button pretends to work. Nothing here touches the music. */
+   email and message go through it; without one, as now and in any copy opened from disk, the panel shows the
+   site's address instead, and no Send button pretends to work. Nothing here touches the music. */
 const CONTACT_ENDPOINT="";                 // e.g. "https://formspree.io/f/…", once the form has been made
 const CONTACT_PROVIDER="Formspree";
 const CONTACT_EMAIL="fieldofunits@gmail.com";
@@ -795,7 +1333,7 @@ const contactStatus=document.getElementById("contactStatus"), contactSend=docume
 const contactLive=!!CONTACT_ENDPOINT&&/^https?:$/.test(location.protocol);
 contactForm.hidden=!contactLive;
 contactFallback.hidden=contactLive;
-document.getElementById("contactNote").textContent="Your message and email address are sent to Field Unit through "+CONTACT_PROVIDER+".";
+document.getElementById("contactNote").textContent="message and email go to field unit via "+CONTACT_PROVIDER.toLowerCase()+".";
 function contactSet(open){
   contactPanel.hidden=!open;
   contactBtn.setAttribute("aria-expanded",open?"true":"false");
@@ -810,197 +1348,27 @@ contactForm.addEventListener("submit",async e=>{
   e.preventDefault();
   if(contactBusy) return;                  // one send at a time
   const f=contactForm.elements, email=f.email.value.trim(), message=f.message.value.trim();
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ contactSay("Please add your email address, for a reply."); f.email.focus(); return; }
-  if(!message){ contactSay("Please write a message."); f.message.focus(); return; }
-  if(message.length>2000){ contactSay("That's a little long: 2000 characters at most."); f.message.focus(); return; }
-  if(f._gotcha.value){ contactSay("Sent."); return; }   // a form-filling robot: nothing is sent
-  contactBusy=true; contactSend.disabled=true; contactSay("Sending…");
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ contactSay("add your email, for a reply."); f.email.focus(); return; }
+  if(!message){ contactSay("write something first."); f.message.focus(); return; }
+  if(message.length>2000){ contactSay("too long: 2000 characters max."); f.message.focus(); return; }
+  if(f._gotcha.value){ contactSay("sent."); return; }   // a form-filling robot: nothing is sent
+  contactBusy=true; contactSend.disabled=true; contactSay("sending…");
   const stop=new AbortController(), timer=setTimeout(()=>stop.abort(),15000);
-  const kept=" Your message is still here: try again, or email "+CONTACT_EMAIL+".";
+  const kept=" message kept. try again, or write to "+CONTACT_EMAIL+".";
   try{
     const r=await fetch(CONTACT_ENDPOINT,{method:"POST",signal:stop.signal,
       headers:{"Accept":"application/json","Content-Type":"application/json"},
       body:JSON.stringify({email,message,name:f.name.value.trim(),site:"field-unit.co.uk",_subject:"Message from field-unit.co.uk"})});
-    if(r.ok){ contactForm.reset(); contactSay("Sent. Thank you: the reply will come to "+email+"."); }
+    if(r.ok){ contactForm.reset(); contactSay("sent. reply goes to "+email+"."); }
     else{
       const j=await r.json().catch(()=>null), why=j&&j.errors&&j.errors[0]&&j.errors[0].message;
-      contactSay("That didn't send"+(why?" ("+why+")":"")+"."+kept);
+      contactSay("didn't send"+(why?" ("+why+")":"")+"."+kept);
     }
   }catch(err){
-    contactSay((err.name==="AbortError"?"No answer from the form service, so it may not have sent.":"That didn't send: there seems to be no connection.")+kept);
+    contactSay((err.name==="AbortError"?"no answer from the form service. may not have sent.":"didn't send: no connection.")+kept);
   }finally{ clearTimeout(timer); contactBusy=false; contactSend.disabled=false; }
 });
 
-
-/* ---------- orbit ink: draw, release, float ---------- */
-const inkCanvas=document.getElementById("inkLayer");
-const inkCtx=inkCanvas.getContext("2d");
-const inkClear=document.getElementById("inkClear");
-const inkMode=document.getElementById("inkMode");
-
-const INK_TOUCH_DEVICE=("ontouchstart" in window)||(navigator.maxTouchPoints>0);
-let inkTouchMode=false;
-let inkW=innerWidth,inkH=innerHeight,inkDpr=1;
-let inkDrawing=false,inkPointer=null,inkPointerType="",inkCurrent=[],inkMarks=[];
-
-if(INK_TOUCH_DEVICE){ inkMode.classList.add("available"); document.getElementById("keyDraw").classList.add("available"); }
-
-function inkSetTouchMode(on){
-  inkTouchMode=!!on;
-  document.body.classList.toggle("touch-ink-on",inkTouchMode);
-  inkMode.classList.toggle("on",inkTouchMode);
-  inkMode.setAttribute("aria-pressed",inkTouchMode?"true":"false");
-}
-const INK_MAX=18;
-const INK_BLOCKED="button,a,input,textarea,select,label,.aud canvas,.zoom,.lb,.contact,[contenteditable='true']";
-const INK_COLORS=["#8CAA55","#E4E2D6","#698246"];
-
-function inkResize(){
-  inkW=innerWidth;inkH=innerHeight;inkDpr=Math.min(2,devicePixelRatio||1);
-  inkCanvas.width=Math.max(1,Math.floor(inkW*inkDpr));
-  inkCanvas.height=Math.max(1,Math.floor(inkH*inkDpr));
-  inkCanvas.style.width=inkW+"px";inkCanvas.style.height=inkH+"px";
-  inkCtx.setTransform(inkDpr,0,0,inkDpr,0,0);
-}
-inkResize();
-addEventListener("resize",inkResize,{passive:true});
-
-function inkBlocked(target){return !!(target&&target.closest&&target.closest(INK_BLOCKED));}
-function inkPoint(e){return{x:Math.round(e.clientX/2)*2,y:Math.round(e.clientY/2)*2};}
-function inkPath(ctx,points){
-  if(!points.length)return;
-  ctx.beginPath();ctx.moveTo(points[0].x,points[0].y);
-  if(points.length===1){ctx.lineTo(points[0].x+.5,points[0].y+.5);return;}
-  for(let i=1;i<points.length-1;i++){
-    const mx=(points[i].x+points[i+1].x)/2,my=(points[i].y+points[i+1].y)/2;
-    ctx.quadraticCurveTo(points[i].x,points[i].y,mx,my);
-  }
-  const last=points[points.length-1];ctx.lineTo(last.x,last.y);
-}
-function inkFinish(){
-  if(!inkDrawing)return;
-  const wasTouch=inkPointerType==="touch";
-  document.body.classList.remove("inking");
-  inkDrawing=false;
-  inkPointer=null;
-  inkPointerType="";
-  if(!inkCurrent.length){
-    inkCurrent=[];
-    if(wasTouch)inkSetTouchMode(false);
-    return;
-  }
-  let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
-  inkCurrent.forEach(p=>{minX=Math.min(minX,p.x);minY=Math.min(minY,p.y);maxX=Math.max(maxX,p.x);maxY=Math.max(maxY,p.y);});
-  const cx=(minX+maxX)/2,cy=(minY+maxY)/2;
-  const local=inkCurrent.map(p=>({x:p.x-cx,y:p.y-cy}));
-  const seed=Math.random()*Math.PI*2;
-  inkMarks.push({
-    points:local,baseX:cx,baseY:cy,born:performance.now()/1000,phase:seed,
-    radiusX:24+Math.random()*58,radiusY:14+Math.random()*34,
-    speed:(.16+Math.random()*.10)*(Math.random()<.5?-1:1),
-    sway:(Math.random()-.5)*.20,color:INK_COLORS[(Math.random()*INK_COLORS.length)|0],
-    width:1.45+Math.random()*1.15
-  });
-  if(inkMarks.length>INK_MAX)inkMarks.shift();
-  inkCurrent=[];
-  if(wasTouch)inkSetTouchMode(false);
-}
-
-document.addEventListener("pointerdown",e=>{
-  if(e.button!==0||inkBlocked(e.target))return;
-  if(e.pointerType==="touch"&&!inkTouchMode)return;
-
-  inkDrawing=true;
-  inkPointer=e.pointerId;
-  inkPointerType=e.pointerType||"mouse";
-  inkCurrent=[inkPoint(e)];
-  document.body.classList.add("inking");
-  try{e.target.setPointerCapture(e.pointerId);}catch(err){}
-  e.preventDefault();
-},{passive:false});
-document.addEventListener("pointermove",e=>{
-  if(!inkDrawing||e.pointerId!==inkPointer)return;
-  const p=inkPoint(e),last=inkCurrent[inkCurrent.length-1];
-  if(!last||Math.hypot(p.x-last.x,p.y-last.y)>=2)inkCurrent.push(p);
-  e.preventDefault();
-},{passive:false});
-document.addEventListener("pointerup",e=>{if(inkDrawing&&e.pointerId===inkPointer)inkFinish();});
-document.addEventListener("pointercancel",e=>{if(inkDrawing&&e.pointerId===inkPointer)inkFinish();});
-inkMode.addEventListener("click",()=>{
-  if(!INK_TOUCH_DEVICE)return;
-  inkSetTouchMode(!inkTouchMode);
-});
-
-inkClear.addEventListener("click",()=>{         // drawings only: music, dancer and drawing mode stay as they are
-  inkMarks=[];
-  inkCurrent=[];
-  say("Drawings cleared");
-  inkClear.classList.add("flash");
-  setTimeout(()=>inkClear.classList.remove("flash"),180);
-});
-
-/* With CHIP FX on, the ink is drawn into a surface one sixth the size and blown up with square pixels, its colours
-   snapped to the three greens the rest of the page uses. The marks themselves are untouched, so turning the effect
-   off draws them smoothly again. Pointer positions stay in page pixels throughout. */
-const INK_PIX=6, inkLo=document.createElement("canvas"), inkLoCtx=inkLo.getContext("2d",{willReadFrequently:true});
-const INK_CHIP=[RGB[0],RGB[2],RGB[4]];
-function inkSnap(){
-  const img=inkLoCtx.getImageData(0,0,inkLo.width,inkLo.height), d=img.data;
-  for(let i=0;i<d.length;i+=4){
-    if(d[i+3]<96){ d[i+3]=0; continue; }
-    let best=INK_CHIP[0], dist=1e9;
-    for(const c of INK_CHIP){ const e=(d[i]-c[0])**2+(d[i+1]-c[1])**2+(d[i+2]-c[2])**2; if(e<dist){ dist=e; best=c; } }
-    d[i]=best[0]; d[i+1]=best[1]; d[i+2]=best[2]; d[i+3]=255;
-  }
-  inkLoCtx.putImageData(img,0,0);
-}
-function inkDrawMark(ctx,mark,t,chunky){
-  const elapsed=t-mark.born,a=mark.phase+(REDUCED?0:elapsed*mark.speed);
-  const x=mark.baseX+(Math.cos(a)-Math.cos(mark.phase))*mark.radiusX;
-  const y=mark.baseY+(Math.sin(a)-Math.sin(mark.phase))*mark.radiusY;
-  const depth=(Math.sin(a)+1)/2;
-  const sx=.34+.76*Math.abs(Math.cos(a)),sy=.82+depth*.20;
-  const alpha=.30+depth*.62,rot=Math.sin(a*.72+mark.phase)*mark.sway;
-  const w=chunky?Math.max(mark.width,INK_PIX):mark.width;
-  ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(sx,sy);
-  ctx.globalAlpha=chunky?1:alpha;ctx.lineCap="round";ctx.lineJoin="round";
-  ctx.strokeStyle="#0e100d";ctx.lineWidth=w+2.4;inkPath(ctx,mark.points);ctx.stroke();
-  ctx.strokeStyle=mark.color;ctx.lineWidth=w;inkPath(ctx,mark.points);ctx.stroke();
-  ctx.restore();
-}
-function inkFrame(ms){
-  const t=ms/1000;
-  inkCtx.setTransform(inkDpr,0,0,inkDpr,0,0);inkCtx.clearRect(0,0,inkW,inkH);
-  const busy=inkMarks.length||(inkDrawing&&inkCurrent.length);
-  const chunky=busy&&look===LOOK.chip;
-  let ctx=inkCtx;
-  if(chunky){
-    const w=Math.ceil(inkW/INK_PIX), h=Math.ceil(inkH/INK_PIX);
-    if(inkLo.width!==w||inkLo.height!==h){ inkLo.width=w; inkLo.height=h; }
-    ctx=inkLoCtx;
-    ctx.setTransform(1/INK_PIX,0,0,1/INK_PIX,0,0);
-    ctx.clearRect(0,0,inkW,inkH);
-  }
-  const ordered=inkMarks.slice().sort((a,b)=>{
-    const da=Math.sin(a.phase+(REDUCED?0:(t-a.born)*a.speed));
-    const db=Math.sin(b.phase+(REDUCED?0:(t-b.born)*b.speed));
-    return da-db;
-  });
-  ordered.forEach(mark=>inkDrawMark(ctx,mark,t,chunky));
-  if(inkDrawing&&inkCurrent.length){
-    ctx.save();ctx.lineCap="round";ctx.lineJoin="round";
-    ctx.strokeStyle="#0e100d";ctx.lineWidth=chunky?INK_PIX+2.4:4.2;inkPath(ctx,inkCurrent);ctx.stroke();
-    ctx.strokeStyle="#E4E2D6";ctx.lineWidth=chunky?INK_PIX:1.9;inkPath(ctx,inkCurrent);ctx.stroke();
-    ctx.restore();
-  }
-  if(chunky){
-    inkSnap();
-    inkCtx.imageSmoothingEnabled=false;
-    inkCtx.drawImage(inkLo,0,0,inkLo.width*INK_PIX,inkLo.height*INK_PIX);
-  }
-  requestAnimationFrame(inkFrame);
-}
-requestAnimationFrame(inkFrame);
 
 /* ---------- lightbox ---------- */
 const lb=document.getElementById("lb");
@@ -1017,10 +1385,7 @@ document.addEventListener("keydown",e=>{
     if(!contactPanel.hidden){ contactSet(false); contactBtn.focus(); }
     lb.classList.remove("on");
     lb.setAttribute("aria-hidden","true");
-    if(inkDrawing){
-      inkCurrent=[];inkDrawing=false;inkPointer=null;inkPointerType="";document.body.classList.remove("inking");
-    }
-    inkSetTouchMode(false);
+    if(voice.vel){ voice.vel=0; voiceGo(); }      // and the ∅ stops
   }
 });
 
@@ -1073,8 +1438,8 @@ function fuToggleRadio(){                // PLAY/PAUSE on the panel
 }
 function fuRadioButton(){                // the RADIO button: switch the radio on, or stop it
   const p=radioCurrent();
-  if(radio.on&&p&&p.playing){ fuStopRadio(); say("Radio off"); }
-  else{ radioStart(); say("Radio on"); }
+  if(radio.on&&p&&p.playing){ fuStopRadio(); say("radio off"); }
+  else{ radioStart(); say("radio on"); }
 }
 function fuSkipRadio(){
   radio.on=true; radio.stop=false;
@@ -1094,7 +1459,7 @@ fuRadioMode.addEventListener("click",fuRadioButton);
    Ten joints, and a pose is ten whole angles. The clock steps from one pose to the next and nothing moves in
    between — no easing anywhere — which is what makes it read as a machine rather than a person. The figure is
    a handful of capsules sampled into the same Bayer-dithered ramp the artwork uses, so it is a cloud of green
-   dots rather than a silhouette, and CHIP FX coarsens it exactly as it coarsens a tile: bigger blocks, fewer
+   dots rather than a silhouette, and the chip face coarsens it exactly as it coarsens a tile: bigger blocks, fewer
    greens. With it on, the robot is about eighteen blocks wide. */
 const danceMode=document.getElementById("danceMode");
 const danceStage=document.getElementById("danceStage");
@@ -1206,8 +1571,8 @@ function danceSet(on){
   danceStage.setAttribute("aria-hidden",danceOn?"false":"true");
   danceMode.classList.toggle("on",danceOn);
   danceMode.setAttribute("aria-pressed",danceOn?"true":"false");
-  danceMode.dataset.tip=danceOn?"Hide dancer":"Show dancer";
-  say(danceOn?"Dancer on":"Dancer off");
+  danceMode.dataset.tip=danceOn?"dancer off":"dancer";
+  say(danceOn?"dancer on":"dancer off");
   clearInterval(danceTimer); clearInterval(danceMoveTimer);
   if(danceOn){
     danceShufflePose();
