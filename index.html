@@ -48,31 +48,50 @@ body::after{
   image-rendering:pixelated;image-rendering:crisp-edges;
 }
 
-/* ============ FX ============ */
-/* The buttons span the same column as the tiles, six tracks wide, so each pair of buttons sits over one column
-   of tiles: 12BIT 8BIT | (DRAW) CLEAR INK | DANCE RADIO. */
+/* ============ CONTROLS ============ */
+/* One row of pixel symbols, each a real button with its name for screen readers and a tooltip on hover or focus.
+   A filled face and a lit corner say "on" as well as the colour does. The ? opens a key with every name, for touch
+   screens, where there is no hover. */
+.sprite{display:none}
 .fxrow{
-  display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;
-  max-width:var(--col);margin:6px auto 30px;padding:0 14px;
+  display:flex;flex-wrap:wrap;justify-content:center;gap:10px;
+  max-width:var(--col);margin:6px auto 8px;padding:0 14px;
 }
 .fxbtn{
-  font-family:var(--term);font-size:11px;letter-spacing:1px;background:none;
-  color:var(--mid);border:1px solid var(--admin);padding:6px 4px;cursor:pointer;
-  white-space:nowrap;text-align:center;
+  position:relative;display:grid;place-items:center;width:52px;height:44px;padding:0;
+  font-family:var(--term);font-size:11px;line-height:1;color:var(--mid);background:none;
+  border:1px solid var(--admin);cursor:pointer;
 }
-#inkClear{grid-column:span 2}
-.fxrow:has(#inkMode.available) #inkClear{grid-column:auto}
-.fxnote{
-  max-width:var(--col);margin:-16px auto 26px;padding:0 14px;
-  font-size:8px;line-height:1.9;letter-spacing:.5px;color:var(--mid);text-align:center;
-}
+.fxbtn .ico{display:block;width:24px;height:24px;fill:currentColor;shape-rendering:crispEdges}
 .fxbtn:hover{color:var(--signal);border-color:var(--signal)}
-.fxbtn.on{color:var(--alert);border-color:var(--alert)}
-.fxbtn:disabled{color:var(--dim);border-color:var(--dim);cursor:not-allowed}
+.fxbtn.on{color:var(--off);border-color:var(--alert);background:rgba(190,80,48,.14)}
+.fxbtn[aria-pressed]::before{               /* the corner light: hollow when off, filled when on */
+  content:"";position:absolute;top:4px;right:4px;width:5px;height:5px;box-sizing:border-box;
+  border:1px solid currentColor;opacity:.6;
+}
+.fxbtn[aria-pressed="true"]::before{background:var(--alert);border-color:var(--alert);opacity:1}
+.fxbtn.pending::before{animation:fu-wait .9s steps(2,jump-none) infinite}
+@keyframes fu-wait{from{background:transparent}to{background:var(--alert);border-color:var(--alert)}}
+.fxbtn[data-tip]::after{
+  content:attr(data-tip);position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);z-index:90;
+  padding:5px 7px;font-size:7px;line-height:1.5;letter-spacing:.5px;white-space:nowrap;
+  color:var(--off);background:#0a0c09;border:1px solid var(--admin);opacity:0;pointer-events:none;
+}
+.fxbtn[data-tip]:hover::after,.fxbtn[data-tip]:focus-visible::after{opacity:1}
+@media(hover:none){.fxbtn[data-tip]::after{display:none}}
+.fxstatus{
+  min-height:14px;max-width:var(--col);margin:0 auto 20px;padding:0 14px;
+  font-size:7px;line-height:1.9;letter-spacing:.5px;color:var(--mid);text-align:center;
+}
+.fxkey{max-width:440px;margin:-6px auto 24px;padding:12px 14px;border:1px solid var(--dim);background:#0a0c09}
+.fxkey ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.fxkey li{display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:center;font-size:7px;line-height:1.8;color:var(--mid)}
+.fxkey li b{display:block;font-weight:400;color:var(--signal)}
+.fxkey .ico{width:24px;height:24px;fill:var(--signal);shape-rendering:crispEdges}
 
 /* ============ ELECTRO DANCER ============ */
 /* The robot is drawn small, through the same dither as the tiles, then blown up with whole pixels — so it is
-   made of the same green grain, and 12BIT and 8BIT take its pixels away along with everything else's. */
+   made of the same green grain, and CHIP FX takes its pixels away along with everything else's. */
 #danceStage{
   --dance-left:50%;
   --dance-bottom:104px;
@@ -120,8 +139,8 @@ body.inking *{
   border-color:var(--off);
 }
 
-.touchonly{display:none}
-.touchonly.available{display:inline-block}
+.touchonly{display:none!important}
+.touchonly.available{display:grid!important}
 
 body.touch-ink-on{
   overscroll-behavior:none;
@@ -135,25 +154,9 @@ body.touch-ink-on *{
   -webkit-touch-callout:none!important;
 }
 
-body.touch-ink-on #inkMode{
-  color:var(--alert);
-  border-color:var(--alert);
-}
-
-/* Two rows of three where six buttons don't fit on one line (touch screens add DRAW); on phones without DRAW the
-   two bit buttons share the first row. */
-@media(max-width:900px){
-  .fxrow:has(#inkMode.available) .fxbtn,
-  .fxrow:has(#inkMode.available) #inkClear{grid-column:span 2}
-}
 @media(max-width:600px){
-  .fxrow{gap:9px}
-  .fxbtn{
-    font-size:9px;
-    padding:10px 2px;
-    grid-column:span 2;
-  }
-  #fx16,#fx8{grid-column:span 3}
+  .fxrow{gap:8px}
+  .fxbtn{width:48px}
 }
 
 
@@ -256,15 +259,31 @@ body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of 
 
 <div class="hero"><canvas id="glyph" width="176" height="110" role="img" aria-label="null set"></canvas></div>
 
-<div class="fxrow">
-  <button class="fxbtn" id="fx16" type="button" aria-pressed="false" title="bit crusher: gritty sampler — sound and picture">12BIT</button>
-  <button class="fxbtn" id="fx8"  type="button" aria-pressed="false" title="bit crusher: lo-fi games console — sound and picture">8BIT</button>
-  <button class="fxbtn touchonly" id="inkMode" type="button" aria-pressed="false" title="draw one floating mark">DRAW</button>
-  <button class="fxbtn" id="inkClear" type="button" title="clear floating drawings">CLEAR INK</button>
-  <button class="fxbtn" id="danceMode" type="button" aria-pressed="false" title="summon an electro dancer">DANCE</button>
-  <button class="fxbtn" id="radioMode" type="button" aria-pressed="false" title="play the Field Unit radio">RADIO</button>
+﻿<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-chip" viewBox="0 0 12 12"><path d="M4 0h1v1h-1zM7 0h1v1h-1zM4 1h1v1h-1zM7 1h1v1h-1zM2 2h8v1h-8zM2 3h1v1h-1zM9 3h1v1h-1zM2 4h1v1h-1zM5 4h3v1h-3zM9 4h1v1h-1zM2 5h1v1h-1zM5 5h1v1h-1zM7 5h1v1h-1zM9 5h1v1h-1zM2 6h1v1h-1zM5 6h1v1h-1zM7 6h1v1h-1zM9 6h1v1h-1zM2 7h4v1h-4zM7 7h3v1h-3zM2 8h1v1h-1zM9 8h1v1h-1zM2 9h8v1h-8zM4 10h1v1h-1zM7 10h1v1h-1zM4 11h1v1h-1zM7 11h1v1h-1z"/></symbol>
+  <symbol id="i-draw" viewBox="0 0 12 12"><path d="M9 0h2v1h-2zM8 1h4v1h-4zM7 2h4v1h-4zM6 3h4v1h-4zM5 4h4v1h-4zM4 5h4v1h-4zM3 6h4v1h-4zM3 7h3v1h-3zM2 8h2v1h-2zM2 9h1v1h-1zM0 10h1v1h-1zM3 10h2v1h-2zM1 11h2v1h-2zM5 11h1v1h-1z"/></symbol>
+  <symbol id="i-clear" viewBox="0 0 12 12"><path d="M7 0h1v1h-1zM6 1h3v1h-3zM5 2h5v1h-5zM4 3h3v1h-3zM8 3h3v1h-3zM3 4h3v1h-3zM7 4h3v1h-3zM2 5h3v1h-3zM6 5h3v1h-3zM3 6h1v1h-1zM5 6h3v1h-3zM4 7h3v1h-3zM5 8h1v1h-1zM0 10h2v1h-2zM4 10h2v1h-2zM8 10h2v1h-2zM2 11h2v1h-2zM6 11h2v1h-2zM10 11h2v1h-2z"/></symbol>
+  <symbol id="i-dance" viewBox="0 0 12 12"><path d="M9 0h1v1h-1zM5 1h2v1h-2zM9 1h1v1h-1zM5 2h2v1h-2zM8 2h1v1h-1zM6 3h2v1h-2zM4 4h4v1h-4zM6 5h1v1h-1zM6 6h1v1h-1zM5 7h3v1h-3zM4 8h1v1h-1zM8 8h1v1h-1zM3 9h1v1h-1zM9 9h1v1h-1zM4 10h1v1h-1zM8 10h1v1h-1zM3 11h2v1h-2zM8 11h2v1h-2z"/></symbol>
+  <symbol id="i-radio" viewBox="0 0 12 12"><path d="M9 0h1v1h-1zM8 1h1v1h-1zM7 2h1v1h-1zM6 3h1v1h-1zM1 4h10v1h-10zM1 5h1v1h-1zM10 5h1v1h-1zM1 6h1v1h-1zM3 6h2v1h-2zM8 6h1v1h-1zM10 6h1v1h-1zM1 7h1v1h-1zM3 7h2v1h-2zM7 7h3v1h-3zM1 8h1v1h-1zM3 8h2v1h-2zM8 8h1v1h-1zM10 8h1v1h-1zM1 9h1v1h-1zM10 9h1v1h-1zM1 10h10v1h-10z"/></symbol>
+</svg>
+<div class="fxrow" role="group" aria-label="Controls">
+  <button class="fxbtn" id="chipFx" type="button" aria-pressed="false" aria-label="Chip effect" data-tip="Chip effect — sound and picture"><svg class="ico" aria-hidden="true"><use href="#i-chip"/></svg></button>
+  <button class="fxbtn touchonly" id="inkMode" type="button" aria-pressed="false" aria-label="Draw on the page" data-tip="Draw on the page"><svg class="ico" aria-hidden="true"><use href="#i-draw"/></svg></button>
+  <button class="fxbtn" id="inkClear" type="button" aria-label="Clear drawings" data-tip="Clear drawings"><svg class="ico" aria-hidden="true"><use href="#i-clear"/></svg></button>
+  <button class="fxbtn" id="danceMode" type="button" aria-pressed="false" aria-label="Dancer" data-tip="Show dancer"><svg class="ico" aria-hidden="true"><use href="#i-dance"/></svg></button>
+  <button class="fxbtn" id="radioMode" type="button" aria-pressed="false" aria-label="Radio" data-tip="Field Unit radio"><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg></button>
+  <button class="fxbtn" id="fxHelp" type="button" aria-expanded="false" aria-controls="fxKey" aria-label="What the buttons do" data-tip="What the buttons do">?</button>
 </div>
-<p class="fxnote" id="fxNote" role="status" hidden>Opened from disk, 12BIT and 8BIT change the picture only: browsers mute sound sent through an effect there. To hear them, open the site with “Open music site locally.bat”, or online.</p>
+<p class="fxstatus" id="fxStatus" role="status"></p>
+<div class="fxkey" id="fxKey" hidden>
+  <ul>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-chip"/></svg><span><b>Chip effect</b>Sound and picture together: a gritty, lo-fi treatment of the same recording, and a coarser picture.</span></li>
+    <li class="touchonly" id="keyDraw"><svg class="ico" aria-hidden="true"><use href="#i-draw"/></svg><span><b>Draw</b>Turns drawing on, so a swipe draws a mark instead of scrolling. Turns itself off after each mark.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-clear"/></svg><span><b>Clear drawings</b>Removes the floating drawings. The music and the dancer carry on.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-dance"/></svg><span><b>Dancer</b>A small robot dances on the page, and starts the radio if nothing is playing.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg><span><b>Radio</b>Plays the tracks one after another.</span></li>
+  </ul>
+</div>
 
 <div id="danceStage" aria-hidden="true">
   <canvas id="electroDancer" width="72" height="132" role="img"
@@ -288,6 +307,7 @@ body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of 
 <div class="lb" id="lb" aria-hidden="true"><img alt=""></div>
 
 <script src="art-thumbs.js"></script>
+<script src="audio/chip-fx/manifest.js"></script>
 <script>
 /* ================================================================
    POSTS — the only thing you edit. Newest first.
@@ -319,18 +339,18 @@ const RAMP=["#0e100d","#2b331f","#698246","#8CAA55","#E4E2D6"];
 const RGB=RAMP.map(h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]);
 const BAYER=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
 const REDUCED=matchMedia("(prefers-reduced-motion: reduce)").matches;
-const PALETTES=[
-  [0,1,2,3,4],   // normal
-  [0,1,3,4],     // 12BIT look
-  [0,2,4]        // 8BIT look
-];
-let visFxMode=0;
+/* The two looks. CHIP FX coarsens every grain canvas together — the logo, the artwork, the footer, the dancer —
+   with bigger blocks and three greens instead of five; the floating ink has its own pass (below). */
+const LOOK={
+  normal:{block:1,palette:[0,1,2,3,4]},
+  chip:{block:4,palette:[0,2,4]}
+};
+let look=LOOK.normal;
 
 function paint(ctx,W,H,field,phase,cutout){   // cutout: leave the darkest level clear, for the dancer
   const img=ctx.createImageData(W,H), d=img.data;
   const px=phase&3, py=(phase>>1)&3;
-  const block=visFxMode===2?4:(visFxMode===1?2:1);
-  const palette=PALETTES[visFxMode]||PALETTES[0];
+  const block=look.block, palette=look.palette;
   const top=palette.length-1;
 
   for(let y=0;y<H;y+=block){
@@ -409,7 +429,52 @@ function audioField(p,t){
 const fmt=s=>{if(!isFinite(s)||s<0)s=0;return(String(Math.floor(s/60)).padStart(2,"0")+":"+String(Math.floor(s%60)).padStart(2,"0"));};
 
 function stopOthers(me){
-  players.forEach(p=>{ if(p!==me && p.audio && !p.audio.paused){ p.audio.pause(); } });
+  players.forEach(p=>{ if(p!==me)[p.orig,p.alt].forEach(a=>{ if(a&&!a.paused)a.pause(); }); });
+}
+
+/* One audio element per copy of a track. Only the copy that is the track (p.audio) reports to the tile and the
+   radio; the other one is silent, whether it is loading, waiting or being faded out. */
+function trackAudio(p,src,preload){
+  const a=new Audio(); a.preload=preload; a.src=src;
+  const live=()=>a===p.audio;
+  a.addEventListener("loadedmetadata",()=>{ if(a===p.orig){p.dur=a.duration||0;if(!p.playing)p.timeEl.textContent="00:00";} });
+  a.addEventListener("error",()=>{
+    if(a===p.orig){p.err=true;p.btn.classList.add("err");p.btn.textContent="×";p.timeEl.textContent="∅";return;}
+    chipLost(p,a);
+  });
+  a.addEventListener("timeupdate",()=>{
+    if(!live())return;
+    if(p.dur){p.prog=a.currentTime/p.dur;p.timeEl.textContent=fmt(a.currentTime);}
+    if(a.readyState>0){ p.lastT=a.currentTime; p.lastTAt=performance.now(); }   // where it was, should this copy fail
+    if(!animating) drawPlayer(p,perf());
+  });
+  // The radio follows whichever tile is playing, so the two always show the same track.
+  a.addEventListener("play",()=>{ if(!live())return; p.playing=true;p.tile.classList.add("playing");p.btn.textContent="‖";p.btn.setAttribute("aria-label","pause "+p.title);radio.index=p.index;wake();fuRenderRadio(); });
+  a.addEventListener("pause",()=>{ if(!live())return; p.playing=false;p.tile.classList.remove("playing");p.btn.textContent="▶";p.btn.setAttribute("aria-label","play "+p.title);fuRenderRadio(); });
+  a.addEventListener("ended",()=>{ if(!live())return; p.prog=0;if(radio.on)radioPlay(p.index+1);else fuRenderRadio(); });
+  return a;
+}
+
+// Play a track in whichever version is chosen, from where it was (or from the start once it has ended).
+function startTrack(p){
+  chipSettle();
+  stopOthers(p);
+  const want=chip.on&&p.fxSrc?chipAlt(p):p.orig;
+  if(want!==p.audio){
+    const at=p.audio.ended?0:(p.audio.currentTime||0), old=p.audio;
+    p.audio=want;
+    if(!old.paused)old.pause();
+    want.currentTime=at;
+  }
+  if(p.audio.ended)p.audio.currentTime=0;
+  p.audio.play().catch(()=>{});
+}
+function seekTrack(p,to){
+  chipSettle();
+  const want=chip.on&&p.fxSrc?chipAlt(p):p.orig;
+  if(want!==p.audio){ const old=p.audio; p.audio=want; if(!old.paused)old.pause(); }
+  p.audio.currentTime=to;
+  if(p.audio.paused){ stopOthers(p); p.audio.play().catch(()=>{}); }
 }
 
 /* ---------- build tiles ---------- */
@@ -431,26 +496,20 @@ POSTS.forEach((post,idx)=>{
              btn:tile.querySelector(".pbtn"),timeEl:tile.querySelector(".atime"),
              tile,prog:0,playing:false,seed:idx*3.7+1,audio:null,dur:0,err:false,artLum:null,artImg:null,
              index:players.length,title:post.title};
-    const a=new Audio(); a.preload="metadata"; a.src=post.audio; p.audio=a;
-    a.addEventListener("loadedmetadata",()=>{p.dur=a.duration||0;p.timeEl.textContent="00:00";});
-    a.addEventListener("error",()=>{p.err=true;p.btn.classList.add("err");p.btn.textContent="×";p.timeEl.textContent="∅";});
-    a.addEventListener("timeupdate",()=>{
-      if(p.dur){p.prog=a.currentTime/p.dur;p.timeEl.textContent=fmt(a.currentTime);}
-      if(!animating) drawPlayer(p,perf());
-    });
-    // The radio follows whichever tile is playing, so the two always show the same track.
-    a.addEventListener("play",()=>{p.playing=true;p.tile.classList.add("playing");p.btn.textContent="‖";p.btn.setAttribute("aria-label","pause "+p.title);radio.index=p.index;fxWake();wake();fuRenderRadio();});
-    a.addEventListener("pause",()=>{p.playing=false;p.tile.classList.remove("playing");p.btn.textContent="▶";p.btn.setAttribute("aria-label","play "+p.title);fuRenderRadio();});
-    a.addEventListener("ended",()=>{p.prog=0;if(radio.on)radioPlay(p.index+1);else fuRenderRadio();});
+    // Two copies of the recording can stand behind a tile: the original, and its CHIP FX version, fetched only
+    // when someone asks for it (tools/chip_fx.py makes them). p.audio is whichever is the track at the moment.
+    const fx=window.FU_CHIP_FX&&FU_CHIP_FX.tracks?Object.values(FU_CHIP_FX.tracks).find(v=>v.original===post.audio):null;
+    p.fxSrc=fx?fx.fx:null;
+    p.fxOffset=fx&&fx.offsetSeconds||0;
+    p.orig=p.audio=trackAudio(p,post.audio,"metadata");
     p.btn.addEventListener("click",()=>{
       if(p.err)return;
-      if(a.paused){stopOthers(p);a.play();}else a.pause();
+      if(p.audio.paused)startTrack(p);else p.audio.pause();
     });
     canvas.addEventListener("click",e=>{
       if(p.err||!p.dur)return;
       const r=canvas.getBoundingClientRect();
-      a.currentTime=((e.clientX-r.left)/r.width)*p.dur;
-      if(a.paused){stopOthers(p);a.play();}
+      seekTrack(p,((e.clientX-r.left)/r.width)*p.dur);
     });
     if(post.art){
       const im=new Image();
@@ -482,6 +541,7 @@ POSTS.forEach((post,idx)=>{
   grid.appendChild(tile);
 });
 
+const artLo=document.createElement("canvas");
 function drawPlayer(p,t){
   if(p.artImg){   // local preview mode: plain art + progress tint
     const im=p.artImg, s=Math.max(p.W/im.width,p.H/im.height);
@@ -490,14 +550,15 @@ function drawPlayer(p,t){
     p.ctx.fillStyle="rgba(140,170,85,0.30)"; p.ctx.fillRect(0,0,px,p.H);
     p.ctx.fillStyle="#8CAA55"; p.ctx.fillRect(Math.max(0,px-1),0,2,p.H);
 
-    if(visFxMode){
-      const step=visFxMode===2?6:3;
-      p.ctx.fillStyle=visFxMode===2?"rgba(14,16,13,0.34)":"rgba(14,16,13,0.18)";
-      for(let y=0;y<p.H;y+=step){
-        for(let x=0;x<p.W;x+=step){
-          if(((x/step)+(y/step))%2===0)p.ctx.fillRect(x,y,step,step);
-        }
-      }
+    if(look===LOOK.chip){               // the same picture in bigger pixels: drawn small, then blown up square
+      const s=look.block, w=Math.ceil(p.W/s), h=Math.ceil(p.H/s);
+      artLo.width=w; artLo.height=h;
+      const lc=artLo.getContext("2d");
+      lc.imageSmoothingEnabled=true;
+      lc.drawImage(p.canvas,0,0,w,h);
+      p.ctx.imageSmoothingEnabled=false;
+      p.ctx.drawImage(artLo,0,0,w,h,0,0,w*s,h*s);
+      p.ctx.imageSmoothingEnabled=true;
     }
     return;
   }
@@ -537,91 +598,152 @@ if(REDUCED){ paint(gctx,176,110,glyphField(0.5),0); paint(fctx,110,7,footField(0
 else frame();
 
 
-/* ---------- bit-crusher FX ----------
-   Each sample is squeezed onto a few levels and held for several samples, which lowers the sample rate. The
-   levels are spaced µ-law fashion (fine near silence, coarse near full scale), so quiet passages turn grainy
-   instead of cutting out. The settings are well past the names' literal 12 and 8 bits, which on mastered music
-   are almost inaudible: 12BIT is a gritty sampler, 8BIT a lo-fi games console. */
-const FXP=[null,{levels:32,rate:12000},{levels:8,rate:6000}];   // off | 12BIT: 6-bit, 12 kHz | 8BIT: 4-bit, 6 kHz
-const FX={ctx:null,mode:0,node:null,send:null,sources:[],wiring:null};
-const fxB=[null,document.getElementById("fx16"),document.getElementById("fx8")];
-const fxNote=document.getElementById("fxNote");
-// Opened from disk, browsers mute any sound a page sends through an effect, so there the buttons change the
-// picture only and a note says so. Online, or served by "Open music site locally.bat", the sound changes too.
-const FXLOCAL=location.protocol==="file:";
-
-class Crush{                              // runs in the audio worklet (below), or in the older fallback
-  constructor(sampleRate){ this.sr=sampleRate; this.p=null; this.phase=1; this.held=[0,0]; }
-  run(ins,outs){
-    if(!ins.length){ outs.forEach(o=>o.fill(0)); return; }
-    const src=c=>ins[Math.min(c,ins.length-1)];      // mono tracks feed both sides
-    const p=this.p;
-    if(!p){ outs.forEach((o,c)=>o.set(src(c))); return; }
-    const MU=255, LOG=Math.log1p(MU), L=p.levels, step=p.rate/this.sr, n=outs[0].length;
-    for(let i=0;i<n;i++){
-      this.phase+=step;
-      if(this.phase>=1){
-        this.phase%=1;
-        for(let c=0;c<outs.length;c++){
-          const x=src(c)[i];
-          const y=Math.round(Math.log1p(MU*Math.min(1,Math.abs(x)))/LOG*L)/L;
-          this.held[c]=Math.sign(x)*Math.expm1(y*LOG)/MU;
-        }
-      }
-      for(let c=0;c<outs.length;c++) outs[c][i]=this.held[c];
-    }
-  }
-}
-const CRUSH_WORKLET=Crush.toString()+`
-registerProcessor("fu-crush",class extends AudioWorkletProcessor{
-  constructor(){ super(); this.crush=new Crush(sampleRate); this.port.onmessage=e=>{ this.crush.p=e.data; }; }
-  process(inputs,outputs){ this.crush.run(inputs[0],outputs[0]); return true; }
-});`;
-
-function fxWire(){                        // once, on the first press: every track then plays through the crusher
-  if(FX.wiring)return FX.wiring;
-  const AC=window.AudioContext||window.webkitAudioContext;
-  FX.ctx=new AC();
-  FX.wiring=(async()=>{
-    let node;
-    try{
-      const url=URL.createObjectURL(new Blob([CRUSH_WORKLET],{type:"text/javascript"}));
-      await FX.ctx.audioWorklet.addModule(url);
-      node=new AudioWorkletNode(FX.ctx,"fu-crush",{outputChannelCount:[2]});
-      FX.send=p=>node.port.postMessage(p);
-    }catch(err){                          // no audio worklets: a script processor does the same on the page
-      node=FX.ctx.createScriptProcessor(2048,2,2);
-      const crush=new Crush(FX.ctx.sampleRate);
-      node.onaudioprocess=e=>crush.run([e.inputBuffer.getChannelData(0),e.inputBuffer.getChannelData(1)],
-                                       [e.outputBuffer.getChannelData(0),e.outputBuffer.getChannelData(1)]);
-      FX.send=p=>{crush.p=p;};
-    }
-    FX.send(FXP[FX.mode]);
-    node.connect(FX.ctx.destination);
-    FX.node=node;
-    players.forEach(p=>{
-      try{ const s=FX.ctx.createMediaElementSource(p.audio); s.connect(node); FX.sources.push(s); }catch(err){}
-    });
-  })();
-  return FX.wiring;
-}
-function fxWake(){                        // browsers start or pause the audio engine until someone presses play
-  if(FX.ctx&&FX.ctx.state!=="running")FX.ctx.resume().catch(()=>{});
-}
-function fxSet(m){
-  FX.mode=(FX.mode===m)?0:m;
-  visFxMode=FX.mode;
-  document.documentElement.dataset.bitfx=String(visFxMode);
-  [1,2].forEach(k=>{
-    fxB[k].classList.toggle("on",FX.mode===k);
-    fxB[k].setAttribute("aria-pressed",FX.mode===k?"true":"false");
+/* ---------- CHIP FX: one switch for sound and picture ----------
+   Every track has a second copy, made once by tools/chip_fx.py with the treatment James approved on Tuckshop
+   (23 Sep 2026): the same recording, filtered, held at 9.6 kHz, quantised and blended back — no new notes. The
+   switch hands a playing track over to the other copy at the same moment in the song, with a 60 ms cross-fade,
+   and changes the picture at the same instant. While the other copy loads, the one playing carries on and the
+   switch's light blinks; if it can't load, nothing changes and the line under the switches says so. Only the most
+   recent press can take effect. Nothing is fetched until it is wanted, and only a few copies are kept at once. */
+const chip={on:false,want:null,gen:0};
+const chipBtn=document.getElementById("chipFx");
+const fxStatus=document.getElementById("fxStatus");
+const VOLUME_WORKS=(()=>{ try{ const a=new Audio(); a.volume=.5; return a.volume===.5; }catch(e){ return false; } })();
+const ALT_KEEP=3, altUsed=[];
+let startLag=0.01;                    // how long a copy takes to start sounding once told to play; learnt as it goes
+const say=text=>{ fxStatus.textContent=text; };
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function once(el,type,ms){
+  return new Promise((resolve,reject)=>{
+    let timer=0;
+    const done=()=>{ clearTimeout(timer); el.removeEventListener(type,ok); el.removeEventListener("error",bad); };
+    const ok=()=>{ done(); resolve(); }, bad=()=>{ done(); reject(new Error("error")); };
+    el.addEventListener(type,ok); el.addEventListener("error",bad);
+    timer=setTimeout(()=>{ done(); reject(new Error("timeout")); },ms);
   });
-  if(FXLOCAL){ fxNote.hidden=!FX.mode; }
-  else if(FX.mode||FX.ctx){ fxWire(); fxWake(); if(FX.send)FX.send(FXP[FX.mode]); }
+}
+
+function chipAlt(p){                  // a track's CHIP FX copy, made on first use; the least recently used let go
+  if(!p.alt)p.alt=trackAudio(p,p.fxSrc,"auto");
+  const i=altUsed.indexOf(p); if(i>=0)altUsed.splice(i,1); altUsed.push(p);
+  while(altUsed.length>ALT_KEEP){
+    const q=altUsed.find(x=>x!==p&&x.audio!==x.alt);
+    if(!q)break;
+    altUsed.splice(altUsed.indexOf(q),1); chipDrop(q);
+  }
+  return p.alt;
+}
+function chipDrop(p){
+  const a=p.alt; if(!a||a===p.audio)return;
+  p.alt=null;
+  try{ a.pause(); a.removeAttribute("src"); a.load(); }catch(e){}
+}
+
+function chipCommit(on){              // the switch and the picture change together
+  chip.on=on;
+  look=on?LOOK.chip:LOOK.normal;
+  document.documentElement.dataset.chip=on?"on":"off";
+  chipBtn.classList.remove("pending");
+  chipBtn.classList.toggle("on",on);
+  chipBtn.setAttribute("aria-pressed",on?"true":"false");
   redrawAllVisuals();
 }
-fxB[1].addEventListener("click",()=>fxSet(1));
-fxB[2].addEventListener("click",()=>fxSet(2));
+
+function chipToggle(){
+  const want=!(chip.want===null?chip.on:chip.want);
+  const gen=++chip.gen;
+  const p=players.find(q=>q.playing)||radioCurrent();
+  const to=p?(want?(p.fxSrc?chipAlt(p):null):p.orig):null;
+  if(!p||!to||to===p.audio){
+    // Nothing to hand over: the picture changes now, and the next track plays in the chosen version.
+    chip.want=null;
+    chipCommit(want);
+    say(want?(p&&!p.fxSrc?"Chip effect on (this track has no chip version)":"Chip effect on"):"Chip effect off");
+    return;
+  }
+  chip.want=want;
+  chipBtn.classList.add("pending");
+  say(want?"Chip effect: loading…":"Back to the original…");
+  chipHandover(p,p.audio,to,gen).then(ok=>{
+    if(gen!==chip.gen)return;         // a newer press, a new track or a seek has taken over
+    chip.want=null;
+    if(ok){ chipCommit(want); say(want?"Chip effect on":"Chip effect off"); }
+    else{ chipBtn.classList.remove("pending"); say("The chip effect couldn't load. Press it again to try once more."); if(want)chipDrop(p); }
+  });
+}
+
+// A new track or a seek settles a pending change straight away (the next play uses the chosen version).
+function chipSettle(){
+  if(chip.want===null)return;
+  const want=chip.want;
+  chip.want=null; chip.gen++;
+  chipCommit(want);
+  say(want?"Chip effect on":"Chip effect off");
+}
+
+async function chipHandover(p,from,to,gen){
+  const live=()=>gen===chip.gen&&p.audio===from;
+  const shift=to===p.alt?p.fxOffset:-p.fxOffset;
+  try{
+    if(to.readyState<3){ if(to.networkState===0)to.load(); await once(to,"canplay",15000); }
+    if(!live())return false;
+    let ready=false;
+    for(let attempt=0;attempt<3&&!ready;attempt++){
+      const playing=!from.paused;
+      // Park the new copy a little ahead of the one playing, then start it as the playing one reaches it.
+      const lead=playing?0.2:0;
+      to.currentTime=Math.max(0,Math.min(from.currentTime+lead+shift,(to.duration||p.dur||1)-0.05));
+      if(to.seeking)await once(to,"seeked",6000);
+      if(!live())return false;
+      if(from.paused){ p.audio=to; return true; }          // paused (or paused meanwhile): switch, don't play
+      const waited=performance.now();
+      while(!from.paused&&from.currentTime+shift<to.currentTime-startLag&&performance.now()-waited<1500)await sleep(4);
+      if(!live())return false;
+      if(from.paused){ p.audio=to; return true; }
+      ready=Math.abs(from.currentTime+shift-to.currentTime)<0.25;   // otherwise the playing copy jumped: go again
+    }
+    if(!ready)return false;
+    const vol=from.volume;
+    if(VOLUME_WORKS)to.volume=0;
+    await to.play();
+    if(!live()){ to.pause(); to.volume=vol; return false; }
+    p.audio=to;                       // the new copy is the track now; the old one's pause is ignored
+    const skew=to.currentTime-(from.currentTime+shift);
+    startLag=Math.max(0,Math.min(0.15,startLag-skew*0.5));
+    window.fuChipSkew=skew;           // for checking the alignment in a browser's console
+    if(VOLUME_WORKS){                 // equal power, over 60 ms
+      const t0=performance.now();
+      for(;;){
+        const k=Math.min(1,(performance.now()-t0)/60);
+        to.volume=vol*Math.sin(k*Math.PI/2); from.volume=vol*Math.cos(k*Math.PI/2);
+        if(k>=1)break;
+        await sleep(8);
+      }
+    }
+    from.pause(); from.volume=vol;
+    return true;
+  }catch(e){ return false; }
+}
+
+// A CHIP FX copy that fails while it is the track: the original carries on from the same place.
+function chipLost(p,a){
+  if(a!==p.alt)return;
+  if(p.audio===a){
+    // A failing element may already have reset itself, so go by the last place it reported.
+    const at=p.lastT||a.currentTime||0, was=p.playing||performance.now()-(p.lastTAt||0)<1000;
+    p.audio=p.orig; p.orig.currentTime=at;
+    if(was)p.orig.play().catch(()=>{});
+    chip.gen++; chip.want=null; chipCommit(false);
+    say("The chip effect couldn't load, so the original is playing.");
+  }
+  p.alt=null;
+}
+chipBtn.addEventListener("click",chipToggle);
+
+// The key to the symbols, for anyone who can't hover to see their names.
+const fxHelp=document.getElementById("fxHelp"), fxKey=document.getElementById("fxKey");
+function keySet(open){ fxKey.hidden=!open; fxHelp.setAttribute("aria-expanded",open?"true":"false"); fxHelp.classList.toggle("on",open); }
+fxHelp.addEventListener("click",()=>keySet(fxKey.hidden));
 
 
 /* ---------- orbit ink: draw, release, float ---------- */
@@ -635,14 +757,13 @@ let inkTouchMode=false;
 let inkW=innerWidth,inkH=innerHeight,inkDpr=1;
 let inkDrawing=false,inkPointer=null,inkPointerType="",inkCurrent=[],inkMarks=[];
 
-if(INK_TOUCH_DEVICE)inkMode.classList.add("available");
+if(INK_TOUCH_DEVICE){ inkMode.classList.add("available"); document.getElementById("keyDraw").classList.add("available"); }
 
 function inkSetTouchMode(on){
   inkTouchMode=!!on;
   document.body.classList.toggle("touch-ink-on",inkTouchMode);
   inkMode.classList.toggle("on",inkTouchMode);
   inkMode.setAttribute("aria-pressed",inkTouchMode?"true":"false");
-  inkMode.textContent=inkTouchMode?"DRAWING":"DRAW";
 }
 const INK_MAX=18;
 const INK_BLOCKED="button,a,input,textarea,select,label,.aud canvas,.zoom,.lb,[contenteditable='true']";
@@ -724,41 +845,72 @@ inkMode.addEventListener("click",()=>{
   inkSetTouchMode(!inkTouchMode);
 });
 
-inkClear.addEventListener("click",()=>{
+inkClear.addEventListener("click",()=>{         // drawings only: music, dancer and drawing mode stay as they are
   inkMarks=[];
   inkCurrent=[];
-  inkSetTouchMode(false);
+  say("Drawings cleared");
   inkClear.classList.add("flash");
   setTimeout(()=>inkClear.classList.remove("flash"),180);
 });
 
-function inkDrawMark(mark,t){
+/* With CHIP FX on, the ink is drawn into a surface one sixth the size and blown up with square pixels, its colours
+   snapped to the three greens the rest of the page uses. The marks themselves are untouched, so turning the effect
+   off draws them smoothly again. Pointer positions stay in page pixels throughout. */
+const INK_PIX=6, inkLo=document.createElement("canvas"), inkLoCtx=inkLo.getContext("2d",{willReadFrequently:true});
+const INK_CHIP=[RGB[0],RGB[2],RGB[4]];
+function inkSnap(){
+  const img=inkLoCtx.getImageData(0,0,inkLo.width,inkLo.height), d=img.data;
+  for(let i=0;i<d.length;i+=4){
+    if(d[i+3]<96){ d[i+3]=0; continue; }
+    let best=INK_CHIP[0], dist=1e9;
+    for(const c of INK_CHIP){ const e=(d[i]-c[0])**2+(d[i+1]-c[1])**2+(d[i+2]-c[2])**2; if(e<dist){ dist=e; best=c; } }
+    d[i]=best[0]; d[i+1]=best[1]; d[i+2]=best[2]; d[i+3]=255;
+  }
+  inkLoCtx.putImageData(img,0,0);
+}
+function inkDrawMark(ctx,mark,t,chunky){
   const elapsed=t-mark.born,a=mark.phase+(REDUCED?0:elapsed*mark.speed);
   const x=mark.baseX+(Math.cos(a)-Math.cos(mark.phase))*mark.radiusX;
   const y=mark.baseY+(Math.sin(a)-Math.sin(mark.phase))*mark.radiusY;
   const depth=(Math.sin(a)+1)/2;
   const sx=.34+.76*Math.abs(Math.cos(a)),sy=.82+depth*.20;
   const alpha=.30+depth*.62,rot=Math.sin(a*.72+mark.phase)*mark.sway;
-  inkCtx.save();inkCtx.translate(x,y);inkCtx.rotate(rot);inkCtx.scale(sx,sy);
-  inkCtx.globalAlpha=alpha;inkCtx.lineCap="round";inkCtx.lineJoin="round";
-  inkCtx.strokeStyle="#0e100d";inkCtx.lineWidth=mark.width+2.4;inkPath(inkCtx,mark.points);inkCtx.stroke();
-  inkCtx.strokeStyle=mark.color;inkCtx.lineWidth=mark.width;inkPath(inkCtx,mark.points);inkCtx.stroke();
-  inkCtx.restore();
+  const w=chunky?Math.max(mark.width,INK_PIX):mark.width;
+  ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(sx,sy);
+  ctx.globalAlpha=chunky?1:alpha;ctx.lineCap="round";ctx.lineJoin="round";
+  ctx.strokeStyle="#0e100d";ctx.lineWidth=w+2.4;inkPath(ctx,mark.points);ctx.stroke();
+  ctx.strokeStyle=mark.color;ctx.lineWidth=w;inkPath(ctx,mark.points);ctx.stroke();
+  ctx.restore();
 }
 function inkFrame(ms){
   const t=ms/1000;
   inkCtx.setTransform(inkDpr,0,0,inkDpr,0,0);inkCtx.clearRect(0,0,inkW,inkH);
+  const busy=inkMarks.length||(inkDrawing&&inkCurrent.length);
+  const chunky=busy&&look===LOOK.chip;
+  let ctx=inkCtx;
+  if(chunky){
+    const w=Math.ceil(inkW/INK_PIX), h=Math.ceil(inkH/INK_PIX);
+    if(inkLo.width!==w||inkLo.height!==h){ inkLo.width=w; inkLo.height=h; }
+    ctx=inkLoCtx;
+    ctx.setTransform(1/INK_PIX,0,0,1/INK_PIX,0,0);
+    ctx.clearRect(0,0,inkW,inkH);
+  }
   const ordered=inkMarks.slice().sort((a,b)=>{
     const da=Math.sin(a.phase+(REDUCED?0:(t-a.born)*a.speed));
     const db=Math.sin(b.phase+(REDUCED?0:(t-b.born)*b.speed));
     return da-db;
   });
-  ordered.forEach(mark=>inkDrawMark(mark,t));
+  ordered.forEach(mark=>inkDrawMark(ctx,mark,t,chunky));
   if(inkDrawing&&inkCurrent.length){
-    inkCtx.save();inkCtx.lineCap="round";inkCtx.lineJoin="round";
-    inkCtx.strokeStyle="#0e100d";inkCtx.lineWidth=4.2;inkPath(inkCtx,inkCurrent);inkCtx.stroke();
-    inkCtx.strokeStyle="#E4E2D6";inkCtx.lineWidth=1.9;inkPath(inkCtx,inkCurrent);inkCtx.stroke();
-    inkCtx.restore();
+    ctx.save();ctx.lineCap="round";ctx.lineJoin="round";
+    ctx.strokeStyle="#0e100d";ctx.lineWidth=chunky?INK_PIX+2.4:4.2;inkPath(ctx,inkCurrent);ctx.stroke();
+    ctx.strokeStyle="#E4E2D6";ctx.lineWidth=chunky?INK_PIX:1.9;inkPath(ctx,inkCurrent);ctx.stroke();
+    ctx.restore();
+  }
+  if(chunky){
+    inkSnap();
+    inkCtx.imageSmoothingEnabled=false;
+    inkCtx.drawImage(inkLo,0,0,inkLo.width*INK_PIX,inkLo.height*INK_PIX);
   }
   requestAnimationFrame(inkFrame);
 }
@@ -775,6 +927,7 @@ document.querySelectorAll(".zoom").forEach(b=>b.addEventListener("click",()=>{
 lb.addEventListener("click",()=>{lb.classList.remove("on");lb.setAttribute("aria-hidden","true");});
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape"){
+    if(!fxKey.hidden){ keySet(false); fxHelp.focus(); }
     lb.classList.remove("on");
     lb.setAttribute("aria-hidden","true");
     if(inkDrawing){
@@ -812,9 +965,7 @@ function radioPlay(index){               // play a track by its tile, skipping a
   for(let n=0;n<players.length;n++){
     const p=players[((index+n)%players.length+players.length)%players.length];
     if(p.err)continue;
-    stopOthers(p);
-    if(p.audio.ended)p.audio.currentTime=0;
-    p.audio.play().catch(()=>{});
+    startTrack(p);
     return;
   }
 }
@@ -835,8 +986,8 @@ function fuToggleRadio(){                // PLAY/PAUSE on the panel
 }
 function fuRadioButton(){                // the RADIO button: switch the radio on, or stop it
   const p=radioCurrent();
-  if(radio.on&&p&&p.playing)fuStopRadio();
-  else radioStart();
+  if(radio.on&&p&&p.playing){ fuStopRadio(); say("Radio off"); }
+  else{ radioStart(); say("Radio on"); }
 }
 function fuSkipRadio(){
   radio.on=true; radio.stop=false;
@@ -844,7 +995,7 @@ function fuSkipRadio(){
 }
 function fuStopRadio(){
   radio.on=false; radio.stop=true;
-  players.forEach(p=>{ if(!p.audio.paused)p.audio.pause(); });
+  stopOthers(null);
   fuRenderRadio();
 }
 fuGlobalToggle.addEventListener("click",fuToggleRadio);
@@ -856,8 +1007,8 @@ fuRadioMode.addEventListener("click",fuRadioButton);
    Ten joints, and a pose is ten whole angles. The clock steps from one pose to the next and nothing moves in
    between — no easing anywhere — which is what makes it read as a machine rather than a person. The figure is
    a handful of capsules sampled into the same Bayer-dithered ramp the artwork uses, so it is a cloud of green
-   dots rather than a silhouette, and 12BIT and 8BIT coarsen it exactly as they coarsen a tile: bigger blocks,
-   fewer greens. At 8BIT the robot is about fifteen pixels wide. */
+   dots rather than a silhouette, and CHIP FX coarsens it exactly as it coarsens a tile: bigger blocks, fewer
+   greens. With it on, the robot is about eighteen blocks wide. */
 const danceMode=document.getElementById("danceMode");
 const danceStage=document.getElementById("danceStage");
 const danceCanvas=document.getElementById("electroDancer");
@@ -968,7 +1119,8 @@ function danceSet(on){
   danceStage.setAttribute("aria-hidden",danceOn?"false":"true");
   danceMode.classList.toggle("on",danceOn);
   danceMode.setAttribute("aria-pressed",danceOn?"true":"false");
-  danceMode.textContent=danceOn?"STOP DANCE":"DANCE";
+  danceMode.dataset.tip=danceOn?"Hide dancer":"Show dancer";
+  say(danceOn?"Dancer on":"Dancer off");
   clearInterval(danceTimer); clearInterval(danceMoveTimer);
   if(danceOn){
     danceShufflePose();

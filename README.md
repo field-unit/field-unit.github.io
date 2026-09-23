@@ -1,71 +1,82 @@
 # Field Unit — music site
 
-The Field Unit site with the games taken out (18 Sep 2026): twelve demo tracks with their artwork to play, the radio, the 12BIT / 8BIT bit-crusher effects, ink drawing and the dancer.
+Live at **https://field-unit.co.uk/** (GitHub Pages, repository `field-unit/field-unit.github.io`; the `CNAME`
+file in this folder is what gives it the domain). Twelve demo tracks with their artwork, the radio, the CHIP FX
+switch, floating ink drawings and a dancing robot. No games, no tickets, no downloads.
 
-Made from `field-unit.github.io-main.zip`. The untouched original is in `../source-assets-private/field-unit-original/`. `index.html` and this README changed; the MP3s and artwork are as downloaded.
+## The controls
 
-## What changed
+One row of pixel symbols under the logo. Each is a real button with its name for screen readers, a tooltip on
+hover or keyboard focus, and a lit corner and filled face when it is on (not colour alone). The line underneath
+says what just changed, and **?** opens a key with every name, for touch screens, where there is no hover.
 
-- **Games removed.** Their five launchers, the full-screen game frame, and the code that opened games or exchanged messages with them are gone. The games themselves live in their own repositories and are untouched.
-- **No tickets.** The completion tickets and the ticket panel are gone. Old tickets saved in a browser are simply ignored.
-- **No downloads** (James, 18 Sep 2026). The track-download page (`field-unit-downloads.html`) has been removed and nothing links to it. The tracks can be played on the site but aren't offered for download.
-  - Any audio a website plays can still be saved by someone determined, since the browser has to fetch the file.
-- **Radio, synced with the tiles.**
-  - The radio no longer has its own player: it plays the tiles in turn. Whatever is playing shows on its tile (‖, moving progress and time) and on the radio panel at once.
-  - **Tiles move the radio:** pressing play on any tile makes that the radio's current track, and pausing either the tile or the panel pauses both.
-  - **Radio controls:**
-    - RADIO or PLAY carries on into the next track when one ends;
-    - SKIP moves to the next tile;
-    - STOP pauses and ends the run.
-  - All 11 tracks are included, played from the files in this folder rather than the live site.
-  - Music only starts when someone presses a play button, RADIO or DANCE. DANCE won't restart the music after STOP, or start a second track over one that's playing.
-  - Only one track plays at a time, and the bit-reduction effects apply to whatever is playing.
-- **Keyboard and screen readers.** The play, radio and image buttons show a focus outline. Each play button is named after its track, and says "pause" while the track plays.
-- **12BIT and 8BIT you can hear** (19 Sep 2026). James found they made no audible difference, and they barely did: a true 12-bit, 24 kHz reduction is all but inaudible on mastered music, and 8-bit, 12 kHz only slightly more.
-  - They are now a proper bit crusher. 12BIT is a gritty sampler: 6-bit, 12 kHz. 8BIT is a lo-fi games console: 4-bit, 6 kHz.
-  - The levels are spaced µ-law fashion, fine near silence, so quiet passages go grainy instead of cutting out.
-  - The names stay as the style, not the literal bit depths; the settings are one line (`FXP`) if they want tuning.
-  - The effect runs in an audio worklet, off the page's own thread, so it doesn't stutter while the visuals animate. Browsers without worklets fall back to the older script processor.
-  - The audio engine is woken whenever a track starts, so the sound doesn't go missing after a phone has paused it.
-- **Room for the radio.** While the radio panel shows, the page gets extra space at the bottom, so the last tiles can scroll clear of it.
-- **Buttons lined up with the tiles** (19 Sep 2026).
-  - On a computer the six-track row puts each pair over one column of tiles: 12BIT 8BIT | CLEAR INK | DANCE RADIO.
-  - Touch screens add DRAW and get two rows of three.
-- **Works when opened from disk** (19 Sep 2026).
-  - Browsers won't let a page read the pixels of images opened from disk, so the artwork used to show plain there, without its green grain.
-  - `art-thumbs.js` now carries a small copy of each of the 11 artworks (384 × 144 px, 226 KB together), which the grain uses instead.
-  - Online the page uses the same copies. A new track added without one still gets the grain online, but shows plain when opened from disk.
-  - From disk, 12BIT and 8BIT change the look, and a line under the buttons says the sound only changes when the site is served (see below). Online that line never shows.
+| Symbol | Name | What it does |
+|---|---|---|
+| a chip round a square wave | Chip effect | Sound and picture together (below) |
+| a pencil and a trail | Draw | Touch screens only: turns drawing on, so a swipe draws a mark instead of scrolling; off again after each mark |
+| an eraser over a line | Clear drawings | Removes the floating drawings, and nothing else |
+| a dancing figure | Dancer | The robot dances on the page, and starts the radio if nothing is playing |
+| a radio | Radio | Plays the tracks one after another |
 
-- **Wilt** (21 Sep 2026). A twelfth track, at the end of the list, dated June 25.
-  - From `Tilted stuff Demo.wav` (3:54, 24-bit, 48 kHz) as `Wilt_Demo.mp3`: 320 kbps at 48 kHz, joint stereo,
-    which is what the other eleven are. Nothing was done to the sound.
-  - `Wilt_Artwork.jpg` is the sunset photograph, as supplied.
+On a computer, drawing is with the mouse anywhere on the page, as before.
 
-- **The dancer is a robot, and it is made of grain** (22 Sep 2026). It was an SVG silhouette driven by CSS
-  keyframes; it is now drawn into a small canvas through the same Bayer dither as the tiles, then blown up
-  with whole pixels.
-  - Ten joints, and a pose is ten whole angles, all multiples of 15 degrees. The clock steps from one pose to
-    the next and nothing moves in between — there is no easing anywhere — which is what makes it read as a
-    machine rather than a person.
-  - Head, body, shoulders, hands and feet are boxes; the limbs are thin rods that stop short of each other, so
-    the joints stay as gaps.
-  - **12BIT and 8BIT take its pixels away too**, exactly as they do a tile: bigger blocks and fewer greens. At
-    8BIT the robot is about eighteen blocks wide.
-  - It never goes solid. The tone is held around the middle of the green ramp, where the dither speckles most,
-    so the figure is a cloud of dots that reads as one shape.
+## CHIP FX (23 Sep 2026)
+
+One switch in place of 12BIT and 8BIT. On, every track plays in a treated version of the same recording and the
+page's grain gets coarser to match; off, the original and the normal picture come back.
+
+- **The sound is rendered once, not approximated live.** James approved an effects-only treatment on Tuckshop:
+  the original stereo mix narrowed a little, the bass kept clean below 175 Hz, the upper band saturated, held at
+  9.6 kHz, quantised to about seven bits with a little dither, filtered and blended back 78/22 with the dry upper
+  band, then matched to the original's loudness under a −1.4 dBFS ceiling. No new notes, instruments, pitch or
+  timing — every part stays where it was.
+- `tools/chip_fx.py` applies that recipe to every track in `POSTS` and writes `audio/chip-fx/<track>.mp3` at
+  192 kbps, plus `audio/chip-fx/manifest.json` (and the same as `manifest.js`, which the page loads): original and
+  treated file, length, sample rate, and hashes of the original and of the recipe, so a track is rendered again
+  only when one of those changes. The 24-bit WAVs stay on this PC in
+  `../source-assets-private/field-unit-chip-fx/`.
+  - The recipe is Codex's reference script step for step. That script uses SciPy, which isn't installed here, so
+    the processor does SciPy's Butterworth design and zero-phase filtering itself; `--check` renders Tuckshop
+    afresh and compares it with the WAV James approved: no sample differs by more than one 24-bit step.
+  - Every treated file decodes to exactly the length of its original, and a browser decodes each pair onto the same
+    timeline (checked by cross-correlation: at most one sample apart), so no offsets are needed.
+- **Switching mid-track** keeps the music going. The other version is fetched only when it's wanted; while it
+  loads the current one plays on and the switch's light blinks. When it's ready it is started at the same point
+  in the song and cross-faded in over 60 ms, and the picture changes at that moment. Only the latest press counts,
+  so repeated presses settle on the last one. Paused, it swaps silently and stays paused. The radio and every tile
+  play in whichever version is chosen. At most three treated files are kept loaded at once.
+- **If a treated file can't load**, the original keeps playing, the switch stays off and the line under the
+  switches says so; pressing again tries again. If one fails while playing, the original carries on from the
+  same place.
+- **The picture:** the logo, the artwork on every tile, the footer strip and the dancer are drawn with 4-pixel
+  blocks and three greens instead of five (the old 8BIT look), and the floating ink is drawn at one sixth size
+  and blown up with square pixels in the same three greens. Drawings, the dancer, the radio and the logo's motion
+  all carry on through a switch. Text, buttons and focus outlines stay sharp.
+- The old bit crusher, its audio worklet and the two buttons are gone. No sound goes through Web Audio any more,
+  so everything, CHIP FX included, also works with `index.html` opened straight from disk.
+- Normal is the default on every visit; the choice isn't remembered, and nothing ever plays on its own.
+
+## Earlier changes
+
+- **18 Sep 2026:** made from `field-unit.github.io-main.zip` (the original is in
+  `../source-assets-private/field-unit-original/`). Games, tickets and the download page removed; the radio
+  plays the tiles in turn, in step with them; play buttons are named after their tracks.
+- **19 Sep:** `art-thumbs.js` carries a small copy of each artwork, so the grain works when the page is opened
+  from disk.
+- **21 Sep:** Wilt, a twelfth track (June 25), from `Tilted stuff Demo.wav`, 320 kbps like the rest.
+- **22 Sep:** the dancer became a robot drawn in grain: ten joints stepping between poses with no easing, boxes
+  and rods with gaps at the joints. Published on field-unit.co.uk.
 
 ## Adding a track
 
 1. Put the MP3 and its artwork in this folder.
 2. Add a line to `POSTS` near the top of `index.html`'s script — newest first, oldest last:
    `{ date:"June 25", title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" },`
-3. Run `python tools/make_art_thumbs.py`. It adds a small copy of the new artwork to `art-thumbs.js`, which is
-   what the grain reads; without one the tile shows the artwork plain when the page is opened from disk. It
-   leaves the existing ones alone.
-4. Upload `index.html`, `art-thumbs.js` and the two new files (see below).
+3. `python tools/make_art_thumbs.py` adds a small copy of the artwork to `art-thumbs.js`.
+4. `python tools/chip_fx.py` renders its CHIP FX version and updates the manifest (the others are left alone).
+5. Publish (below).
 
-A WAV can be converted here without any extra software:
+A WAV can be converted here without extra software:
 
 ```python
 import soundfile as sf
@@ -76,31 +87,12 @@ sf.write("Track.mp3", d, sr, format="MP3", subtype="MPEG_LAYER_III",
 
 ## Preview locally
 
-**Double-click `Open music site locally.bat`** (needs Python). It serves this folder at http://127.0.0.1:8160/ and opens it, with everything working as it will online, including the 12BIT / 8BIT sound. Close the minimised "Field Unit server" window to stop it.
+Double-click **`Open music site locally.bat`**, or run `python tools/serve.py` in this folder and open
+http://127.0.0.1:8160/. `tools/serve.py` answers byte ranges as GitHub Pages does, so seeking and the CHIP FX
+hand-over behave as they will online; Python's own `http.server` doesn't, and seeking fails there. Offline, the
+pixel font (Press Start 2P, from Google Fonts) falls back to the system monospace.
 
-Or from a terminal in this folder:
+## Publishing
 
-```bash
-python -m http.server 8160 --bind 127.0.0.1
-```
-
-- **Opening `index.html` directly** shows everything except the bit-reduced sound. Browsers mute any sound a page sends through an effect when the page comes from disk, so there 12BIT and 8BIT change the visuals only and the music plays unaltered.
-- Offline, the pixel font (Press Start 2P, from Google Fonts) falls back to the system monospace.
-
-## Going online
-
-Step by step, with the portfolio as well: **`../LAUNCH.md`**. In short:
-
-The site has a domain of its own since 22 Sep 2026: **field-unit.co.uk**. `CNAME` in this folder is the file that tells GitHub Pages so, and it goes up with the rest; `field-unit.github.io` then redirects to it. The portfolio's Field Unit object opens the new address.
-
-This folder is laid out as the `field-unit.github.io` repository: its contents replace what's there now, so delete `field-unit-downloads.html` from the repository when you upload. Nothing has been uploaded.
-
-**Upload it in the browser (about five minutes, no software needed):**
-1. Sign in at github.com and open the repository behind the site (`github.com/field-unit/field-unit.github.io`, if `field-unit` is the account name).
-2. Open `field-unit-downloads.html` → the `…` menu → **Delete file** → **Commit changes**.
-3. Back on the repository's front page: **Add file → Upload files**, drag in `index.html`, `art-thumbs.js`, `README.md`, `Wilt_Demo.mp3`, `Wilt_Artwork.jpg` and `CNAME` from this folder, then **Commit changes**. The other eleven MP3s and their artwork are already there and haven't changed. `Open music site locally.bat`, the `tools` folder and `.gitignore` are only for this PC; leave them out.
-4. After a minute or two, open https://field-unit.github.io/ and press Ctrl+F5.
-
-This copy was made from the repository as it stood on 29 Jul 2026. If anything has changed there since (new tracks, for example), say so before uploading, so the changes can be merged instead of overwritten.
-
-**Until then, the live site still has the games** (the five launchers, the ticket console and the downloads), and so does the Field Unit link on the portfolio website, which opens the live site. The offline portfolio file opens this local copy instead, from disk. This folder is the game-free version; preview it locally as above to see it. The games' own repositories (fishexe, trainexe, ringroadexe, signalstepexe, pigeonexe) can stay or be archived; nothing here links to them.
+This folder is the `field-unit.github.io` repository: commit and `git push` from this PC, and GitHub Pages serves
+it at field-unit.co.uk a minute later. `Open music site locally.bat` and `tools/` stay on this PC (`.gitignore`).
