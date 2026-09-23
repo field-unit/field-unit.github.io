@@ -17,15 +17,38 @@ says what just changed, and **?** opens a key with every name, for touch screens
 | an eraser over a line | Clear drawings | Removes the floating drawings, and nothing else |
 | a dancing figure | Dancer | The robot dances on the page, and starts the radio if nothing is playing |
 | a radio | Radio | Plays the tracks one after another |
+| an envelope | Contact | A small panel for getting in touch (below) |
 
 On a computer, drawing is with the mouse anywhere on the page, as before.
+
+## Contact (23 Sep 2026)
+
+The envelope opens a small panel under the controls; Esc or × closes it and focus goes back to the envelope. It
+never touches the music, and drawing is off inside it.
+
+- **Now:** there is no form service yet, so the panel shows the site's own address,
+  fieldofunits@gmail.com, as a mail link. A Send button that only pretended to send would be worse than none.
+- **To turn the form on:** make a form with a hosted form service (Formspree was the brief's suggestion;
+  check its current free allowance first), with fieldofunits@gmail.com as the recipient, and confirm that address
+  when the service emails it. Then paste the form's endpoint into `CONTACT_ENDPOINT` near the top of the contact
+  script in `index.html` (and `CONTACT_PROVIDER` if it isn't Formspree), and publish. The panel then shows the form:
+  your email (required, for a reply), a message (required, up to 2000 characters), an optional name, and Send.
+  - It sends JSON with the visitor's address as `email` (Formspree uses it as the reply-to), the site's name, and a
+    subject naming the site, so a message says where it came from. A hidden `_gotcha` field catches form-filling
+    robots, and the service's own spam filtering does the rest; no secret is in the page.
+  - "Sent" shows only once the service has accepted the message. On an error, no connection or a 15-second
+    timeout it says so, keeps the message, and offers the address instead; a second press while one send is
+    pending does nothing.
+  - Before relying on it: send one clearly labelled test and check it arrives, that Reply goes to the visitor, and
+    that the subject names the site.
+- A copy opened from disk never shows the form, only the address.
 
 ## CHIP FX (23 Sep 2026)
 
 One switch in place of 12BIT and 8BIT. On, every track plays in a treated version of the same recording and the
 page's grain gets coarser to match; off, the original and the normal picture come back.
 
-- **The sound is rendered once, not approximated live.** James approved an effects-only treatment on Tuckshop:
+- **The sound is rendered once, not approximated live.** An effects-only treatment was approved on Tuckshop:
   the original stereo mix narrowed a little, the bass kept clean below 175 Hz, the upper band saturated, held at
   9.6 kHz, quantised to about seven bits with a little dither, filtered and blended back 78/22 with the dry upper
   band, then matched to the original's loudness under a −1.4 dBFS ceiling. No new notes, instruments, pitch or
@@ -37,7 +60,7 @@ page's grain gets coarser to match; off, the original and the normal picture com
   `../source-assets-private/field-unit-chip-fx/`.
   - The recipe is Codex's reference script step for step. That script uses SciPy, which isn't installed here, so
     the processor does SciPy's Butterworth design and zero-phase filtering itself; `--check` renders Tuckshop
-    afresh and compares it with the WAV James approved: no sample differs by more than one 24-bit step.
+    afresh and compares it with the approved WAV: no sample differs by more than one 24-bit step.
   - Every treated file decodes to exactly the length of its original, and a browser decodes each pair onto the same
     timeline (checked by cross-correlation: at most one sample apart), so no offsets are needed.
 - **Switching mid-track** keeps the music going. The other version is fetched only when it's wanted; while it
@@ -64,7 +87,7 @@ page's grain gets coarser to match; off, the original and the normal picture com
 - **19 Sep:** `art-thumbs.js` carries a small copy of each artwork, so the grain works when the page is opened
   from disk.
 - **21 Sep:** Wilt, a twelfth track, from `Tilted stuff Demo.wav`, 320 kbps like the rest.
-- **23 Sep:** no dates on the tracks (James). Each tile shows the track's name alone, and the dates have gone from
+- **23 Sep:** no dates on the tracks. Each tile shows the track's name alone, and the dates have gone from
   `POSTS` too, so they aren't in the page at all. The order of the list is unchanged, newest first.
 - **22 Sep:** the dancer became a robot drawn in grain: ten joints stepping between poses with no easing, boxes
   and rods with gaps at the joints. Published on field-unit.co.uk.

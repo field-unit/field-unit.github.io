@@ -88,6 +88,27 @@ body::after{
 .fxkey li{display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:center;font-size:7px;line-height:1.8;color:var(--mid)}
 .fxkey li b{display:block;font-weight:400;color:var(--signal)}
 .fxkey .ico{width:24px;height:24px;fill:var(--signal);shape-rendering:crispEdges}
+/* Contact: a small panel under the controls. The fields use plain readable type, not the pixel face. */
+.contact{max-width:440px;margin:-6px auto 24px;padding:12px 14px 14px;border:1px solid var(--dim);background:#0a0c09;color:var(--mid)}
+.contact-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.contact h2{margin:0;font-size:9px;font-weight:400;letter-spacing:1px;color:var(--signal)}
+.contact-close{width:30px;height:28px;padding:0;font-family:var(--term);font-size:10px;color:var(--mid);background:none;border:1px solid var(--admin);cursor:pointer}
+.contact-close:hover{color:var(--signal);border-color:var(--signal)}
+.contact p{margin:0;font-size:7px;line-height:1.9;letter-spacing:.5px}
+.contact a{color:var(--signal)}
+.contact form{display:grid;gap:10px}
+.contact [hidden]{display:none}           /* the form's own display rule would otherwise beat its hidden attribute */
+.contact label{display:grid;gap:5px;font-size:7px;letter-spacing:.5px;color:var(--mid)}
+.contact input,.contact textarea{
+  width:100%;padding:8px 9px;font:16px/1.4 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color:var(--off);background:#050605;border:1px solid var(--admin);border-radius:0;-webkit-font-smoothing:auto;
+}
+.contact textarea{min-height:120px;resize:vertical}
+.contact input:focus,.contact textarea:focus{border-color:var(--signal);outline:none}
+.contact .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.contact-send{justify-self:start;padding:9px 14px;font-family:var(--term);font-size:8px;letter-spacing:1px;color:var(--bg);background:var(--signal);border:1px solid var(--signal);cursor:pointer}
+.contact-send:disabled{opacity:.55;cursor:wait}
+.contact-status{min-height:14px;color:var(--off)}
 
 /* ============ ELECTRO DANCER ============ */
 /* The robot is drawn small, through the same dither as the tiles, then blown up with whole pixels — so it is
@@ -264,6 +285,7 @@ body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of 
   <symbol id="i-draw" viewBox="0 0 12 12"><path d="M9 0h2v1h-2zM8 1h4v1h-4zM7 2h4v1h-4zM6 3h4v1h-4zM5 4h4v1h-4zM4 5h4v1h-4zM3 6h4v1h-4zM3 7h3v1h-3zM2 8h2v1h-2zM2 9h1v1h-1zM0 10h1v1h-1zM3 10h2v1h-2zM1 11h2v1h-2zM5 11h1v1h-1z"/></symbol>
   <symbol id="i-clear" viewBox="0 0 12 12"><path d="M7 0h1v1h-1zM6 1h3v1h-3zM5 2h5v1h-5zM4 3h3v1h-3zM8 3h3v1h-3zM3 4h3v1h-3zM7 4h3v1h-3zM2 5h3v1h-3zM6 5h3v1h-3zM3 6h1v1h-1zM5 6h3v1h-3zM4 7h3v1h-3zM5 8h1v1h-1zM0 10h2v1h-2zM4 10h2v1h-2zM8 10h2v1h-2zM2 11h2v1h-2zM6 11h2v1h-2zM10 11h2v1h-2z"/></symbol>
   <symbol id="i-dance" viewBox="0 0 12 12"><path d="M9 0h1v1h-1zM5 1h2v1h-2zM9 1h1v1h-1zM5 2h2v1h-2zM8 2h1v1h-1zM6 3h2v1h-2zM4 4h4v1h-4zM6 5h1v1h-1zM6 6h1v1h-1zM5 7h3v1h-3zM4 8h1v1h-1zM8 8h1v1h-1zM3 9h1v1h-1zM9 9h1v1h-1zM4 10h1v1h-1zM8 10h1v1h-1zM3 11h2v1h-2zM8 11h2v1h-2z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 12 12"><path d="M0 2h12v1h-12zM0 3h2v1h-2zM10 3h2v1h-2zM0 4h1v1h-1zM2 4h1v1h-1zM9 4h1v1h-1zM11 4h1v1h-1zM0 5h1v1h-1zM3 5h1v1h-1zM8 5h1v1h-1zM11 5h1v1h-1zM0 6h1v1h-1zM4 6h1v1h-1zM7 6h1v1h-1zM11 6h1v1h-1zM0 7h1v1h-1zM5 7h2v1h-2zM11 7h1v1h-1zM0 8h1v1h-1zM11 8h1v1h-1zM0 9h12v1h-12z"/></symbol>
   <symbol id="i-radio" viewBox="0 0 12 12"><path d="M9 0h1v1h-1zM8 1h1v1h-1zM7 2h1v1h-1zM6 3h1v1h-1zM1 4h10v1h-10zM1 5h1v1h-1zM10 5h1v1h-1zM1 6h1v1h-1zM3 6h2v1h-2zM8 6h1v1h-1zM10 6h1v1h-1zM1 7h1v1h-1zM3 7h2v1h-2zM7 7h3v1h-3zM1 8h1v1h-1zM3 8h2v1h-2zM8 8h1v1h-1zM10 8h1v1h-1zM1 9h1v1h-1zM10 9h1v1h-1zM1 10h10v1h-10z"/></symbol>
 </svg>
 <div class="fxrow" role="group" aria-label="Controls">
@@ -272,6 +294,7 @@ body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of 
   <button class="fxbtn" id="inkClear" type="button" aria-label="Clear drawings" data-tip="Clear drawings"><svg class="ico" aria-hidden="true"><use href="#i-clear"/></svg></button>
   <button class="fxbtn" id="danceMode" type="button" aria-pressed="false" aria-label="Dancer" data-tip="Show dancer"><svg class="ico" aria-hidden="true"><use href="#i-dance"/></svg></button>
   <button class="fxbtn" id="radioMode" type="button" aria-pressed="false" aria-label="Radio" data-tip="Field Unit radio"><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg></button>
+  <button class="fxbtn" id="contactBtn" type="button" aria-expanded="false" aria-controls="contactPanel" aria-label="Contact" data-tip="Contact"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg></button>
   <button class="fxbtn" id="fxHelp" type="button" aria-expanded="false" aria-controls="fxKey" aria-label="What the buttons do" data-tip="What the buttons do">?</button>
 </div>
 <p class="fxstatus" id="fxStatus" role="status"></p>
@@ -282,7 +305,21 @@ body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of 
     <li><svg class="ico" aria-hidden="true"><use href="#i-clear"/></svg><span><b>Clear drawings</b>Removes the floating drawings. The music and the dancer carry on.</span></li>
     <li><svg class="ico" aria-hidden="true"><use href="#i-dance"/></svg><span><b>Dancer</b>A small robot dances on the page, and starts the radio if nothing is playing.</span></li>
     <li><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg><span><b>Radio</b>Plays the tracks one after another.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span><b>Contact</b>A way to get in touch. The music carries on.</span></li>
   </ul>
+</div>
+<div class="contact" id="contactPanel" role="dialog" aria-labelledby="contactTitle" hidden>
+  <div class="contact-head"><h2 id="contactTitle">CONTACT</h2><button class="contact-close" id="contactClose" type="button" aria-label="Close contact">&#215;</button></div>
+  <form id="contactForm" novalidate hidden>
+    <label>YOUR EMAIL (for a reply)<input name="email" type="email" autocomplete="email" required maxlength="254"></label>
+    <label>MESSAGE<textarea name="message" required maxlength="2000"></textarea></label>
+    <label>NAME (optional)<input name="name" type="text" autocomplete="name" maxlength="100"></label>
+    <label class="hp" aria-hidden="true">Leave this empty<input name="_gotcha" type="text" tabindex="-1" autocomplete="off"></label>
+    <button class="contact-send" id="contactSend" type="submit">SEND</button>
+    <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
+    <p class="contact-note" id="contactNote"></p>
+  </form>
+  <p class="contact-fallback" id="contactFallback">Write to Field Unit at <a id="contactMail" href="mailto:fieldofunits@gmail.com">fieldofunits@gmail.com</a></p>
 </div>
 
 <div id="danceStage" aria-hidden="true">
@@ -599,7 +636,7 @@ else frame();
 
 
 /* ---------- CHIP FX: one switch for sound and picture ----------
-   Every track has a second copy, made once by tools/chip_fx.py with the treatment James approved on Tuckshop
+   Every track has a second copy, made once by tools/chip_fx.py with the treatment approved on Tuckshop
    (23 Sep 2026): the same recording, filtered, held at 9.6 kHz, quantised and blended back — no new notes. The
    switch hands a playing track over to the other copy at the same moment in the song, with a 60 ms cross-fade,
    and changes the picture at the same instant. While the other copy loads, the one playing carries on and the
@@ -742,8 +779,57 @@ chipBtn.addEventListener("click",chipToggle);
 
 // The key to the symbols, for anyone who can't hover to see their names.
 const fxHelp=document.getElementById("fxHelp"), fxKey=document.getElementById("fxKey");
-function keySet(open){ fxKey.hidden=!open; fxHelp.setAttribute("aria-expanded",open?"true":"false"); fxHelp.classList.toggle("on",open); }
+function keySet(open){ fxKey.hidden=!open; fxHelp.setAttribute("aria-expanded",open?"true":"false"); fxHelp.classList.toggle("on",open); if(open) contactSet(false); }
 fxHelp.addEventListener("click",()=>keySet(fxKey.hidden));
+
+/* ---------- contact ----------
+   A small panel under the controls. With a form endpoint (a hosted form service, set up and verified for the site), your
+   email and message go through it; without one, as now and in any copy opened from disk, the panel shows
+   his address instead, and no Send button pretends to work. Nothing here touches the music. */
+const CONTACT_ENDPOINT="";                 // e.g. "https://formspree.io/f/…", once the form has been made
+const CONTACT_PROVIDER="Formspree";
+const CONTACT_EMAIL="fieldofunits@gmail.com";
+const contactBtn=document.getElementById("contactBtn"), contactPanel=document.getElementById("contactPanel");
+const contactForm=document.getElementById("contactForm"), contactFallback=document.getElementById("contactFallback");
+const contactStatus=document.getElementById("contactStatus"), contactSend=document.getElementById("contactSend");
+const contactLive=!!CONTACT_ENDPOINT&&/^https?:$/.test(location.protocol);
+contactForm.hidden=!contactLive;
+contactFallback.hidden=contactLive;
+document.getElementById("contactNote").textContent="Your message and email address are sent to Field Unit through "+CONTACT_PROVIDER+".";
+function contactSet(open){
+  contactPanel.hidden=!open;
+  contactBtn.setAttribute("aria-expanded",open?"true":"false");
+  contactBtn.classList.toggle("on",open);
+  if(open){ keySet(false); (contactLive?contactForm.elements.email:document.getElementById("contactMail")).focus(); }
+}
+contactBtn.addEventListener("click",()=>contactSet(contactPanel.hidden));
+document.getElementById("contactClose").addEventListener("click",()=>{ contactSet(false); contactBtn.focus(); });
+let contactBusy=false;
+function contactSay(t){ contactStatus.textContent=t; }
+contactForm.addEventListener("submit",async e=>{
+  e.preventDefault();
+  if(contactBusy) return;                  // one send at a time
+  const f=contactForm.elements, email=f.email.value.trim(), message=f.message.value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ contactSay("Please add your email address, for a reply."); f.email.focus(); return; }
+  if(!message){ contactSay("Please write a message."); f.message.focus(); return; }
+  if(message.length>2000){ contactSay("That's a little long: 2000 characters at most."); f.message.focus(); return; }
+  if(f._gotcha.value){ contactSay("Sent."); return; }   // a form-filling robot: nothing is sent
+  contactBusy=true; contactSend.disabled=true; contactSay("Sending…");
+  const stop=new AbortController(), timer=setTimeout(()=>stop.abort(),15000);
+  const kept=" Your message is still here: try again, or email "+CONTACT_EMAIL+".";
+  try{
+    const r=await fetch(CONTACT_ENDPOINT,{method:"POST",signal:stop.signal,
+      headers:{"Accept":"application/json","Content-Type":"application/json"},
+      body:JSON.stringify({email,message,name:f.name.value.trim(),site:"field-unit.co.uk",_subject:"Message from field-unit.co.uk"})});
+    if(r.ok){ contactForm.reset(); contactSay("Sent. Thank you: the reply will come to "+email+"."); }
+    else{
+      const j=await r.json().catch(()=>null), why=j&&j.errors&&j.errors[0]&&j.errors[0].message;
+      contactSay("That didn't send"+(why?" ("+why+")":"")+"."+kept);
+    }
+  }catch(err){
+    contactSay((err.name==="AbortError"?"No answer from the form service, so it may not have sent.":"That didn't send: there seems to be no connection.")+kept);
+  }finally{ clearTimeout(timer); contactBusy=false; contactSend.disabled=false; }
+});
 
 
 /* ---------- orbit ink: draw, release, float ---------- */
@@ -766,7 +852,7 @@ function inkSetTouchMode(on){
   inkMode.setAttribute("aria-pressed",inkTouchMode?"true":"false");
 }
 const INK_MAX=18;
-const INK_BLOCKED="button,a,input,textarea,select,label,.aud canvas,.zoom,.lb,[contenteditable='true']";
+const INK_BLOCKED="button,a,input,textarea,select,label,.aud canvas,.zoom,.lb,.contact,[contenteditable='true']";
 const INK_COLORS=["#8CAA55","#E4E2D6","#698246"];
 
 function inkResize(){
@@ -928,6 +1014,7 @@ lb.addEventListener("click",()=>{lb.classList.remove("on");lb.setAttribute("aria
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape"){
     if(!fxKey.hidden){ keySet(false); fxHelp.focus(); }
+    if(!contactPanel.hidden){ contactSet(false); contactBtn.focus(); }
     lb.classList.remove("on");
     lb.setAttribute("aria-hidden","true");
     if(inkDrawing){
