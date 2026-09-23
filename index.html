@@ -318,18 +318,18 @@ body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of 
    A post is either audio (+ optional art) OR images.
    ================================================================ */
 const POSTS = [
-  { date:"July 26", title:"tuckshop", audio:"tuckshop.mp3", art:"tuckshopart.jpg" },
-  { date:"July 26", title:"trenchcoat", audio:"trenchcoat.mp3", art:"trenchcoatart.jpg" },
-  { date:"July 26", title:"nature of freak", audio:"Nature_of_Freak_Demo.mp3", art:"Factory_Artwork~2.png" },
-  { date:"July 26", title:"nomemory notreal", audio:"nomemory_notreal_mthree.mp3", art:"Hague_Artwork_Final.png" },
-  { date:"June 26", title:"the of the", audio:"the_of_the_demo.mp3", art:"Abbey_Canal_Artwork_3.jpg" },
-  { date:"June 26", title:"curley cuh", audio:"Curley_Cuh_Demo.mp3", art:"Sign_Artwork_2.jpg" },
-  { date:"December 25", title:"pocket muck", audio:"Pocket_Muck_Demo.mp3", art:"untitled11.png" },
-  { date:"November 25", title:"medium slate", audio:"Medium_Slate_Demo.mp3", art:"RedStaircaseBrickworkArtwork.jpg" },
-  { date:"September 25", title:"LAN_33", audio:"LAN_33_Demo.mp3", art:"Canal_Bucket_Artwork6.jpg" },
-  { date:"August 25", title:"navvy", audio:"Navvy_Demo.mp3", art:"NoParking3.jpg" },
-  { date:"July 25", title:"lbd+m3", audio:"lbd_m3_demo.mp3", art:"CloudArtwork3.jpg" },
-  { date:"June 25", title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" }
+  { title:"tuckshop", audio:"tuckshop.mp3", art:"tuckshopart.jpg" },
+  { title:"trenchcoat", audio:"trenchcoat.mp3", art:"trenchcoatart.jpg" },
+  { title:"nature of freak", audio:"Nature_of_Freak_Demo.mp3", art:"Factory_Artwork~2.png" },
+  { title:"nomemory notreal", audio:"nomemory_notreal_mthree.mp3", art:"Hague_Artwork_Final.png" },
+  { title:"the of the", audio:"the_of_the_demo.mp3", art:"Abbey_Canal_Artwork_3.jpg" },
+  { title:"curley cuh", audio:"Curley_Cuh_Demo.mp3", art:"Sign_Artwork_2.jpg" },
+  { title:"pocket muck", audio:"Pocket_Muck_Demo.mp3", art:"untitled11.png" },
+  { title:"medium slate", audio:"Medium_Slate_Demo.mp3", art:"RedStaircaseBrickworkArtwork.jpg" },
+  { title:"LAN_33", audio:"LAN_33_Demo.mp3", art:"Canal_Bucket_Artwork6.jpg" },
+  { title:"navvy", audio:"Navvy_Demo.mp3", art:"NoParking3.jpg" },
+  { title:"lbd+m3", audio:"lbd_m3_demo.mp3", art:"CloudArtwork3.jpg" },
+  { title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" }
 ];
 
 /* ================================================================
@@ -484,13 +484,13 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 POSTS.forEach((post,idx)=>{
   const tile=document.createElement("article");
   tile.className="tile";
-  tile.dataset.k=((post.title||"")+" "+(post.date||"")).toLowerCase();
+  tile.dataset.k=(post.title||"").toLowerCase();
 
   if(post.audio){
     tile.innerHTML=`
       <div class="medium aud"><canvas width="192" height="72" aria-hidden="true"></canvas></div>
       <div class="arow"><button class="pbtn" type="button" aria-label="play ${esc(post.title||"")}">▶</button><span class="atime">--:--</span></div>
-      <div class="cap"><span>${esc(post.date||"")}</span><span class="t">${esc(post.title||"")}</span></div>`;
+      <div class="cap"><span class="t">${esc(post.title||"")}</span></div>`;
     const canvas=tile.querySelector("canvas");
     const p={canvas,ctx:canvas.getContext("2d"),W:192,H:72,
              btn:tile.querySelector(".pbtn"),timeEl:tile.querySelector(".atime"),
@@ -536,7 +536,7 @@ POSTS.forEach((post,idx)=>{
       <div class="medium">`+post.images.map((s,i)=>`
         <button class="zoom" aria-label="enlarge"><img loading="lazy" src="${esc(s)}" alt="${esc(post.title||"image")}"></button>`).join("")+`
       </div>
-      <div class="cap"><span>${esc(post.date||"")}</span><span class="t">${esc(post.title||"")}</span></div>`;
+      <div class="cap"><span class="t">${esc(post.title||"")}</span></div>`;
   }
   grid.appendChild(tile);
 });

@@ -63,7 +63,9 @@ page's grain gets coarser to match; off, the original and the normal picture com
   plays the tiles in turn, in step with them; play buttons are named after their tracks.
 - **19 Sep:** `art-thumbs.js` carries a small copy of each artwork, so the grain works when the page is opened
   from disk.
-- **21 Sep:** Wilt, a twelfth track (June 25), from `Tilted stuff Demo.wav`, 320 kbps like the rest.
+- **21 Sep:** Wilt, a twelfth track, from `Tilted stuff Demo.wav`, 320 kbps like the rest.
+- **23 Sep:** no dates on the tracks (James). Each tile shows the track's name alone, and the dates have gone from
+  `POSTS` too, so they aren't in the page at all. The order of the list is unchanged, newest first.
 - **22 Sep:** the dancer became a robot drawn in grain: ten joints stepping between poses with no easing, boxes
   and rods with gaps at the joints. Published on field-unit.co.uk.
 
@@ -71,7 +73,7 @@ page's grain gets coarser to match; off, the original and the normal picture com
 
 1. Put the MP3 and its artwork in this folder.
 2. Add a line to `POSTS` near the top of `index.html`'s script — newest first, oldest last:
-   `{ date:"June 25", title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" },`
+   `{ title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" },`
 3. `python tools/make_art_thumbs.py` adds a small copy of the artwork to `art-thumbs.js`.
 4. `python tools/chip_fx.py` renders its CHIP FX version and updates the manifest (the others are left alone).
 5. Publish (below).
