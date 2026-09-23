@@ -144,11 +144,14 @@ original and the normal picture come back.
 - **22 Sep:** the dancer became a robot drawn in grain: ten joints stepping between poses with no easing, boxes
   and rods with gaps at the joints. Published on field-unit.co.uk.
 - **23 Sep:** the draw tool (floating ink drawings, with its clear button) removed; the talking ∅ took its place as
-  the page's odd thing to play with. The CHIP FX switch became the fx dice.
+  the page's odd thing to play with. The CHIP FX switch became the fx dice. A shared link now shows "field unit",
+  a line about the site and `og.png` (the logo, the buttons and three tiles, cut from a screenshot) instead of a
+  bare ∅. The artwork files carry no camera details.
 
 ## Adding a track
 
-1. Put the MP3 and its artwork in this folder.
+1. Put the MP3 and its artwork in this folder, and run `python tools/strip_meta.py <artwork>`: it takes the
+   camera details (make, date, location) out of the file without touching the picture.
 2. Add a line to `POSTS` near the top of `index.html`'s script — newest first, oldest last:
    `{ title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" },`
 3. `python tools/make_art_thumbs.py` adds a small copy of the artwork to `art-thumbs.js`.
