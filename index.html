@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>∅</title>
+<title>field unit — music</title>
 <meta name="description" content="field unit. twelve demos, a radio, an fx dice, and a logo that says its name when you scroll over it.">
 <link rel="canonical" href="https://field-unit.co.uk/">
 <!-- how a shared link looks in a chat or a post -->
@@ -74,6 +74,24 @@ body::after{
   display:flex;flex-wrap:wrap;justify-content:center;gap:10px;
   max-width:var(--col);margin:6px auto 8px;padding:0 14px;
 }
+/* the dice: lit in the colour of the face it landed on. Beside it, joined to it, a narrow ▾ opens the colours
+   (hovering the dice opens them too, on a screen with a mouse); the menu hangs under the pair, over the page. */
+.dicewrap{position:relative;display:flex}
+.dicewrap .fxbtn.dice{border-right:0}
+.fxmore{display:grid;place-items:center;width:18px;height:44px;padding:0;color:var(--admin);background:none;border:1px solid var(--admin);cursor:pointer}
+.fxmore .ico{width:10px;height:10px;fill:currentColor;shape-rendering:crispEdges}
+.fxmore:hover,.fxmore[aria-expanded="true"]{color:var(--signal);border-color:var(--signal)}
+.fxmenu{position:absolute;left:0;top:calc(100% + 5px);z-index:95;display:flex;gap:6px;padding:7px;background:#0a0c09;border:1px solid var(--admin);box-shadow:0 0 0 3px #080907}
+.fxmenu[hidden]{display:none}
+.fxmenu::before{content:"";position:absolute;left:0;right:0;top:-7px;height:7px}   /* no gap to fall through on the way down */
+.sw{position:relative;width:30px;height:30px;padding:0;background:none;border:0;cursor:pointer}
+.sw::before{content:"";position:absolute;inset:5px;background:var(--c);box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)}
+.sw::after{content:"";position:absolute;left:12px;right:12px;bottom:-3px;height:3px;background:transparent}
+.sw:hover::before{inset:3px}
+.sw[aria-pressed="true"]::before{inset:3px;outline:2px solid var(--off);outline-offset:1px}
+.sw[aria-pressed="true"]::after{background:var(--off)}                      /* and a mark under it, as well as the ring */
+.sw[aria-disabled="true"]{opacity:.3;cursor:not-allowed}
+.sw:focus-visible{outline:2px solid var(--off);outline-offset:2px}
 /* the dice: lit in the colour of the face it landed on */
 .fxbtn.dice.on{color:var(--fxc);border-color:var(--fxc);background:var(--fxbg)}
 .fxbtn.dice[aria-pressed="true"]::before{background:var(--fxc);border-color:var(--fxc)}
@@ -111,6 +129,8 @@ body::after{
 .fxkey li{display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:center;font-size:7px;line-height:1.8;color:var(--mid)}
 .fxkey li b{display:block;font-weight:400;color:var(--signal)}
 .fxkey .ico{width:24px;height:24px;fill:var(--signal);shape-rendering:crispEdges}
+.fxkey .keysw{display:inline-block;width:7px;height:7px;margin:0 3px 0 6px;background:var(--c);vertical-align:0}
+.fxkey .keysw:first-child{margin-left:0}
 /* Contact: a small panel under the controls. The fields use plain readable type, not the pixel face. */
 .contact{max-width:440px;margin:-6px auto 24px;padding:12px 14px 14px;border:1px solid var(--dim);background:#0a0c09;color:var(--mid)}
 .contact-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
@@ -134,7 +154,7 @@ body::after{
 .contact-status{min-height:14px;color:var(--off)}
 
 /* ============ ELECTRO DANCER ============ */
-/* The robot is drawn small, through the same dither as the tiles, then blown up with whole pixels — so it is
+/* The figure is drawn small, through the same dither as the tiles, then blown up with whole pixels — so it is
    made of the same green grain, and the dice's chip face takes its pixels away along with everything else's. */
 #danceStage{
   --dance-left:50%;
@@ -160,6 +180,7 @@ body::after{
   #electroDancer{width:82px}
   #danceStage{--dance-bottom:92px}
 }
+body.radio-on #danceStage{--dance-bottom:150px}   /* standing clear of the player */
 
 
 @media(max-width:600px){
@@ -169,29 +190,45 @@ body::after{
 
 
 /* ============ RADIO ============ */
+/* The player: once a track has been picked it stays in the corner as you scroll. Whether it's playing one track or
+   the radio, which track (press the name to go to its tile), the effect on, a line to move through it, and the
+   buttons. If a shared link's track couldn't start by itself, one wide button starts it. */
 .global-radio{
   position:fixed;
   right:10px;
   bottom:10px;
   z-index:160;
   display:none;
-  width:min(310px,calc(100% - 20px));
+  width:min(330px,calc(100% - 20px));
   border:2px double var(--signal);
   background:#0a0c09;
   padding:8px;
   box-shadow:0 0 0 3px #080907;
 }
 .global-radio.on{display:block}
-body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of the radio panel */
-.global-radio-title{
-  margin-bottom:7px;
-  color:var(--off);
-  font-size:7px;
-  line-height:1.5;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
+body.radio-on{padding-bottom:150px}   /* room to scroll the last tiles clear of the player */
+.gr-head{display:flex;align-items:center;gap:7px;margin-bottom:6px;font-size:7px;line-height:1.5;white-space:nowrap}
+.gr-mode{flex:none;padding:2px 4px 1px;color:var(--bg);background:var(--admin)}
+.gr-mode.radio{background:var(--signal)}
+.global-radio .gr-title{flex:1;min-width:0;padding:2px 0;color:var(--off);overflow:hidden;text-overflow:ellipsis;border:0;text-align:left}
+.global-radio .gr-title:hover{text-decoration:underline;border:0}
+.gr-fx{flex:none;display:flex;align-items:center;gap:4px;color:var(--mid)}
+.gr-fx::before{content:"";width:6px;height:6px;border:1px solid currentColor}
+.gr-fx.on::before{background:currentColor}
+.gr-fx.wait::before{animation:fu-wait .9s steps(2,jump-none) infinite}
+.gr-seek{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:7px;margin-bottom:7px;font-size:7px;color:var(--mid)}
+.gr-seek input{-webkit-appearance:none;appearance:none;width:100%;height:24px;margin:0;background:none;cursor:pointer}
+.gr-seek input::-webkit-slider-runnable-track{height:3px;background:linear-gradient(var(--signal),var(--signal)) 0/var(--k,0%) 100% no-repeat,var(--dim)}
+.gr-seek input::-moz-range-track{height:3px;background:var(--dim)}
+.gr-seek input::-moz-range-progress{height:3px;background:var(--signal)}
+.gr-seek input::-webkit-slider-thumb{-webkit-appearance:none;width:8px;height:14px;margin-top:-5.5px;background:var(--off);border:0;border-radius:0}
+.gr-seek input::-moz-range-thumb{width:8px;height:14px;background:var(--off);border:0;border-radius:0}
+.gr-seek input:disabled{cursor:default;opacity:.5}
+.gr-seek input:focus-visible{outline:2px solid var(--off);outline-offset:1px}
+.global-radio .gr-go{display:block;width:100%;box-sizing:border-box;padding:9px 6px;color:var(--bg);background:var(--signal);border:1px solid var(--signal);font-size:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.global-radio .gr-go:hover{background:var(--off);border-color:var(--off)}
+.global-radio [hidden]{display:none}
+.global-radio-title{display:none}
 .global-radio-controls{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
@@ -243,6 +280,20 @@ body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of 
 .pbtn:hover{border-color:var(--signal)}
 .pbtn.err{color:var(--alert);border-color:var(--alert);cursor:not-allowed}
 .atime{margin-left:auto;font-size:9px;color:var(--mid)}
+/* share: a small secondary button at the end of the row, with a bigger invisible target round it */
+.sbtn{position:relative;display:grid;place-items:center;width:24px;height:24px;padding:0;color:var(--admin);background:none;border:0;cursor:pointer}
+.sbtn::before{content:"";position:absolute;inset:-6px}
+.sbtn .ico{width:12px;height:12px;fill:currentColor;shape-rendering:crispEdges}
+.sbtn:hover,.sbtn.done{color:var(--signal)}
+.sbtn:focus-visible{outline:2px solid var(--off);outline-offset:2px}
+.sbtn[data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);right:0;z-index:90;padding:5px 7px;font-size:7px;line-height:1.5;
+  white-space:nowrap;color:var(--off);background:#0a0c09;border:1px solid var(--admin);opacity:0;pointer-events:none}
+.sbtn[data-tip]:hover::after,.sbtn[data-tip]:focus-visible::after,.sbtn.done::after{opacity:1}
+@media(hover:none){.sbtn[data-tip]:not(.done)::after{display:none}}
+.sharebox{display:flex;gap:6px;padding:0 9px 8px}
+.sharebox input{flex:1;min-width:0;padding:6px 7px;font:13px/1.3 ui-monospace,monospace;color:var(--off);background:#050605;border:1px solid var(--admin);border-radius:0}
+.sharebox button{all:unset;cursor:pointer;padding:0 8px;font-size:9px;color:var(--mid);border:1px solid var(--admin)}
+.tile.found{border-color:var(--signal)}
 .tile.playing .atime{color:var(--signal)}
 
 /* lightbox */
@@ -272,10 +323,17 @@ body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of 
   <symbol id="i-dance" viewBox="0 0 12 12"><path d="M9 0h1v1h-1zM5 1h2v1h-2zM9 1h1v1h-1zM5 2h2v1h-2zM8 2h1v1h-1zM6 3h2v1h-2zM4 4h4v1h-4zM6 5h1v1h-1zM6 6h1v1h-1zM5 7h3v1h-3zM4 8h1v1h-1zM8 8h1v1h-1zM3 9h1v1h-1zM9 9h1v1h-1zM4 10h1v1h-1zM8 10h1v1h-1zM3 11h2v1h-2zM8 11h2v1h-2z"/></symbol>
   <symbol id="i-die" viewBox="0 0 12 12"><path d="M1 0h10v1h-10zM0 1h1v10h-1zM11 1h1v10h-1zM1 11h10v1h-10zM2 2h2v2h-2zM5 5h2v2h-2zM8 8h2v2h-2z"/></symbol>
   <symbol id="i-mail" viewBox="0 0 12 12"><path d="M0 2h12v1h-12zM0 3h2v1h-2zM10 3h2v1h-2zM0 4h1v1h-1zM2 4h1v1h-1zM9 4h1v1h-1zM11 4h1v1h-1zM0 5h1v1h-1zM3 5h1v1h-1zM8 5h1v1h-1zM11 5h1v1h-1zM0 6h1v1h-1zM4 6h1v1h-1zM7 6h1v1h-1zM11 6h1v1h-1zM0 7h1v1h-1zM5 7h2v1h-2zM11 7h1v1h-1zM0 8h1v1h-1zM11 8h1v1h-1zM0 9h12v1h-12z"/></symbol>
+  <symbol id="i-share" viewBox="0 0 12 12"><path d="M5 0h2v1h-2zM4 1h4v1h-4zM3 2h6v1h-6zM5 3h2v6h-2zM1 6h2v1h-2zM9 6h2v1h-2zM1 7h1v4h-1zM10 7h1v4h-1zM1 11h10v1h-10z"/></symbol>
+  <symbol id="i-tick" viewBox="0 0 12 12"><path d="M1 6h2v1h-2zM2 7h2v1h-2zM3 8h2v1h-2zM4 9h2v1h-2zM5 8h2v1h-2zM6 7h2v1h-2zM7 6h2v1h-2zM8 5h2v1h-2zM9 4h2v1h-2zM10 3h2v1h-2z"/></symbol>
+  <symbol id="i-caret" viewBox="0 0 5 5"><path d="M0 1h5v1h-5zM1 2h3v1h-3zM2 3h1v1h-1z"/></symbol>
   <symbol id="i-radio" viewBox="0 0 12 12"><path d="M9 0h1v1h-1zM8 1h1v1h-1zM7 2h1v1h-1zM6 3h1v1h-1zM1 4h10v1h-10zM1 5h1v1h-1zM10 5h1v1h-1zM1 6h1v1h-1zM3 6h2v1h-2zM8 6h1v1h-1zM10 6h1v1h-1zM1 7h1v1h-1zM3 7h2v1h-2zM7 7h3v1h-3zM1 8h1v1h-1zM3 8h2v1h-2zM8 8h1v1h-1zM10 8h1v1h-1zM1 9h1v1h-1zM10 9h1v1h-1zM1 10h10v1h-10z"/></symbol>
 </svg>
 <div class="fxrow" role="group" aria-label="Controls">
-  <button class="fxbtn dice" id="fxDice" type="button" aria-pressed="false" aria-label="fx dice" data-tip="roll the dice"><svg class="ico" aria-hidden="true"><use href="#i-die"/></svg></button>
+  <div class="dicewrap" id="diceWrap">
+    <button class="fxbtn dice" id="fxDice" type="button" aria-pressed="false" aria-label="fx dice" data-tip="roll the dice"><svg class="ico" aria-hidden="true"><use href="#i-die"/></svg></button>
+    <button class="fxmore" id="fxMore" type="button" aria-expanded="false" aria-controls="fxMenu" aria-label="choose an effect"><svg class="ico" aria-hidden="true"><use href="#i-caret"/></svg></button>
+    <div class="fxmenu" id="fxMenu" role="group" aria-label="effects" hidden></div>
+  </div>
   <button class="fxbtn" id="danceMode" type="button" aria-pressed="false" aria-label="dancer" data-tip="dancer"><svg class="ico" aria-hidden="true"><use href="#i-dance"/></svg></button>
   <button class="fxbtn" id="radioMode" type="button" aria-pressed="false" aria-label="radio" data-tip="radio"><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg></button>
   <button class="fxbtn" id="contactBtn" type="button" aria-expanded="false" aria-controls="contactPanel" aria-label="contact" data-tip="contact"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg></button>
@@ -286,9 +344,12 @@ body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of 
 <div class="fxkey" id="fxKey" hidden>
   <ul>
     <li><svg class="ico" aria-hidden="true"><use href="#i-null"/></svg><span><b>the ∅</b>scroll over it or swipe across it and it talks. harder, faster. tap to stop.</span></li>
-    <li><svg class="ico" aria-hidden="true"><use href="#i-die"/></svg><span><b>dice</b>rolls one of six: chip, dub, slow, swirl, radio, cave. sound and picture. again for off.</span></li>
-    <li><svg class="ico" aria-hidden="true"><use href="#i-dance"/></svg><span><b>dancer</b>a robot. starts the radio if it's quiet.</span></li>
-    <li><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg><span><b>radio</b>everything, one after another.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-die"/></svg><span><b>dice</b>rolls one of six effects, on the sound and the picture:
+      <span id="keySwatches"></span>. again for off. to pick one, hover the dice or press ▾ beside it and choose a colour.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-dance"/></svg><span><b>dancer</b>a dancing figure. starts the radio if it's quiet.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg><span><b>radio</b>plays everything, one after another.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-share"/></svg><span><b>share</b>on each track: copies a link that opens this page with that track ready to play.</span></li>
+    <li><span class="ico" aria-hidden="true">▶</span><span><b>player</b>stays in the corner as you scroll. track: one track. radio: all of them in turn. play or pause, skip to the next, stop (the radio goes off; the track keeps its place). drag the line, or use the arrow keys on it, to move through the track.</span></li>
     <li><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span><b>contact</b>get in touch.</span></li>
   </ul>
 </div>
@@ -308,16 +369,27 @@ body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of 
 
 <div id="danceStage" aria-hidden="true">
   <canvas id="electroDancer" width="72" height="132" role="img"
-          aria-label="A small robot dancing, drawn in green grain"></canvas>
+          aria-label="A small figure dancing, drawn in green grain"></canvas>
 </div>
 
-<section class="global-radio" id="globalRadio" aria-label="Field Unit radio">
-  <div class="global-radio-title" id="globalRadioTitle">FIELD UNIT RADIO // WAITING</div>
-  <div class="global-radio-controls">
-    <button id="globalRadioToggle" type="button">PLAY</button>
-    <button id="globalRadioSkip" type="button">SKIP</button>
-    <button id="globalRadioStop" type="button">STOP</button>
+<section class="global-radio" id="globalRadio" aria-label="player">
+  <div class="gr-head">
+    <span class="gr-mode" id="grMode">TRACK</span>
+    <button class="gr-title" id="grTitle" type="button"></button>
+    <span class="gr-fx" id="grFx">ORIGINAL</span>
   </div>
+  <div class="gr-seek">
+    <span id="grTime">0:00</span>
+    <input id="grSeek" type="range" min="0" max="1" step="1" value="0" aria-label="position in the track" disabled>
+    <span id="grDur">-:--</span>
+  </div>
+  <button class="gr-go" id="grGo" type="button" hidden></button>
+  <div class="global-radio-controls" id="grControls">
+    <button id="globalRadioToggle" type="button">PLAY</button>
+    <button id="globalRadioSkip" type="button" aria-label="skip to the next track">SKIP</button>
+    <button id="globalRadioStop" type="button" aria-label="stop: the radio goes off, the track keeps its place" title="radio off, the track keeps its place">STOP</button>
+  </div>
+  <div class="global-radio-title" id="globalRadioTitle"></div>
 </section>
 <div class="wrap">
   <main class="grid" id="grid"></main>
@@ -335,21 +407,22 @@ body.radio-on{padding-bottom:110px}   /* room to scroll the last tiles clear of 
    art:    optional cover image for an audio post  e.g. "art/unlocker.png"
            (rendered through the grain engine; progress burns across it)
    images: list of image paths         e.g. ["art/patch.png"]
+   id:     the track's name in a shared link (field-unit.co.uk/?track=tuckshop). Keep it once a link has gone out.
    A post is either audio (+ optional art) OR images.
    ================================================================ */
 const POSTS = [
-  { title:"tuckshop", audio:"tuckshop.mp3", art:"tuckshopart.jpg" },
-  { title:"trenchcoat", audio:"trenchcoat.mp3", art:"trenchcoatart.jpg" },
-  { title:"nature of freak", audio:"Nature_of_Freak_Demo.mp3", art:"Factory_Artwork~2.png" },
-  { title:"nomemory notreal", audio:"nomemory_notreal_mthree.mp3", art:"Hague_Artwork_Final.png" },
-  { title:"the of the", audio:"the_of_the_demo.mp3", art:"Abbey_Canal_Artwork_3.jpg" },
-  { title:"curley cuh", audio:"Curley_Cuh_Demo.mp3", art:"Sign_Artwork_2.jpg" },
-  { title:"pocket muck", audio:"Pocket_Muck_Demo.mp3", art:"untitled11.png" },
-  { title:"medium slate", audio:"Medium_Slate_Demo.mp3", art:"RedStaircaseBrickworkArtwork.jpg" },
-  { title:"LAN_33", audio:"LAN_33_Demo.mp3", art:"Canal_Bucket_Artwork6.jpg" },
-  { title:"navvy", audio:"Navvy_Demo.mp3", art:"NoParking3.jpg" },
-  { title:"lbd+m3", audio:"lbd_m3_demo.mp3", art:"CloudArtwork3.jpg" },
-  { title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" }
+  { id:"tuckshop", title:"tuckshop", audio:"tuckshop.mp3", art:"tuckshopart.jpg" },
+  { id:"trenchcoat", title:"trenchcoat", audio:"trenchcoat.mp3", art:"trenchcoatart.jpg" },
+  { id:"nature-of-freak", title:"nature of freak", audio:"Nature_of_Freak_Demo.mp3", art:"Factory_Artwork~2.png" },
+  { id:"nomemory-notreal", title:"nomemory notreal", audio:"nomemory_notreal_mthree.mp3", art:"Hague_Artwork_Final.png" },
+  { id:"the-of-the", title:"the of the", audio:"the_of_the_demo.mp3", art:"Abbey_Canal_Artwork_3.jpg" },
+  { id:"curley-cuh", title:"curley cuh", audio:"Curley_Cuh_Demo.mp3", art:"Sign_Artwork_2.jpg" },
+  { id:"pocket-muck", title:"pocket muck", audio:"Pocket_Muck_Demo.mp3", art:"untitled11.png" },
+  { id:"medium-slate", title:"medium slate", audio:"Medium_Slate_Demo.mp3", art:"RedStaircaseBrickworkArtwork.jpg" },
+  { id:"lan-33", title:"LAN_33", audio:"LAN_33_Demo.mp3", art:"Canal_Bucket_Artwork6.jpg" },
+  { id:"navvy", title:"navvy", audio:"Navvy_Demo.mp3", art:"NoParking3.jpg" },
+  { id:"lbd-m3", title:"lbd+m3", audio:"lbd_m3_demo.mp3", art:"CloudArtwork3.jpg" },
+  { id:"wilt", title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" }
 ];
 
 /* ================================================================
@@ -494,7 +567,7 @@ function trackAudio(p,src,preload){
   fxRoute(a);                                      // once the live effects exist, every copy goes through them
   if(dice.face&&dice.face.rate)fxRateOne(a,dice.face.rate);
   const live=()=>a===p.audio;
-  a.addEventListener("loadedmetadata",()=>{ if(a===p.orig){p.dur=a.duration||0;if(!p.playing)p.timeEl.textContent="00:00";} });
+  a.addEventListener("loadedmetadata",()=>{ if(a===p.orig){p.dur=a.duration||0;if(!p.playing)p.timeEl.textContent="00:00";if(radioCurrent()===p)fuRenderRadio();} });
   a.addEventListener("error",()=>{
     if(a===p.orig){p.err=true;p.btn.classList.add("err");p.btn.textContent="×";p.timeEl.textContent="∅";return;}
     chipLost(p,a);
@@ -504,15 +577,17 @@ function trackAudio(p,src,preload){
     if(p.dur){p.prog=a.currentTime/p.dur;p.timeEl.textContent=fmt(a.currentTime);}
     if(a.readyState>0){ p.lastT=a.currentTime; p.lastTAt=performance.now(); }   // where it was, should this copy fail
     if(!animating) drawPlayer(p,clock());
+    if(radioCurrent()===p)playerTime(p);
   });
   // The radio follows whichever tile is playing, so the two always show the same track.
-  a.addEventListener("play",()=>{ if(!live())return; p.playing=true;p.tile.classList.add("playing");p.btn.textContent="‖";p.btn.setAttribute("aria-label","pause "+p.title);radio.index=p.index;wake();fuRenderRadio(); });
+  a.addEventListener("play",()=>{ if(!live())return; p.playing=true;p.tile.classList.add("playing");p.btn.textContent="‖";p.btn.setAttribute("aria-label","pause "+p.title);radio.index=p.index;player.blocked=null;trackShown(p);if(/^press play for/.test(fxStatus.textContent))say("");wake();fuRenderRadio(); });
   a.addEventListener("pause",()=>{ if(!live())return; p.playing=false;p.tile.classList.remove("playing");p.btn.textContent="▶";p.btn.setAttribute("aria-label","play "+p.title);fuRenderRadio(); });
   a.addEventListener("ended",()=>{ if(!live())return; p.prog=0;if(radio.on)radioPlay(p.index+1);else fuRenderRadio(); });
   return a;
 }
 
-// Play a track in whichever version is chosen, from where it was (or from the start once it has ended).
+// Play a track in whichever version is chosen, from where it was (or from the start once it has ended). Gives back
+// the browser's answer, which says no if it won't let sound start yet (a shared link opened cold).
 function startTrack(p){
   chipSettle();
   fxWake();
@@ -525,14 +600,19 @@ function startTrack(p){
     want.currentTime=at;
   }
   if(p.audio.ended)p.audio.currentTime=0;
-  p.audio.play().catch(()=>{});
+  const going=p.audio.play();
+  if(going)going.catch(()=>{});
+  return going||Promise.resolve();
 }
-function seekTrack(p,to){
+// Move within a track. From the artwork it starts playing too; from the player's line it keeps playing or stays paused.
+function seekTrack(p,to,keepPaused){
   chipSettle();
+  const was=!p.audio.paused;
   const want=chip.on&&p.fxSrc?chipAlt(p):p.orig;
   if(want!==p.audio){ const old=p.audio; p.audio=want; if(!old.paused)old.pause(); }
-  p.audio.currentTime=to;
-  if(p.audio.paused){ stopOthers(p); p.audio.play().catch(()=>{}); }
+  p.audio.currentTime=to+(p.audio===p.alt?p.fxOffset:0);
+  if(p.audio.paused&&(was||!keepPaused)){ stopOthers(p); p.audio.play().catch(()=>{}); }
+  else if(p.dur){ p.prog=to/p.dur; p.timeEl.textContent=fmt(to); drawPlayer(p,clock()); if(radioCurrent()===p)playerTime(p); }
 }
 
 /* ---------- build tiles ---------- */
@@ -547,13 +627,15 @@ POSTS.forEach((post,idx)=>{
   if(post.audio){
     tile.innerHTML=`
       <div class="medium aud"><canvas width="192" height="72" aria-hidden="true"></canvas></div>
-      <div class="arow"><button class="pbtn" type="button" aria-label="play ${esc(post.title||"")}">▶</button><span class="atime">--:--</span></div>
+      <div class="arow"><button class="pbtn" type="button" aria-label="play ${esc(post.title||"")}">▶</button><span class="atime">--:--</span><button class="sbtn" type="button" aria-label="share ${esc(post.title||"")}" data-tip="copy link"><svg class="ico" aria-hidden="true"><use href="#i-share"/></svg></button></div>
       <div class="cap"><span class="t">${esc(post.title||"")}</span></div>`;
     const canvas=tile.querySelector("canvas");
     const p={canvas,ctx:canvas.getContext("2d"),W:192,H:72,
              btn:tile.querySelector(".pbtn"),timeEl:tile.querySelector(".atime"),
              tile,prog:0,playing:false,seed:idx*3.7+1,audio:null,dur:0,err:false,artLum:null,artImg:null,
-             index:players.length,title:post.title};
+             index:players.length,title:post.title,id:post.id,art:post.art};
+    tile.id="track-"+post.id;
+    tile.querySelector(".sbtn").addEventListener("click",e=>shareTrack(p,e.currentTarget));
     // Two copies of the recording can stand behind a tile: the original, and its chip version, fetched only
     // when someone asks for it (tools/chip_fx.py makes them). p.audio is whichever is the track at the moment.
     const fx=window.FU_CHIP_FX&&FU_CHIP_FX.tracks?Object.values(FU_CHIP_FX.tracks).find(v=>v.original===post.audio):null;
@@ -562,7 +644,7 @@ POSTS.forEach((post,idx)=>{
     p.orig=p.audio=trackAudio(p,post.audio,"metadata");
     p.btn.addEventListener("click",()=>{
       if(p.err)return;
-      if(p.audio.paused)startTrack(p);else p.audio.pause();
+      if(p.audio.paused)playNow(p);else p.audio.pause();
     });
     canvas.addEventListener("click",e=>{
       if(p.err||!p.dur)return;
@@ -705,6 +787,7 @@ function chipCommit(on){              // the sound and the picture change togeth
   diceBtn.classList.remove("pending");
   if(on)look=LOOK.chip; else if(look===LOOK.chip)look=LOOK.normal;
   redrawAllVisuals();
+  fxShow();
 }
 
 function chipSet(want){
@@ -719,7 +802,7 @@ function chipSet(want){
     return;
   }
   chip.want=want;
-  if(want){ diceBtn.classList.add("pending"); say("chip — loading…"); }
+  if(want){ diceBtn.classList.add("pending"); say("chip — loading…"); fxShow(); }
   chipHandover(p,p.audio,to,gen).then(ok=>{
     if(gen!==chip.gen)return;         // a newer roll, a new track or a seek has taken over
     chip.want=null;
@@ -919,10 +1002,10 @@ const FACE={
   dub:{id:"dub",say:"dub — tape echo",ramp:RAMPS.dub,live:true},
   slow:{id:"slow",say:"slow — down a gear",ramp:RAMPS.slow,rate:0.84},
   swirl:{id:"swirl",say:"swirl — phased",ramp:RAMPS.swirl,live:true},
-  radio:{id:"radio",say:"radio — far off",ramp:RAMPS.radio,live:true},
+  radio:{id:"radio",say:"radio filter — far off",ramp:RAMPS.radio,live:true},
   cave:{id:"cave",say:"cave — big room",ramp:RAMPS.cave,live:true}
 };
-Object.values(FACE).forEach(f=>{ f.rgb=f.ramp.map(hexRGB); f.hex=f.ramp[3]; });
+Object.values(FACE).forEach(f=>{ f.rgb=f.ramp.map(hexRGB); f.hex=f.ramp[3]; f.name=f.id==="radio"?"radio filter":f.id; });
 // Opposite faces: chip/dub on x, slow/swirl on y, radio/cave on z (the cube's own axes).
 const DIE_FACES=[
   {n:[1,0,0],f:FACE.chip},{n:[-1,0,0],f:FACE.dub},{n:[0,1,0],f:FACE.slow},
@@ -984,15 +1067,16 @@ function dieDraw(M){
 let dieRest=null;                              // where the die sits, as an offset from the dice button
 function diePlace(x,y){ dieCv.style.transform="translate("+x.toFixed(1)+"px,"+y.toFixed(1)+"px)"; }
 function dieShelf(){                           // the dice button's top-left corner, inside the row
-  return {x:diceBtn.offsetLeft, y:diceBtn.offsetTop, w:diceBtn.offsetWidth, rowW:diceBtn.parentElement.clientWidth};
+  const row=dieCv.parentElement, r=diceBtn.getBoundingClientRect(), rr=row.getBoundingClientRect();
+  return {x:r.left-rr.left, y:r.top-rr.top, w:r.width, rowW:row.clientWidth};
 }
-function dieRoll(face){
+function dieRoll(face,now){                     // now: chosen, not rolled, so it lands straight away where it is
   return new Promise(done=>{
     const sh=dieShelf(), size=40, edge=21.6;   // on screen, a quarter turn moves it along by one edge of the cube
-    const turns=5+((Math.random()*2)|0);
+    const turns=now?0:5+((Math.random()*2)|0);
     const x0=sh.x+(sh.w-size)/2, dist=Math.min(turns*edge, Math.max(0,sh.rowW-size-x0));
     const y0=sh.y-size+3;                      // resting on the buttons' top edge
-    const F=faceUp(face), dur=REDUCED?0:1050, t0=performance.now();
+    const F=faceUp(face), dur=REDUCED||now?0:1050, t0=performance.now();
     dieRest={dx:x0+dist-sh.x, dy:y0-sh.y};
     dieCv.classList.add("show");
     const step=now=>{
@@ -1033,6 +1117,7 @@ function diceApply(face){
   if(face.rate)fxRate(face.rate);
   if(face.live)fxChain(face.id);
   say(face.say);
+  fxShow();
 }
 function diceOff(message){
   const face=dice.face;
@@ -1047,10 +1132,76 @@ function diceOff(message){
   look=LOOK.normal;
   redrawAllVisuals();
   say(message||"fx off");
+  fxShow();
 }
 diceBtn.addEventListener("click",()=>{
   if(dice.rolling)return;                      // let it land
   if(dice.face)diceOff(); else diceRoll();
+});
+
+/* ---------- choosing a face: the colours under the dice ----------
+   Six swatches, one per face, always in this order and in the face's own colour: no words on them, but each is a
+   button with the effect's name for screen readers, and the key under ? says which colour is which. Hovering the
+   dice opens them (with a mouse); the ▾ beside it opens them for touch and the keyboard. Opening changes nothing;
+   choosing one puts that effect on straight away, through the same path as a roll, and the lit one again turns it
+   off. The dice itself still rolls. */
+const diceWrap=document.getElementById("diceWrap"), fxMore=document.getElementById("fxMore"), fxMenu=document.getElementById("fxMenu");
+const swatches=Object.values(FACE).map(f=>{
+  const b=document.createElement("button");
+  b.type="button"; b.className="sw"; b.dataset.face=f.id;
+  b.style.setProperty("--c",f.hex);
+  b.setAttribute("aria-label",f.name);
+  b.setAttribute("aria-pressed","false");
+  if(f.live&&!LIVE_OK)b.setAttribute("aria-disabled","true");      // opened from disk: only chip and slow work
+  b.addEventListener("click",e=>{ e.stopPropagation(); diceChoose(f); });
+  fxMenu.appendChild(b);
+  return b;
+});
+document.getElementById("keySwatches").innerHTML=Object.values(FACE).map(f=>
+  '<span class="keysw" style="--c:'+f.hex+'" aria-hidden="true"></span>'+f.name).join(", ");
+function diceChoose(face){
+  if(dice.rolling)return;
+  if(face.live&&!LIVE_OK){ say(face.name+" works on the site itself, not from a saved copy"); return; }
+  if(dice.face===face){ diceOff(); return; }
+  const old=dice.face;
+  if(face.live)fxGraph();                      // inside the press, so the browser lets it sound
+  if(face===FACE.chip){ const p=players.find(q=>q.playing)||radioCurrent(); if(p&&p.fxSrc)chipAlt(p); }
+  if(old){                                     // the effect that was on comes off first
+    if(old===FACE.chip)chipSet(false);
+    if(old.rate&&face.rate!==old.rate)fxRate(face.rate||1);
+    if(old.live&&!face.live)fxChain(null);
+  }
+  dice.last=face;
+  dieRoll(face,true);
+  diceApply(face);
+}
+function fxShow(){                             // the lit swatch and the player's readout follow every change
+  swatches.forEach(b=>b.setAttribute("aria-pressed",String(!!dice.face&&b.dataset.face===dice.face.id)));
+  if(typeof fuRenderRadio==="function")fuRenderRadio();
+}
+// Opened by hovering, it closes a moment after the pointer leaves; opened with the ▾ (a click, a tap, the keyboard)
+// it stays until the ▾ again, a press elsewhere or Esc.
+let menuTimer=0, menuPinned=false;
+function menuSet(open,pin){
+  clearTimeout(menuTimer);
+  fxMenu.hidden=!open;
+  menuPinned=open&&!!pin;
+  fxMore.setAttribute("aria-expanded",open?"true":"false");
+}
+fxMore.addEventListener("click",()=>{ if(fxMenu.hidden||!menuPinned)menuSet(true,true); else menuSet(false); });
+diceWrap.addEventListener("pointerenter",e=>{ if(e.pointerType==="mouse"){ clearTimeout(menuTimer); if(fxMenu.hidden)menuSet(true,false); } });
+diceWrap.addEventListener("pointerleave",e=>{
+  if(e.pointerType!=="mouse"||menuPinned)return;
+  if(fxMenu.querySelector(":focus-visible"))return;                // not while the keyboard is in it
+  clearTimeout(menuTimer); menuTimer=setTimeout(()=>menuSet(false),350);
+});
+diceWrap.addEventListener("focusout",()=>setTimeout(()=>{ if(!diceWrap.contains(document.activeElement)&&!diceWrap.matches(":hover"))menuSet(false); },0));
+document.addEventListener("pointerdown",e=>{ if(!fxMenu.hidden&&!diceWrap.contains(e.target))menuSet(false); });
+fxMenu.addEventListener("keydown",e=>{                                  // left and right step along the colours
+  if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft")return;
+  const i=swatches.indexOf(document.activeElement); if(i<0)return;
+  e.preventDefault();
+  swatches[(i+(e.key==="ArrowRight"?1:-1)+swatches.length)%swatches.length].focus();
 });
 
 /* ---------- the ∅ talks ----------
@@ -1394,6 +1545,8 @@ document.querySelectorAll(".zoom").forEach(b=>b.addEventListener("click",()=>{
 lb.addEventListener("click",()=>{lb.classList.remove("on");lb.setAttribute("aria-hidden","true");});
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape"){
+    if(!fxMenu.hidden){ const inside=diceWrap.contains(document.activeElement); menuSet(false); if(inside)fxMore.focus(); }
+    const box=document.querySelector(".sharebox"); if(box)box.remove();
     if(!fxKey.hidden){ keySet(false); fxHelp.focus(); }
     if(!contactPanel.hidden){ contactSet(false); contactBtn.focus(); }
     lb.classList.remove("on");
@@ -1415,22 +1568,187 @@ const fuGlobalSkip=document.getElementById("globalRadioSkip");
 const fuGlobalStop=document.getElementById("globalRadioStop");
 const fuRadioMode=document.getElementById("radioMode");
 const radio={on:false,stop:false,index:-1};
+const grMode=document.getElementById("grMode"), grTitle=document.getElementById("grTitle"), grFx=document.getElementById("grFx");
+const grSeek=document.getElementById("grSeek"), grTime=document.getElementById("grTime"), grDur=document.getElementById("grDur");
+const grGo=document.getElementById("grGo"), grControls=document.getElementById("grControls");
+const player={blocked:null,dragging:false};     // blocked: a track the browser wouldn't start by itself
+const short=s=>{ if(!isFinite(s)||s<0)s=0; return Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0"); };
+const place=p=>Math.max(0,(p.audio.currentTime||0)-(p.audio===p.alt?p.fxOffset:0));   // where the track is, whichever copy plays
 
 function radioCurrent(){ return players[radio.index]||null; }
 function fuRenderRadio(){
   const p=radioCurrent(), playing=!!(p&&p.playing);
-  fuGlobalTitle.textContent="FIELD UNIT RADIO // "+(p?String(p.title).toUpperCase():"WAITING");
-  fuGlobalToggle.textContent=playing?"PAUSE":"PLAY";
   fuGlobalRadio.classList.toggle("on",radio.index>=0);
   document.body.classList.toggle("radio-on",radio.index>=0);
   fuRadioMode.classList.toggle("on",radio.on&&playing);
   fuRadioMode.setAttribute("aria-pressed",radio.on&&playing?"true":"false");
+  const f=dice.face, waiting=chip.want===true;
+  grFx.textContent=f?(f.id==="radio"?"RADIO FX":f.id.toUpperCase()):"ORIGINAL";
+  grFx.style.color=f?f.hex:"";
+  grFx.classList.toggle("on",!!f); grFx.classList.toggle("wait",waiting);
+  grFx.setAttribute("aria-label","effect: "+(f?f.name+(waiting?", loading":""):"none, the original sound"));
+  if(!p){ msState(null); return; }
+  grMode.textContent=radio.on?"RADIO":"TRACK";
+  grMode.classList.toggle("radio",radio.on);
+  grTitle.textContent=String(p.title).toUpperCase();
+  grTitle.setAttribute("aria-label",p.title+": show it in the list");
+  const blocked=player.blocked===p&&!playing;
+  grGo.hidden=!blocked; grControls.hidden=blocked;
+  grGo.textContent="▶ PLAY "+String(p.title).toUpperCase();
+  grGo.setAttribute("aria-label","play "+p.title);
+  fuGlobalToggle.textContent=playing?"PAUSE":"PLAY";
+  fuGlobalToggle.setAttribute("aria-label",(playing?"pause ":"play ")+p.title);
+  grSeek.setAttribute("aria-label","position in "+p.title);
+  playerTime(p);
+  msState(p);
+}
+function playerTime(p){                        // the line and the times, kept up as the track plays
+  if(player.dragging)return;
+  const d=p.dur||0, t=Math.min(place(p),d||Infinity);
+  grSeek.max=String(Math.max(1,Math.floor(d)));
+  grSeek.value=String(Math.floor(t));
+  grSeek.disabled=!d;
+  grSeek.style.setProperty("--k",(d?t/d*100:0).toFixed(2)+"%");
+  grTime.textContent=short(t);
+  grDur.textContent=d?short(d):"-:--";
+  grSeek.setAttribute("aria-valuetext",short(t)+" of "+(d?short(d):"not known yet"));
+  msPosition(p);
+}
+// The line: dragged, it shows where it will go and moves there when let go; the arrow keys go 5 seconds at a time,
+// Page Up and Page Down 30, Home and End to either end.
+grSeek.addEventListener("pointerdown",()=>{ player.dragging=true; });
+grSeek.addEventListener("input",()=>{
+  const p=radioCurrent(); if(!p||!p.dur)return;
+  const t=Number(grSeek.value);
+  grTime.textContent=short(t);
+  grSeek.style.setProperty("--k",(t/p.dur*100).toFixed(2)+"%");
+  if(!player.dragging)seekTrack(p,t,true);
+});
+grSeek.addEventListener("change",()=>{
+  const p=radioCurrent(); player.dragging=false;
+  if(p&&p.dur)seekTrack(p,Number(grSeek.value),true);
+});
+addEventListener("pointerup",()=>{ if(player.dragging){ player.dragging=false; const p=radioCurrent(); if(p)playerTime(p); } });
+grSeek.addEventListener("keydown",e=>{
+  const p=radioCurrent(); if(!p||!p.dur)return;
+  const step={ArrowRight:5,ArrowUp:5,ArrowLeft:-5,ArrowDown:-5,PageUp:30,PageDown:-30}[e.key];
+  let to=null;
+  if(step!==undefined)to=place(p)+step; else if(e.key==="Home")to=0; else if(e.key==="End")to=p.dur-1;
+  if(to===null)return;
+  e.preventDefault();
+  seekTrack(p,Math.max(0,Math.min(p.dur-0.25,to)),true);
+});
+grTitle.addEventListener("click",()=>{ const p=radioCurrent(); if(p)showTile(p,true); });
+grGo.addEventListener("click",()=>{ const p=radioCurrent(); if(p){ fxWake(); playNow(p); } });
+
+// Play a track by hand (its tile, the player, a shared link): if the browser won't start the sound by itself, the
+// player offers one button that will, and nothing claims to be playing until it is.
+function playNow(p){
+  player.blocked=null;
+  radio.stop=false;
+  return startTrack(p).catch(err=>{
+    if(p.err||!err)return;                     // the track itself didn't load: its tile shows ∅
+    if(err.name==="NotAllowedError"){ player.blocked=p; radio.index=p.index; fuRenderRadio(); say("press play for "+p.title); }
+    else if(err.name!=="AbortError")say(p.title+" didn't load");
+  });
+}
+function showTile(p,focus){                    // bring a track's tile into view, once, and mark it for a moment
+  p.tile.scrollIntoView({block:"center",behavior:REDUCED?"auto":"smooth"});
+  p.tile.classList.add("found"); setTimeout(()=>p.tile.classList.remove("found"),1600);
+  if(focus)p.btn.focus({preventScroll:true});
+}
+
+/* ---------- a link to one track ----------
+   field-unit.co.uk/?track=tuckshop is this same page: it finds the track, brings its tile into view, puts it in the
+   player and tries to play it from the start, as one track, in its original sound. A browser that won't start sound
+   by itself leaves it ready, with one button to press. The address follows whichever track is playing (without
+   adding to the history), so it can be copied from the bar too; the tab's name follows it as well. */
+const SITE="https://field-unit.co.uk/";
+function trackShown(p){
+  document.title=p.title+" — field unit";
+  if(/^https?:$/.test(location.protocol)&&new URLSearchParams(location.search).get("track")!==p.id){
+    try{ history.replaceState(null,"",location.pathname+"?track="+encodeURIComponent(p.id)); }catch(e){}
+  }
+}
+async function shareTrack(p,btn){
+  const url=SITE+"?track="+encodeURIComponent(p.id);
+  const open=p.tile.querySelector(".sharebox"); if(open)open.remove();
+  try{
+    if(!navigator.clipboard||!window.isSecureContext)throw new Error("no clipboard");
+    await navigator.clipboard.writeText(url);
+    btn.classList.add("done"); btn.dataset.tip="copied";
+    btn.querySelector("use").setAttribute("href","#i-tick");
+    say("link to "+p.title+" copied");
+    setTimeout(()=>{ btn.classList.remove("done"); btn.dataset.tip="copy link"; btn.querySelector("use").setAttribute("href","#i-share"); },1800);
+  }catch(e){
+    // No clipboard here: the link in a field, selected, to copy by hand.
+    const box=document.createElement("div");
+    box.className="sharebox";
+    box.innerHTML='<input readonly aria-label="link to '+esc(p.title)+'"><button type="button" aria-label="close">×</button>';
+    const input=box.querySelector("input");
+    input.value=url;
+    p.tile.querySelector(".arow").after(box);
+    input.focus(); input.select();
+    say("link to "+p.title+" ready to copy");
+    box.querySelector("button").addEventListener("click",()=>{ box.remove(); btn.focus(); });
+  }
+}
+function openShared(){
+  const id=new URLSearchParams(location.search).get("track");
+  if(id===null)return;
+  const p=players.find(q=>q.id===id.toLowerCase());
+  if(!p){                                      // an old or mistyped link: everything else is still here
+    say("no track called “"+id.slice(0,40)+"” here");
+    try{ history.replaceState(null,"",location.pathname); }catch(e){}
+    return;
+  }
+  radio.on=false; radio.index=p.index;
+  document.title=p.title+" — field unit";
+  fuRenderRadio();
+  showTile(p,false);
+  playNow(p);
+}
+addEventListener("popstate",()=>{               // back or forward to an address with another track: select it
+  const id=new URLSearchParams(location.search).get("track"), p=players.find(q=>q.id===id);
+  if(p&&radio.index!==p.index){ radio.index=p.index; document.title=p.title+" — field unit"; fuRenderRadio(); showTile(p,false); }
+});
+
+/* ---------- the lock screen and headphones ----------
+   Where the browser offers it, the track's name and artwork show on the lock screen and in the system's media
+   controls, and play, pause, next, previous and seeking there drive the same player. */
+const MS=("mediaSession" in navigator)?navigator.mediaSession:null;
+let msTrackShown=null;
+function msState(p){
+  if(!MS)return;
+  try{
+    if(p&&msTrackShown!==p){
+      msTrackShown=p;
+      MS.metadata=new MediaMetadata({title:p.title,artist:"field unit",album:"demos",
+        artwork:p.art?[{src:new URL(p.art,location.href).href,type:/\.png$/i.test(p.art)?"image/png":"image/jpeg"}]:[]});
+    }
+    MS.playbackState=p?(p.playing?"playing":"paused"):"none";
+  }catch(e){}
+}
+function msPosition(p){
+  if(!MS||!MS.setPositionState||!p.dur)return;
+  try{ MS.setPositionState({duration:p.dur,playbackRate:p.audio.playbackRate||1,position:Math.min(p.dur,place(p))}); }catch(e){}
+}
+if(MS){
+  const act=(name,fn)=>{ try{ MS.setActionHandler(name,fn); }catch(e){} };   // a browser without one says so by throwing
+  act("play",()=>{ const p=radioCurrent(); if(p)playNow(p); });
+  act("pause",()=>{ const p=radioCurrent(); if(p&&p.playing)p.audio.pause(); });
+  act("stop",()=>fuStopRadio());
+  act("nexttrack",()=>fuSkipRadio());
+  act("previoustrack",()=>{ const p=radioCurrent(); if(!p)return; if(place(p)>3)seekTrack(p,0,true); else radioPlay(radio.index-1); });
+  act("seekto",d=>{ const p=radioCurrent(); if(p&&p.dur&&isFinite(d.seekTime))seekTrack(p,Math.max(0,Math.min(p.dur-0.25,d.seekTime)),true); });
+  act("seekbackward",d=>{ const p=radioCurrent(); if(p&&p.dur)seekTrack(p,Math.max(0,place(p)-(d.seekOffset||10)),true); });
+  act("seekforward",d=>{ const p=radioCurrent(); if(p&&p.dur)seekTrack(p,Math.min(p.dur-0.25,place(p)+(d.seekOffset||10)),true); });
 }
 function radioPlay(index){               // play a track by its tile, skipping any that failed to load
   for(let n=0;n<players.length;n++){
     const p=players[((index+n)%players.length+players.length)%players.length];
     if(p.err)continue;
-    startTrack(p);
+    playNow(p);
     return;
   }
 }
@@ -1444,9 +1762,10 @@ function fuStartRadio(){                 // DANCE: starts the radio, but never a
   if(radio.stop||players.some(p=>p.playing))return;
   radioStart();
 }
-function fuToggleRadio(){                // PLAY/PAUSE on the panel
+function fuToggleRadio(){                // PLAY/PAUSE on the player: carries on as it was, one track or the radio
   const p=radioCurrent();
   if(p&&p.playing)p.audio.pause();
+  else if(p)playNow(p);
   else radioStart();
 }
 function fuRadioButton(){                // the RADIO button: switch the radio on, or stop it
@@ -1454,8 +1773,8 @@ function fuRadioButton(){                // the RADIO button: switch the radio o
   if(radio.on&&p&&p.playing){ fuStopRadio(); say("radio off"); }
   else{ radioStart(); say("radio on"); }
 }
-function fuSkipRadio(){
-  radio.on=true; radio.stop=false;
+function fuSkipRadio(){                  // SKIP: the next track, keeping to one track or the radio
+  radio.stop=false;
   radioPlay(radio.index+1);
 }
 function fuStopRadio(){
@@ -1468,12 +1787,12 @@ fuGlobalSkip.addEventListener("click",fuSkipRadio);
 fuGlobalStop.addEventListener("click",fuStopRadio);
 fuRadioMode.addEventListener("click",fuRadioButton);
 
-/* ---------- the dancer: a robot, in the same grain as everything else ----------
+/* ---------- the dancer: a dancing figure, in the same grain as everything else ----------
    Ten joints, and a pose is ten whole angles. The clock steps from one pose to the next and nothing moves in
-   between — no easing anywhere — which is what makes it read as a machine rather than a person. The figure is
+   between — no easing anywhere — which gives it its stiff, stepped way of moving. The figure is
    a handful of capsules sampled into the same Bayer-dithered ramp the artwork uses, so it is a cloud of green
    dots rather than a silhouette, and the chip face coarsens it exactly as it coarsens a tile: bigger blocks, fewer
-   greens. With it on, the robot is about eighteen blocks wide. */
+   greens. With it on, the figure is about eighteen blocks wide. */
 const danceMode=document.getElementById("danceMode");
 const danceStage=document.getElementById("danceStage");
 const danceCanvas=document.getElementById("electroDancer");
@@ -1595,6 +1914,7 @@ function danceSet(on){
   }
 }
 danceMode.addEventListener("click",()=>danceSet(!danceOn));
+openShared();
 addEventListener("keydown",event=>{
   if(event.key==="Escape"&&danceOn)danceSet(false);
 });

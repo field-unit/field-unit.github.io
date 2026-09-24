@@ -2,7 +2,8 @@
 
 Live at **https://field-unit.co.uk/** (GitHub Pages, repository `field-unit/field-unit.github.io`; the `CNAME`
 file in this folder is what gives it the domain). Twelve demo tracks with their artwork, the radio, the fx dice,
-a logo that talks when you spin it, and a dancing robot. No games, no tickets, no downloads.
+a logo that talks when you spin it, and a dancing figure. Each track has a link of its own, and the player follows you
+down the page. No games, no tickets, no downloads.
 
 ## The controls
 
@@ -13,8 +14,8 @@ no hover.
 
 | Symbol | Name | What it does |
 |---|---|---|
-| a die | FX dice | Rolls one of six effects on the sound and the picture; press again for off (below) |
-| a dancing figure | Dancer | The robot dances on the page, and starts the radio if nothing is playing |
+| a die, with a narrow ▾ beside it | FX dice | Rolls one of six effects on the sound and the picture; press again for off. Hover it, or press the ▾, to choose a colour instead (below) |
+| a dancing figure | Dancer | A small figure dances on the page, and starts the radio if nothing is playing |
 | a radio | Radio | Plays the tracks one after another |
 | an envelope | Contact | A small panel for getting in touch (below) |
 
@@ -63,7 +64,7 @@ sound and picture. Press again: another roll, never the same face twice running.
 | dub — tape echo | repeats at 0.36 s that darken and wobble as they fade | teal, with a faint repeat trailing each shape |
 | slow — down a gear | the tracks play at 0.84, and the pitch drops with them | amber, the grain crawling at under half speed |
 | swirl — phased | a slow six-stage phaser | purple, 2-pixel blocks, the logo twisting |
-| radio — far off | a narrow band, 420 Hz to 2.8 kHz, gently overdriven | red, a line slipping sideways now and then |
+| radio filter — far off | a narrow band, 420 Hz to 2.8 kHz, gently overdriven | red, a line slipping sideways now and then |
 | cave — big room | a long, dark 3.2 s reverb behind the dry sound | blue, everything a little lighter |
 
 - Dub, swirl, radio and cave run live in the browser's audio graph, built the first time one of them is rolled
@@ -72,6 +73,50 @@ sound and picture. Press again: another roll, never the same face twice running.
   for when the two add up. A page opened from disk can't send the tracks through it, so there the dice rolls only
   chip and slow.
 - Nothing is remembered between visits; every visit starts with the dice off.
+
+**Choosing a face (24 Sep 2026).** Hovering the dice (with a mouse) opens six colour swatches directly under it, one
+per face, always in the order above and in the face's own colour; no words on them. Choosing one puts that effect on
+at once, through the same path as a roll (the die lands with that face up, the button lights, the line underneath
+names it); choosing the lit one again turns it off. Opening the swatches changes nothing, and the dice itself still
+rolls. The menu stays open while the pointer travels into it and closes a third of a second after it leaves, or on a
+press elsewhere, or Esc. For touch and the keyboard, the narrow ▾ joined to the dice opens it (and keeps it open
+until pressed again): Tab reaches the swatches, the arrow keys step along them, Enter or Space chooses, Esc closes
+and puts focus back on the ▾. Each swatch is a button named for screen readers ("chip", "dub", "slow", "swirl",
+"radio filter", "cave") with its pressed state, and the lit one has a ring and a mark under it as well as its
+colour. The key under **?** shows which colour is which. From disk only chip and slow work, and the others are
+dimmed.
+
+## The player and track links (24 Sep 2026)
+
+**The player.** Once a track has been picked it stays in the bottom corner as you scroll: whether it's playing one
+track (TRACK) or the radio (RADIO), the track's name (press it to go to its tile), the effect on (ORIGINAL, or the
+face in its colour, blinking while chip loads), a line with the time so far and the length (`0:42` … `3:03`), and
+PLAY/PAUSE, SKIP and STOP. The line can be dragged (a tall invisible target round the thin line), or focused and
+moved with the arrow keys (5 s), Page Up and Page Down (30 s), Home and End; it keeps playing, or stays paused, as it
+was. The time is the track's own, whichever copy (original or chip) is sounding. PLAY carries on as it was, one track
+or the radio; SKIP goes to the next track the same way; STOP turns the radio off and pauses, and the track keeps its
+place (the key says so). The page keeps room at the bottom so the player never covers the last tile, and the dancing
+figure stands clear of it.
+
+**Track links.** Each tile has a small share button at the end of its row. It copies
+`https://field-unit.co.uk/?track=<id>` (the ids are in `POSTS`: `tuckshop`, `trenchcoat`, `nature-of-freak`,
+`nomemory-notreal`, `the-of-the`, `curley-cuh`, `pocket-muck`, `medium-slate`, `lan-33`, `navvy`, `lbd-m3`, `wilt`;
+keep an id once a link has gone out). The button turns to a tick and says "copied", and screen readers hear "link to
+navvy copied". Where the page can't use the clipboard, the link appears in a field under the row, selected, to copy by
+hand. Copying never touches what is playing.
+
+Opening such a link is the same single page: it finds the track, brings its tile into view once, puts it in the
+player and tries to play it from the start, as one track, in its original sound. If the browser won't let sound start
+by itself (usual on a first visit), the track stays ready and the player shows one wide **▶ PLAY TUCKSHOP** button;
+pressing it starts that track, and nothing says it's playing until it is. A track that fails to load shows its ∅ as
+before. A link to a track that isn't there says so on the line under the buttons and plays nothing. The address
+follows whichever track is playing, without adding to the browser's history, so it can be copied from the address
+bar too, and the tab reads "tuckshop — field unit" ("field unit — music" before anything is picked). A shared link's
+preview is the site's own (`og.png`): a page without a server can't give each track its own preview.
+
+**The lock screen and headphones.** Where the browser offers it (the Media Session API), the track's name, "field
+unit" and its artwork show in the system's media controls, and play, pause, stop, next, previous and seeking there
+drive the same player. Not yet tried on a real phone's lock screen.
 
 ## Contact (23 Sep 2026)
 
@@ -141,8 +186,8 @@ original and the normal picture come back.
 - **21 Sep:** Wilt, a twelfth track, from `Tilted stuff Demo.wav`, 320 kbps like the rest.
 - **23 Sep:** no dates on the tracks. Each tile shows the track's name alone, and the dates have gone from
   `POSTS` too, so they aren't in the page at all. The order of the list is unchanged, newest first.
-- **22 Sep:** the dancer became a robot drawn in grain: ten joints stepping between poses with no easing, boxes
-  and rods with gaps at the joints. Published on field-unit.co.uk.
+- **22 Sep:** the dancer became a figure drawn in grain: ten joints stepping between poses with no easing, boxes
+  and rods with gaps at the joints. Published on field-unit.co.uk. (Called a dancing figure since 24 Sep.)
 - **23 Sep:** the draw tool (floating ink drawings, with its clear button) removed; the talking ∅ took its place as
   the page's odd thing to play with. The CHIP FX switch became the fx dice. A shared link now shows "field unit",
   a line about the site and `og.png` (the logo, the buttons and three tiles, cut from a screenshot) instead of a
@@ -152,8 +197,8 @@ original and the normal picture come back.
 
 1. Put the MP3 and its artwork in this folder, and run `python tools/strip_meta.py <artwork>`: it takes the
    camera details (make, date, location) out of the file without touching the picture.
-2. Add a line to `POSTS` near the top of `index.html`'s script — newest first, oldest last:
-   `{ title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" },`
+2. Add a line to `POSTS` near the top of `index.html`'s script — newest first, oldest last, with an `id` for its
+   link (lower case, hyphens): `{ id:"wilt", title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" },`
 3. `python tools/make_art_thumbs.py` adds a small copy of the artwork to `art-thumbs.js`.
 4. `python tools/chip_fx.py` renders its chip version and updates the manifest (the others are left alone).
 5. Publish (below).
