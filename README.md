@@ -207,25 +207,28 @@ original and the normal picture come back.
 
 ## Adding a track
 
-1. Put the MP3 and its artwork in this folder, and run `python tools/strip_meta.py <artwork>`: it takes the
-   camera details (make, date, location) out of the file without touching the picture.
-2. Add a line to `POSTS` near the top of `index.html`'s script — newest first, oldest last, with an `id` for its
-   link (lower case, hyphens): `{ id:"wilt", title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" },`
-3. `python tools/make_art_thumbs.py` adds a small copy of the artwork to `art-thumbs.js`. The tiles' grain reads
-   only brightness, so a dark, flat picture comes out as one shade of green: give it an entry in `TUNE` in that
-   tool (where the tile's strip sits, and a brightness stretch) and run it with `--redo <artwork>`. LAN_33 and
-   medium slate have one (24 Sep); their artwork files are unchanged.
-4. `python tools/chip_fx.py` renders its chip version and updates the manifest (the others are left alone).
-5. Publish (below).
+Double-click **`Add a track.bat`** in this folder, or drop the song and its artwork onto it together. It asks for
+the song (MP3, WAV, FLAC or AIFF), the artwork (JPG, PNG or WebP) and the title, shows what it's about to do, and
+then:
 
-A WAV can be converted here without extra software:
+1. copies the song in, named after the title. A WAV, FLAC or AIFF becomes a 320 kbps MP3 (a recording above
+   48 kHz is brought down first); an MP3 keeps its audio exactly as it is and loses only its tags;
+2. copies the artwork in with its hidden details taken out (camera, date, location). A picture over 2000 px gets a
+   2000 px copy, and a photo stored on its side is turned upright;
+3. puts the track at the top of `POSTS`, with an `id` for its own link, and counts it in the page's description;
+4. makes the tile's grain copy (`tools/make_art_thumbs.py`), with the brightness of a flat picture stretched;
+5. makes the CHIP FX version (`tools/chip_fx.py`);
+6. opens the page from this PC at the new track, then asks what next: **publish** (committed and pushed: live a
+   minute or two later), **later** (it stays here, and the next run offers to publish it), **undo** (every file put
+   back as it was), or **up** / **down** (a higher or lower part of the artwork in the tile).
 
-```python
-import soundfile as sf
-d, sr = sf.read("Track.wav", dtype="float32", always_2d=True)
-sf.write("Track.mp3", d, sr, format="MP3", subtype="MPEG_LAYER_III",
-         bitrate_mode="CONSTANT", compression_level=0.0)      # 320 kbps
-```
+The originals are only read.
+
+By hand, the same steps: the files into this folder (`python tools/strip_meta.py <artwork>` takes out the picture's
+hidden details); a line at the top of `POSTS`, newest first, keeping an `id` once a link has gone out:
+`{ id:"wilt", title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" },`; then `python tools/make_art_thumbs.py`
+(a flat picture wants a `TUNE` entry there and `--redo <artwork>`) and `python tools/chip_fx.py <song>`; then publish
+(below).
 
 ## Preview locally
 
@@ -238,4 +241,5 @@ monospace, depending on the browser.
 ## Publishing
 
 This folder is the `field-unit.github.io` repository: commit and `git push` from this PC, and GitHub Pages serves
-it at field-unit.co.uk a minute later. `Open music site locally.bat` and `tools/` stay on this PC (`.gitignore`).
+it at field-unit.co.uk a minute later. `Add a track.bat`, `Open music site locally.bat` and `tools/` stay on this
+PC (`.gitignore`).
