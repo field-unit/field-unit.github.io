@@ -217,7 +217,7 @@ body.radio-on{padding-bottom:150px}   /* room to scroll the last tiles clear of 
 .gr-fx.on::before{background:currentColor}
 .gr-fx.wait::before{animation:fu-wait .9s steps(2,jump-none) infinite}
 .gr-seek{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:7px;margin-bottom:7px;font-size:7px;color:var(--mid)}
-.gr-seek input{-webkit-appearance:none;appearance:none;width:100%;height:24px;margin:0;background:none;cursor:pointer}
+.gr-seek input{-webkit-appearance:none;appearance:none;width:100%;height:28px;margin:0;background:none;cursor:pointer;touch-action:none}
 .gr-seek input::-webkit-slider-runnable-track{height:3px;background:linear-gradient(var(--signal),var(--signal)) 0/var(--k,0%) 100% no-repeat,var(--dim)}
 .gr-seek input::-moz-range-track{height:3px;background:var(--dim)}
 .gr-seek input::-moz-range-progress{height:3px;background:var(--signal)}
@@ -1603,7 +1603,7 @@ function fuRenderRadio(){
   msState(p);
 }
 function playerTime(p){                        // the line and the times, kept up as the track plays
-  if(player.dragging)return;
+  if(player.dragging||seekTo!==null||performance.now()-seekAt<350)return;   // never under a finger, or just after
   const d=p.dur||0, t=Math.min(place(p),d||Infinity);
   grSeek.max=String(Math.max(1,Math.floor(d)));
   grSeek.value=String(Math.floor(t));
@@ -1614,21 +1614,35 @@ function playerTime(p){                        // the line and the times, kept u
   grSeek.setAttribute("aria-valuetext",short(t)+" of "+(d?short(d):"not known yet"));
   msPosition(p);
 }
-// The line: dragged, it shows where it will go and moves there when let go; the arrow keys go 5 seconds at a time,
-// Page Up and Page Down 30, Home and End to either end.
-grSeek.addEventListener("pointerdown",()=>{ player.dragging=true; });
+// The line: while a finger or the mouse holds it, it shows where it will go and nothing moves it back; let go, the
+// track goes there. The arrow keys go 5 seconds at a time, Page Up and Page Down 30, Home and End to either end, and a
+// screen reader's own adjustments go straight through.
+let seekTo=null, seekTimer=0, seekAt=0;
+function seekCommit(){
+  clearTimeout(seekTimer);
+  const p=radioCurrent(), t=seekTo;
+  seekTo=null;
+  if(t===null||!p||!p.dur)return;
+  seekAt=performance.now();
+  seekTrack(p,Math.max(0,Math.min(p.dur-0.25,t)),true);
+}
+const seekHold=()=>{ player.dragging=true; };
+grSeek.addEventListener("pointerdown",seekHold);
+grSeek.addEventListener("touchstart",seekHold,{passive:true});
 grSeek.addEventListener("input",()=>{
   const p=radioCurrent(); if(!p||!p.dur)return;
-  const t=Number(grSeek.value);
-  grTime.textContent=short(t);
-  grSeek.style.setProperty("--k",(t/p.dur*100).toFixed(2)+"%");
-  if(!player.dragging)seekTrack(p,t,true);
+  seekTo=Number(grSeek.value);
+  grTime.textContent=short(seekTo);
+  grSeek.style.setProperty("--k",(seekTo/p.dur*100).toFixed(2)+"%");
+  clearTimeout(seekTimer);
+  if(!player.dragging)seekTimer=setTimeout(seekCommit,120);      // not held: a key or a screen reader, so go now
 });
-grSeek.addEventListener("change",()=>{
-  const p=radioCurrent(); player.dragging=false;
-  if(p&&p.dur)seekTrack(p,Number(grSeek.value),true);
-});
-addEventListener("pointerup",()=>{ if(player.dragging){ player.dragging=false; const p=radioCurrent(); if(p)playerTime(p); } });
+grSeek.addEventListener("change",seekCommit);
+["pointerup","pointercancel","touchend","touchcancel"].forEach(type=>addEventListener(type,()=>{
+  if(!player.dragging)return;
+  player.dragging=false;
+  seekCommit();
+},{passive:true}));
 grSeek.addEventListener("keydown",e=>{
   const p=radioCurrent(); if(!p||!p.dur)return;
   const step={ArrowRight:5,ArrowUp:5,ArrowLeft:-5,ArrowDown:-5,PageUp:30,PageDown:-30}[e.key];
