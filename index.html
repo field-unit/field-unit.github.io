@@ -18,10 +18,12 @@
 <meta property="og:image:alt" content="the field unit logo, a green null-set sign, above the site's buttons and three track tiles">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="%230e100d"/><text x="8" y="12.5" font-size="12" text-anchor="middle" fill="%238CAA55" font-family="monospace">∅</text></svg>'>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/press-start-2p.woff" as="font" type="font/woff" crossorigin>
 <style>
+/* The pixel face, served from the site rather than Google (no request elsewhere, and it's there before the first paint):
+   Press Start 2P by Cody "CodeMan38" Boisclair, SIL Open Font License 1.1 (https://openfontlicense.org), cut to the
+   characters the page uses. */
+@font-face{font-family:"Press Start 2P";src:url("fonts/press-start-2p.woff") format("woff");font-display:swap}
 /* ============ NULL SET // GRAIN — tokens ============ */
 :root{
   --bg:#0e100d;
@@ -51,6 +53,7 @@ body::after{
   background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px);
 }
 :focus-visible{outline:2px solid var(--off);outline-offset:2px}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
 .wrap{max-width:var(--col);margin:0 auto;padding:0 14px}
 
@@ -78,7 +81,7 @@ body::after{
    (hovering the dice opens them too, on a screen with a mouse); the menu hangs under the pair, over the page. */
 .dicewrap{position:relative;display:flex}
 .dicewrap .fxbtn.dice{border-right:0}
-.fxmore{display:grid;place-items:center;width:18px;height:44px;padding:0;color:var(--admin);background:none;border:1px solid var(--admin);cursor:pointer}
+.fxmore{display:grid;place-items:center;width:24px;height:44px;padding:0;color:var(--admin);background:none;border:1px solid var(--admin);cursor:pointer}
 .fxmore .ico{width:10px;height:10px;fill:currentColor;shape-rendering:crispEdges}
 .fxmore:hover,.fxmore[aria-expanded="true"]{color:var(--signal);border-color:var(--signal)}
 .fxmenu{position:absolute;left:0;top:calc(100% + 5px);z-index:95;display:flex;gap:6px;padding:7px;background:#0a0c09;border:1px solid var(--admin);box-shadow:0 0 0 3px #080907}
@@ -115,18 +118,18 @@ body::after{
 @keyframes fu-wait{from{background:transparent}to{background:var(--alert);border-color:var(--alert)}}
 .fxbtn[data-tip]::after{
   content:attr(data-tip);position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);z-index:90;
-  padding:5px 7px;font-size:7px;line-height:1.5;letter-spacing:.5px;white-space:nowrap;
+  padding:5px 7px;font-size:8px;line-height:1.5;letter-spacing:.5px;white-space:nowrap;
   color:var(--off);background:#0a0c09;border:1px solid var(--admin);opacity:0;pointer-events:none;
 }
 .fxbtn[data-tip]:hover::after,.fxbtn[data-tip]:focus-visible::after{opacity:1}
 @media(hover:none){.fxbtn[data-tip]::after{display:none}}
 .fxstatus{
   min-height:14px;max-width:var(--col);margin:0 auto 20px;padding:0 14px;
-  font-size:7px;line-height:1.9;letter-spacing:.5px;color:var(--mid);text-align:center;
+  font-size:8px;line-height:1.9;letter-spacing:.5px;color:var(--mid);text-align:center;
 }
 .fxkey{max-width:440px;margin:-6px auto 24px;padding:12px 14px;border:1px solid var(--dim);background:#0a0c09}
 .fxkey ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.fxkey li{display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:center;font-size:7px;line-height:1.8;color:var(--mid)}
+.fxkey li{display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:center;font-size:8px;line-height:1.8;color:var(--mid)}
 .fxkey li b{display:block;font-weight:400;color:var(--signal)}
 .fxkey .ico{width:24px;height:24px;fill:var(--signal);shape-rendering:crispEdges}
 .fxkey .keysw{display:inline-block;width:7px;height:7px;margin:0 3px 0 6px;background:var(--c);vertical-align:0}
@@ -137,11 +140,11 @@ body::after{
 .contact h2{margin:0;font-size:9px;font-weight:400;letter-spacing:1px;color:var(--signal)}
 .contact-close{width:30px;height:28px;padding:0;font-family:var(--term);font-size:10px;color:var(--mid);background:none;border:1px solid var(--admin);cursor:pointer}
 .contact-close:hover{color:var(--signal);border-color:var(--signal)}
-.contact p{margin:0;font-size:7px;line-height:1.9;letter-spacing:.5px}
+.contact p{margin:0;font-size:8px;line-height:1.9;letter-spacing:.5px}
 .contact a{color:var(--signal)}
 .contact form{display:grid;gap:10px}
 .contact [hidden]{display:none}           /* the form's own display rule would otherwise beat its hidden attribute */
-.contact label{display:grid;gap:5px;font-size:7px;letter-spacing:.5px;color:var(--mid)}
+.contact label{display:grid;gap:5px;font-size:8px;letter-spacing:.5px;color:var(--mid)}
 .contact input,.contact textarea{
   width:100%;padding:8px 9px;font:16px/1.4 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   color:var(--off);background:#050605;border:1px solid var(--admin);border-radius:0;-webkit-font-smoothing:auto;
@@ -207,7 +210,7 @@ body.radio-on #danceStage{--dance-bottom:150px}   /* standing clear of the playe
 }
 .global-radio.on{display:block}
 body.radio-on{padding-bottom:150px}   /* room to scroll the last tiles clear of the player */
-.gr-head{display:flex;align-items:center;gap:7px;margin-bottom:6px;font-size:7px;line-height:1.5;white-space:nowrap}
+.gr-head{display:flex;align-items:center;gap:7px;margin-bottom:6px;font-size:8px;line-height:1.5;white-space:nowrap}
 .gr-mode{flex:none;padding:2px 4px 1px;color:var(--bg);background:var(--admin)}
 .gr-mode.radio{background:var(--signal)}
 .global-radio .gr-title{flex:1;min-width:0;padding:2px 0;color:var(--off);overflow:hidden;text-overflow:ellipsis;border:0;text-align:left}
@@ -216,7 +219,7 @@ body.radio-on{padding-bottom:150px}   /* room to scroll the last tiles clear of 
 .gr-fx::before{content:"";width:6px;height:6px;border:1px solid currentColor}
 .gr-fx.on::before{background:currentColor}
 .gr-fx.wait::before{animation:fu-wait .9s steps(2,jump-none) infinite}
-.gr-seek{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:7px;margin-bottom:7px;font-size:7px;color:var(--mid)}
+.gr-seek{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:7px;margin-bottom:7px;font-size:8px;color:var(--mid)}
 .gr-seek input{-webkit-appearance:none;appearance:none;width:100%;height:28px;margin:0;background:none;cursor:pointer;touch-action:none}
 .gr-seek input::-webkit-slider-runnable-track{height:3px;background:linear-gradient(var(--signal),var(--signal)) 0/var(--k,0%) 100% no-repeat,var(--dim)}
 .gr-seek input::-moz-range-track{height:3px;background:var(--dim)}
@@ -240,7 +243,7 @@ body.radio-on{padding-bottom:150px}   /* room to scroll the last tiles clear of 
   border:1px solid var(--admin);
   padding:7px 5px;
   color:var(--signal);
-  font-size:7px;
+  font-size:8px;
   text-align:center;
 }
 .global-radio button:hover{border-color:var(--signal)}
@@ -286,7 +289,7 @@ body.radio-on{padding-bottom:150px}   /* room to scroll the last tiles clear of 
 .sbtn .ico{width:12px;height:12px;fill:currentColor;shape-rendering:crispEdges}
 .sbtn:hover,.sbtn.done{color:var(--signal)}
 .sbtn:focus-visible{outline:2px solid var(--off);outline-offset:2px}
-.sbtn[data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);right:0;z-index:90;padding:5px 7px;font-size:7px;line-height:1.5;
+.sbtn[data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);right:0;z-index:90;padding:5px 7px;font-size:8px;line-height:1.5;
   white-space:nowrap;color:var(--off);background:#0a0c09;border:1px solid var(--admin);opacity:0;pointer-events:none}
 .sbtn[data-tip]:hover::after,.sbtn[data-tip]:focus-visible::after,.sbtn.done::after{opacity:1}
 @media(hover:none){.sbtn[data-tip]:not(.done)::after{display:none}}
@@ -316,6 +319,7 @@ body.radio-on{padding-bottom:150px}   /* room to scroll the last tiles clear of 
 </head>
 <body>
 
+<h1 class="vh">field unit</h1>
 <div class="hero"><canvas id="glyph" width="176" height="110" tabindex="0" role="button" aria-label="the ∅ talks: press to hear it, arrow keys to spin it"></canvas></div>
 
 <svg class="sprite" aria-hidden="true" focusable="false">

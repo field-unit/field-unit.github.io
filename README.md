@@ -193,6 +193,18 @@ original and the normal picture come back.
   a line about the site and `og.png` (the logo, the buttons and three tiles, cut from a screenshot) instead of a
   bare ∅. The artwork files carry no camera details.
 
+## Housekeeping (24 Sep 2026)
+
+- **The pixel font is served from the site** (`fonts/press-start-2p.woff`, 6 KB: Press Start 2P, SIL Open Font
+  License, cut to the characters the page uses), not from Google Fonts: no request to another company, and it is
+  there before the first paint, so nothing shifts on a slow connection. The page's small text is 8 px, the face's
+  own grid (7 px was hard to read on a phone and a little blurred).
+- **The artwork copies the grain reads** (`art-thumbs.js`) are grey and at the tiles' own 192 x 72: 78 KB instead of
+  281 KB. Six dark or flat pictures have their strip moved onto the subject and their brightness stretched (`TUNE` in
+  `tools/make_art_thumbs.py`).
+- A heading for screen readers and search engines ("field unit", not shown), and `robots.txt` and `sitemap.xml`.
+- The ▾ beside the dice is 24 px wide, a comfortable size for a finger.
+
 ## Adding a track
 
 1. Put the MP3 and its artwork in this folder, and run `python tools/strip_meta.py <artwork>`: it takes the
@@ -220,7 +232,8 @@ sf.write("Track.mp3", d, sr, format="MP3", subtype="MPEG_LAYER_III",
 Double-click **`Open music site locally.bat`**, or run `python tools/serve.py` in this folder and open
 http://127.0.0.1:8160/. `tools/serve.py` answers byte ranges as GitHub Pages does, so seeking and the chip
 hand-over behave as they will online; Python's own `http.server` doesn't, and seeking fails there. Offline, the
-pixel font (Press Start 2P, from Google Fonts) falls back to the system monospace.
+pixel font (Press Start 2P, served from `fonts/` in this folder since 24 Sep) may fall back to the system
+monospace, depending on the browser.
 
 ## Publishing
 
