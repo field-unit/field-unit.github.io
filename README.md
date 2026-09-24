@@ -199,7 +199,10 @@ original and the normal picture come back.
    camera details (make, date, location) out of the file without touching the picture.
 2. Add a line to `POSTS` near the top of `index.html`'s script — newest first, oldest last, with an `id` for its
    link (lower case, hyphens): `{ id:"wilt", title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" },`
-3. `python tools/make_art_thumbs.py` adds a small copy of the artwork to `art-thumbs.js`.
+3. `python tools/make_art_thumbs.py` adds a small copy of the artwork to `art-thumbs.js`. The tiles' grain reads
+   only brightness, so a dark, flat picture comes out as one shade of green: give it an entry in `TUNE` in that
+   tool (where the tile's strip sits, and a brightness stretch) and run it with `--redo <artwork>`. LAN_33 and
+   medium slate have one (24 Sep); their artwork files are unchanged.
 4. `python tools/chip_fx.py` renders its chip version and updates the manifest (the others are left alone).
 5. Publish (below).
 
