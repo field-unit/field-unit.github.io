@@ -60,14 +60,14 @@ sound and picture. Press again: another roll, never the same face twice running.
 
 | Face | Sound | Picture |
 |---|---|---|
-| chip — crunched | every track swaps to its rendered chip copy (below) | 4-pixel blocks, three greens |
-| dub — tape echo | repeats at 0.36 s that darken and wobble as they fade | teal, with a faint repeat trailing each shape |
-| slow — down a gear | the tracks play at 0.84, and the pitch drops with them | amber, the grain crawling at under half speed |
-| swirl — phased | a slow six-stage phaser | purple, 2-pixel blocks, the logo twisting |
-| radio filter — far off | a narrow band, 420 Hz to 2.8 kHz, gently overdriven | red, a line slipping sideways now and then |
-| warehouse — big room | a few hard reflections, then a short tail (about 1.3 s) that darkens as it dies, kept off the kick and bass (high-pass at 320 Hz) and low behind the track | blue, everything a little lighter |
+| chip — crunched | every track swaps to its rendered chip copy (below) | magenta, 4-pixel blocks, three shades; the logo an octagon that turns in eighths, its grain stepping like a sprite |
+| delay — tight ping-pong | clean repeats 135 ms apart, left then right, each about 10 dB down, with no bass in them (380 Hz to 6.5 kHz) | teal, two crisp repeats trailing each shape; rings going out from the logo in time |
+| slow — down a gear | the tracks play at 0.84, and the pitch drops with them | amber, the grain crawling at under half speed; the logo breathes, its ring softer |
+| swirl — phased | a slow six-stage phaser | purple, 2-pixel blocks, the logo turning slowly and twisting |
+| radio filter — far off | a narrow band, 420 Hz to 2.8 kHz, gently overdriven | red, a line slipping sideways now and then; a band of interference drifting down the logo |
+| warehouse — big room | a few hard reflections, then a short tail (about 1.3 s) that darkens as it dies, kept off the kick and bass (high-pass at 320 Hz) and low behind the track | blue, everything a little lighter; a beam of light sweeping across the logo |
 
-- Dub, swirl, radio and warehouse run live in the browser's audio graph, built the first time one of them is rolled
+- Delay, swirl, radio and warehouse run live in the browser's audio graph, built the first time one of them is rolled
   (inside the press, so the browser lets it sound). From then on every copy of every track goes through it: a dry
   path, plus the rolled effect faded in or out over a tenth of a second, and a safety limiter just under full scale
   for when the two add up. A page opened from disk can't send the tracks through it, so there the dice rolls only
@@ -81,7 +81,7 @@ names it); choosing the lit one again turns it off. Opening the swatches changes
 rolls. The menu stays open while the pointer travels into it and closes a third of a second after it leaves, or on a
 press elsewhere, or Esc. For touch and the keyboard, the narrow ▾ joined to the dice opens it (and keeps it open
 until pressed again): Tab reaches the swatches, the arrow keys step along them, Enter or Space chooses, Esc closes
-and puts focus back on the ▾. Each swatch is a button named for screen readers ("chip", "dub", "slow", "swirl",
+and puts focus back on the ▾. Each swatch is a button named for screen readers ("chip", "delay", "slow", "swirl",
 "radio filter", "warehouse") with its pressed state, and the lit one has a ring and a mark under it as well as its
 colour. The key under **?** shows which colour is which. From disk only chip and slow work, and the others are
 dimmed.
