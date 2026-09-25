@@ -203,6 +203,23 @@
    "mp3PeakDbfs": -2.27,
    "peakLimited": false,
    "offsetSeconds": 0.0
+  },
+  "dripseed": {
+   "title": "Dripseed",
+   "original": "dripseed.mp3",
+   "fx": "audio/chip-fx/dripseed.mp3",
+   "seconds": 327.442,
+   "fxSeconds": 327.442,
+   "sampleRate": 48000,
+   "sourceSha256": "152e1c950190ced741dfcd7e4d22917c07fbec9daab9ef22833cfabcd9c89cf1",
+   "settingsHash": "f5cd7e36de5e6419",
+   "bytes": 7860140,
+   "sourceRmsDbfs": -17.27,
+   "rmsDbfs": -17.27,
+   "peakDbfs": -3.18,
+   "mp3PeakDbfs": -3.42,
+   "peakLimited": false,
+   "offsetSeconds": 0.0
   }
  },
  "recipe": "chip-fx-v2",
