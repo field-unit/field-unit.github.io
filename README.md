@@ -205,32 +205,44 @@ original and the normal picture come back.
 - A heading for screen readers and search engines ("field unit", not shown), and `robots.txt` and `sitemap.xml`.
 - The ▾ beside the dice is 24 px wide, a comfortable size for a finger.
 
-## Adding a track
+## Adding, changing and removing tracks
 
-Double-click **`Add a track.bat`** in this folder, or drop the song and its artwork onto it together. It asks for
-the song (MP3, WAV, FLAC or AIFF), the artwork (JPG, PNG or WebP) and the title, shows what it's about to do, and
-then:
+Three double-clicks in this folder:
 
-1. copies the song in, named after the title. A WAV, FLAC or AIFF becomes a 320 kbps MP3 (a recording above
-   48 kHz is brought down first); an MP3 keeps its audio exactly as it is and loses only its tags;
+- **`Add a track.bat`** adds one (or drop the song and its artwork onto it together);
+- **`Manage tracks.bat`** opens a page for all of it: add a track, or open one to rename it, give it a new recording or
+  new artwork, move which part of its picture the tile shows, move it up or down the page, or remove it. It opens in
+  this PC's browser, and the same page works on a phone on the home Wi-Fi;
+- **`Publish.bat`** lists whatever isn't live yet and, on a typed yes, puts it live.
+
+Nothing goes live until it's published, and publishing always sends everything that's waiting, together, so the live
+site never gets a track whose files stayed behind. Everything is committed as field-unit and pushed; GitHub Pages
+shows it a minute or two later.
+
+**Adding** asks for the song (MP3, WAV, FLAC, AIFF or M4A), the artwork (JPG, PNG or WebP) and the title, then:
+
+1. copies the song in, named after the title. Anything but an MP3 becomes a 320 kbps MP3 (a recording above 48 kHz
+   is brought down first); an MP3 keeps its audio exactly as it is and loses only its tags;
 2. copies the artwork in with its hidden details taken out (camera, date, location). A picture over 2000 px gets a
    2000 px copy, and a photo stored on its side is turned upright;
 3. puts the track at the top of `POSTS`, with an `id` for its own link, and counts it in the page's description;
 4. makes the tile's grain copy (`tools/make_art_thumbs.py`), with the brightness of a flat picture stretched;
 5. makes the CHIP FX version (`tools/chip_fx.py`);
-6. opens the page from this PC at the new track, then asks what next: **publish** (committed and pushed: live a
-   minute or two later), **later** (it stays here, and the next run offers to publish it), **undo** (every file put
-   back as it was), or **up** / **down** (a higher or lower part of the artwork in the tile).
+6. opens the page from this PC at the new track, then waits for a typed word (Enter alone doesn't choose):
+   **publish**, **later** (it stays on this PC; `Publish.bat` puts it live), **undo** (every file put back as it
+   was), or **up** / **down** (a higher or lower part of the artwork in the tile).
 
-The originals are only read.
+**Changing** a track keeps its `id`, so links that have gone out keep working. A new recording or picture takes the
+old file's place, and the CHIP FX version and grain copy are made again. **Removing** one takes it off the list with
+its files, grain copy and CHIP FX version, and lowers the count; its song and artwork are copied to
+`../source-assets-private/field-unit-removed` first. On the page, each track's changes can be published, kept for
+later or undone, and "Put back as it is live" undoes everything that isn't published.
 
-**From a phone:** double-click **`Add from my phone.bat`**. While its window is open, this PC serves a small private
-page to the home Wi-Fi: open the address the window shows in the phone's browser, enter the code it shows (asked for
-once per phone), then choose the song and artwork on the phone and give the title. The PC does all of the above, the
-phone shows how the tile will look and can listen to the track on the site first, and it has the same publish, later,
-undo, higher and lower. Nothing outside the home network can reach the page, and only a phone with the code gets in.
-Windows lets the phone in only while it treats the Wi-Fi as a private network (the window says if it doesn't).
-Deleting `tools/phone-key.txt` changes the code and forgets every phone.
+**From a phone:** open the address the `Manage tracks.bat` window shows, on the same Wi-Fi, and enter the code it
+shows (asked for once per phone); this PC itself needs no code. The phone can listen to the site as it will be before
+anything is published. Nothing outside the home network can reach the page. Windows lets the phone in only while it
+treats the Wi-Fi as a private network (the window says if it doesn't). Deleting `tools/phone-key.txt` changes the
+code and forgets every phone. The originals are only ever read.
 
 By hand, the same steps: the files into this folder (`python tools/strip_meta.py <artwork>` takes out the picture's
 hidden details); a line at the top of `POSTS`, newest first, keeping an `id` once a link has gone out:
@@ -249,5 +261,5 @@ monospace, depending on the browser.
 ## Publishing
 
 This folder is the `field-unit.github.io` repository: commit and `git push` from this PC, and GitHub Pages serves
-it at field-unit.co.uk a minute later. `Add a track.bat`, `Add from my phone.bat`, `Open music site locally.bat` and
-`tools/` stay on this PC (`.gitignore`).
+it at field-unit.co.uk a minute later (`Publish.bat` does this for tracks). `Add a track.bat`, `Manage tracks.bat`,
+`Publish.bat`, `Open music site locally.bat` and `tools/` stay on this PC (`.gitignore`).

@@ -1,7 +1,8 @@
 # Only for this PC — these never go to the repository behind the site.
 Open music site locally.bat
 Add a track.bat
-Add from my phone.bat
+Manage tracks.bat
+Publish.bat
 tools/
 __pycache__/
 *.pyc
