@@ -224,6 +224,14 @@ then:
 
 The originals are only read.
 
+**From a phone:** double-click **`Add from my phone.bat`**. While its window is open, this PC serves a small private
+page to the home Wi-Fi: open the address the window shows in the phone's browser, enter the code it shows (asked for
+once per phone), then choose the song and artwork on the phone and give the title. The PC does all of the above, the
+phone shows how the tile will look and can listen to the track on the site first, and it has the same publish, later,
+undo, higher and lower. Nothing outside the home network can reach the page, and only a phone with the code gets in.
+Windows lets the phone in only while it treats the Wi-Fi as a private network (the window says if it doesn't).
+Deleting `tools/phone-key.txt` changes the code and forgets every phone.
+
 By hand, the same steps: the files into this folder (`python tools/strip_meta.py <artwork>` takes out the picture's
 hidden details); a line at the top of `POSTS`, newest first, keeping an `id` once a link has gone out:
 `{ id:"wilt", title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" },`; then `python tools/make_art_thumbs.py`
@@ -241,5 +249,5 @@ monospace, depending on the browser.
 ## Publishing
 
 This folder is the `field-unit.github.io` repository: commit and `git push` from this PC, and GitHub Pages serves
-it at field-unit.co.uk a minute later. `Add a track.bat`, `Open music site locally.bat` and `tools/` stay on this
-PC (`.gitignore`).
+it at field-unit.co.uk a minute later. `Add a track.bat`, `Add from my phone.bat`, `Open music site locally.bat` and
+`tools/` stay on this PC (`.gitignore`).
