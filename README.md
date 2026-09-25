@@ -43,7 +43,7 @@ An up-and-down swipe still scrolls the page, so nobody gets stuck on it.
   new voice is rendered once, in a few milliseconds, then played like tape at the speed of the spin.
 - **The dice's face is on it too.** It goes into the same audio bus as the tracks: chip plays a crunched take (held
   at 9.6 kHz like the tracks' chip copies, sixteen companded steps each way), slow plays it at 0.84, and dub, swirl,
-  radio and cave treat it as they treat the music. It never pulls the tracks into the audio graph by itself, and it
+  radio and warehouse treat it as they treat the music. It never pulls the tracks into the audio graph by itself, and it
   works with the page opened from disk.
 - With reduced motion set, it talks and brightens but doesn't turn.
 - Checked with Windows' en-GB speech recogniser as a rough, independent listener: every one of 18 test voices comes
@@ -65,9 +65,9 @@ sound and picture. Press again: another roll, never the same face twice running.
 | slow — down a gear | the tracks play at 0.84, and the pitch drops with them | amber, the grain crawling at under half speed |
 | swirl — phased | a slow six-stage phaser | purple, 2-pixel blocks, the logo twisting |
 | radio filter — far off | a narrow band, 420 Hz to 2.8 kHz, gently overdriven | red, a line slipping sideways now and then |
-| cave — big room | a long, dark 3.2 s reverb behind the dry sound | blue, everything a little lighter |
+| warehouse — big room | a few hard reflections, then a short tail (about 1.3 s) that darkens as it dies, kept off the kick and bass (high-pass at 320 Hz) and low behind the track | blue, everything a little lighter |
 
-- Dub, swirl, radio and cave run live in the browser's audio graph, built the first time one of them is rolled
+- Dub, swirl, radio and warehouse run live in the browser's audio graph, built the first time one of them is rolled
   (inside the press, so the browser lets it sound). From then on every copy of every track goes through it: a dry
   path, plus the rolled effect faded in or out over a tenth of a second, and a safety limiter just under full scale
   for when the two add up. A page opened from disk can't send the tracks through it, so there the dice rolls only
@@ -82,7 +82,7 @@ rolls. The menu stays open while the pointer travels into it and closes a third 
 press elsewhere, or Esc. For touch and the keyboard, the narrow ▾ joined to the dice opens it (and keeps it open
 until pressed again): Tab reaches the swatches, the arrow keys step along them, Enter or Space chooses, Esc closes
 and puts focus back on the ▾. Each swatch is a button named for screen readers ("chip", "dub", "slow", "swirl",
-"radio filter", "cave") with its pressed state, and the lit one has a ring and a mark under it as well as its
+"radio filter", "warehouse") with its pressed state, and the lit one has a ring and a mark under it as well as its
 colour. The key under **?** shows which colour is which. From disk only chip and slow work, and the others are
 dimmed.
 

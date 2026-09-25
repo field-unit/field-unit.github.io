@@ -884,7 +884,7 @@ function chipLost(p,a){
   p.alt=null;
 }
 
-/* ---------- the live effects: dub, swirl, radio, cave ----------
+/* ---------- the live effects: dub, swirl, radio, warehouse ("cave" in the code) ----------
    Built with the browser's audio graph the first time one is rolled (inside the click, so the browser lets it
    sound). From then on every copy of every track is routed through it: a dry path, plus the rolled effect mixed in,
    faded over a tenth of a second either way. A page opened from disk can't do this, so there the dice rolls only
@@ -925,9 +925,22 @@ function softClip(k){
   for(let i=0;i<n;i++){ const x=i/(n-1)*2-1; c[i]=Math.tanh(k*x)/Math.tanh(k); }
   return c;
 }
-function roomTail(ctx,seconds,decay){      // a made-up room: stereo noise dying away
-  const n=Math.floor(ctx.sampleRate*seconds), b=ctx.createBuffer(2,n,ctx.sampleRate);
-  for(let ch=0;ch<2;ch++){ const d=b.getChannelData(ch); for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,decay); }
+function warehouseTail(ctx){               // a made-up warehouse: a few hard reflections off concrete, then a tail that
+                                           // gathers from 20 to 80 ms, falls 60 dB in 1.4 s and darkens as it goes
+  const sr=ctx.sampleRate, n=Math.floor(sr*1.9), b=ctx.createBuffer(2,n,sr), rt=1.4;
+  const walls=[[0.013,1],[0.021,0.8],[0.034,0.7],[0.047,0.6],[0.062,0.5],[0.081,0.45],[0.104,0.35]];
+  for(let ch=0;ch<2;ch++){
+    const d=b.getChannelData(ch); let y=0;
+    for(let i=0;i<n;i++){
+      const t=i/sr, f=1500+7500*Math.exp(-t/0.5), a=1-Math.exp(-2*Math.PI*f/sr);
+      y+=a*((Math.random()*2-1)-y);                               // noise, lowpassed ever lower: the highs die first
+      d[i]=y*Math.exp(-6.91*t/rt)*Math.min(1,Math.max(0,(t-0.02)/0.06));
+    }
+    walls.forEach(([at,g])=>{                // each reflection a 2 ms burst, a little later on the right
+      const s=Math.floor(at*(ch?1.09:1)*sr);
+      for(let k=0;k<96&&s+k<n;k++)d[s+k]+=g*2.2*(1-k/96)*(Math.random()*2-1);
+    });
+  }
   return b;
 }
 // Each builder returns the effect's input and output, the level of its output, the dry level to sit beside it,
@@ -964,13 +977,15 @@ const FX_BUILD={
     inp.connect(hp).connect(lp).connect(drive).connect(out);
     return {inp,out,wet:1,dry:0,stop:[]};
   },
-  cave(ctx){                                 // a big room: a long, dark reverb behind the dry sound
+  cave(ctx){                                 // warehouse: the room around the track rather than a wash over it. The
+                                             // kick and bass stay out of it (high-pass at 320 Hz), so they stay tight
     const inp=ctx.createGain(), out=ctx.createGain();
-    const pre=ctx.createDelay(0.2); pre.delayTime.value=0.03;
-    const room=ctx.createConvolver(); room.buffer=roomTail(ctx,3.2,2.6);
-    const lp=ctx.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=4500;
-    inp.connect(pre).connect(room).connect(lp).connect(out);
-    return {inp,out,wet:0.48,dry:0.8,stop:[]};
+    const hp=ctx.createBiquadFilter(); hp.type="highpass"; hp.frequency.value=320; hp.Q.value=0.7;
+    const pre=ctx.createDelay(0.2); pre.delayTime.value=0.02;
+    const room=ctx.createConvolver(); room.buffer=warehouseTail(ctx);
+    const lp=ctx.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=6500; lp.Q.value=0.5;
+    inp.connect(hp).connect(pre).connect(room).connect(lp).connect(out);
+    return {inp,out,wet:0.34,dry:0.94,stop:[]};
   }
 };
 function fxChain(id){
@@ -1008,10 +1023,10 @@ const FACE={
   slow:{id:"slow",say:"slow — down a gear",ramp:RAMPS.slow,rate:0.84},
   swirl:{id:"swirl",say:"swirl — phased",ramp:RAMPS.swirl,live:true},
   radio:{id:"radio",say:"radio filter — far off",ramp:RAMPS.radio,live:true},
-  cave:{id:"cave",say:"cave — big room",ramp:RAMPS.cave,live:true}
+  cave:{id:"cave",say:"warehouse — big room",ramp:RAMPS.cave,live:true}
 };
-Object.values(FACE).forEach(f=>{ f.rgb=f.ramp.map(hexRGB); f.hex=f.ramp[3]; f.name=f.id==="radio"?"radio filter":f.id; });
-// Opposite faces: chip/dub on x, slow/swirl on y, radio/cave on z (the cube's own axes).
+Object.values(FACE).forEach(f=>{ f.rgb=f.ramp.map(hexRGB); f.hex=f.ramp[3]; f.name={radio:"radio filter",cave:"warehouse"}[f.id]||f.id; });
+// Opposite faces: chip/dub on x, slow/swirl on y, radio/warehouse on z (the cube's own axes).
 const DIE_FACES=[
   {n:[1,0,0],f:FACE.chip},{n:[-1,0,0],f:FACE.dub},{n:[0,1,0],f:FACE.slow},
   {n:[0,-1,0],f:FACE.swirl},{n:[0,0,1],f:FACE.radio},{n:[0,0,-1],f:FACE.cave}
