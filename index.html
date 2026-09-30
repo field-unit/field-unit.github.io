@@ -1633,7 +1633,7 @@ function fuRenderRadio(){
   fuRadioMode.classList.toggle("on",radio.on&&playing);
   fuRadioMode.setAttribute("aria-pressed",radio.on&&playing?"true":"false");
   const f=dice.face, waiting=chip.want===true;
-  grFx.textContent=f?(f.id==="radio"?"RADIO FX":f.id.toUpperCase()):"ORIGINAL";
+  grFx.textContent=f?(f.id==="radio"?"RADIO FX":f.name.toUpperCase()):"ORIGINAL";
   grFx.style.color=f?f.hex:"";
   grFx.classList.toggle("on",!!f); grFx.classList.toggle("wait",waiting);
   grFx.setAttribute("aria-label","effect: "+(f?f.name+(waiting?", loading":""):"none, the original sound"));
