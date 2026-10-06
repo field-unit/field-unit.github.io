@@ -220,6 +220,23 @@
    "mp3PeakDbfs": -3.24,
    "peakLimited": false,
    "offsetSeconds": 0.0
+  },
+  "5-8zero": {
+   "title": "5-8ZERO",
+   "original": "5-8zero.mp3",
+   "fx": "audio/chip-fx/5-8zero.mp3",
+   "seconds": 280.0,
+   "fxSeconds": 280.0,
+   "sampleRate": 48000,
+   "sourceSha256": "a500bd4f6ea78ad5ebfccca3f5483798bd718ae3baf4e9f4e10f6cf4b3959a0f",
+   "settingsHash": "f5cd7e36de5e6419",
+   "bytes": 6721388,
+   "sourceRmsDbfs": -16.55,
+   "rmsDbfs": -16.55,
+   "peakDbfs": -2.26,
+   "mp3PeakDbfs": -2.5,
+   "peakLimited": false,
+   "offsetSeconds": 0.0
   }
  },
  "recipe": "chip-fx-v2",
