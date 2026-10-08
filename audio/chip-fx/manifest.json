@@ -237,6 +237,23 @@
    "mp3PeakDbfs": -2.5,
    "peakLimited": false,
    "offsetSeconds": 0.0
+  },
+  "stinky": {
+   "title": "stinky",
+   "original": "stinky.mp3",
+   "fx": "audio/chip-fx/stinky.mp3",
+   "seconds": 193.548,
+   "fxSeconds": 193.548,
+   "sampleRate": 48000,
+   "sourceSha256": "688ceedc50252036e4ff11524f85c38b73e340c7e6233e8fcf4acea23732acb2",
+   "settingsHash": "f5cd7e36de5e6419",
+   "bytes": 4646636,
+   "sourceRmsDbfs": -15.95,
+   "rmsDbfs": -15.95,
+   "peakDbfs": -2.41,
+   "mp3PeakDbfs": -2.68,
+   "peakLimited": false,
+   "offsetSeconds": 0.0
   }
  },
  "recipe": "chip-fx-v2",
