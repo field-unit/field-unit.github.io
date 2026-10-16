@@ -279,13 +279,13 @@
    "seconds": 240.0,
    "fxSeconds": 240.0,
    "sampleRate": 48000,
-   "sourceSha256": "f13080b9f3f9721fc58a9a0f9687378e009c03df93245b9ea8ffc889e9266022",
+   "sourceSha256": "b9ce24bb0b987373c589d4567c7478f9d80aa762771019a029412400f4262dce",
    "settingsHash": "f5cd7e36de5e6419",
    "bytes": 5761196,
-   "sourceRmsDbfs": -16.03,
-   "rmsDbfs": -16.03,
-   "peakDbfs": -1.85,
-   "mp3PeakDbfs": -2.11,
+   "sourceRmsDbfs": -15.99,
+   "rmsDbfs": -15.99,
+   "peakDbfs": -1.82,
+   "mp3PeakDbfs": -2.1,
    "peakLimited": false,
    "offsetSeconds": 0.0
   }
