@@ -288,6 +288,23 @@
    "mp3PeakDbfs": -2.1,
    "peakLimited": false,
    "offsetSeconds": 0.0
+  },
+  "pablo-from-backyard-sports": {
+   "title": "Pablo from Backyard Sports",
+   "original": "pablo-from-backyard-sports.mp3",
+   "fx": "audio/chip-fx/pablo-from-backyard-sports.mp3",
+   "seconds": 241.67,
+   "fxSeconds": 241.67,
+   "sampleRate": 48000,
+   "sourceSha256": "6d886b33c42e497822bbc4e76acac2e3cda373186892426381d9e09448accbb6",
+   "settingsHash": "f5cd7e36de5e6419",
+   "bytes": 5801516,
+   "sourceRmsDbfs": -17.06,
+   "rmsDbfs": -17.06,
+   "peakDbfs": -3.13,
+   "mp3PeakDbfs": -3.38,
+   "peakLimited": false,
+   "offsetSeconds": 0.0
   }
  },
  "recipe": "chip-fx-v2",
