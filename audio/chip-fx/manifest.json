@@ -305,6 +305,23 @@
    "mp3PeakDbfs": -3.38,
    "peakLimited": false,
    "offsetSeconds": 0.0
+  },
+  "nordham": {
+   "title": "Nordham",
+   "original": "nordham.mp3",
+   "fx": "audio/chip-fx/nordham.mp3",
+   "seconds": 240.0,
+   "fxSeconds": 240.0,
+   "sampleRate": 48000,
+   "sourceSha256": "ca99727e74f09205e50e83b99295518b28a934d8fbee1c31e18cce37fca0318b",
+   "settingsHash": "f5cd7e36de5e6419",
+   "bytes": 5761196,
+   "sourceRmsDbfs": -16.85,
+   "rmsDbfs": -16.85,
+   "peakDbfs": -2.95,
+   "mp3PeakDbfs": -3.21,
+   "peakLimited": false,
+   "offsetSeconds": 0.0
   }
  },
  "recipe": "chip-fx-v2",
