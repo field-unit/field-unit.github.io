@@ -112,11 +112,15 @@ pressing it starts that track, and nothing says it's playing until it is. A trac
 before. A link to a track that isn't there says so on the line under the buttons and plays nothing. The address
 follows whichever track is playing, without adding to the browser's history, so it can be copied from the address
 bar too, and the tab reads "tuckshop — field unit" ("field unit — music" before anything is picked). A shared link's
-preview is the site's own (`og.png`): a page without a server can't give each track its own preview.
+preview is the site's own: "field unit" and `og.png`, the ∅ logo alone (no description, since 20 Oct). A page without
+a server can't give each track its own preview.
 
 **The lock screen and headphones.** Where the browser offers it (the Media Session API), the track's name, "field
 unit" and its artwork show in the system's media controls, and play, pause, stop, next, previous and seeking there
-drive the same player. Not yet tried on a real phone's lock screen.
+drive the same player. The artwork there is never the untreated photo (20 Oct): it is `lock/<artwork name>.png`, a
+512 px square in the tiles' green grain (the same brightness sums and TUNE, five greens, 4 x 4 Bayer dither, 128 grain
+pixels a side), made by `tools/make_art_thumbs.py` alongside the tile copies; the track tools make, remake, remove and
+publish it with the artwork.
 
 ## Contact (23 Sep 2026)
 
@@ -192,6 +196,10 @@ original and the normal picture come back.
   the page's odd thing to play with. The CHIP FX switch became the fx dice. A shared link now shows "field unit",
   a line about the site and `og.png` (the logo, the buttons and three tiles, cut from a screenshot) instead of a
   bare ∅. The artwork files carry no camera details.
+
+- **20 Oct:** shared links show only "field unit" and the ∅: the page's description and og:description are gone,
+  and `og.png` is the logo alone, drawn by `tools/make_og.py` exactly as the page draws it at rest. Phones' media
+  controls show each track's green grain square from `lock/` instead of the photo.
 
 ## Housekeeping (24 Sep 2026)
 

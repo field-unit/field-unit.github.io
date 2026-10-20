@@ -4,18 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>field unit — music</title>
-<meta name="description" content="field unit. eighteen demos, a radio, an fx dice, and a logo that says its name when you scroll over it.">
 <link rel="canonical" href="https://field-unit.co.uk/">
 <!-- how a shared link looks in a chat or a post -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="field unit">
 <meta property="og:title" content="field unit">
-<meta property="og:description" content="eighteen demos, a radio, an fx dice, and a logo that says its name when you scroll over it.">
 <meta property="og:url" content="https://field-unit.co.uk/">
 <meta property="og:image" content="https://field-unit.co.uk/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="the field unit logo, a green null-set sign, above the site's buttons and three track tiles">
+<meta property="og:image:alt" content="the field unit logo, a green null-set sign">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="%230e100d"/><text x="8" y="12.5" font-size="12" text-anchor="middle" fill="%238CAA55" font-family="monospace">∅</text></svg>'>
 <link rel="preload" href="fonts/press-start-2p.woff" as="font" type="font/woff" crossorigin>
@@ -1784,7 +1782,8 @@ addEventListener("popstate",()=>{               // back or forward to an address
 
 /* ---------- the lock screen and headphones ----------
    Where the browser offers it, the track's name and artwork show on the lock screen and in the system's media
-   controls, and play, pause, next, previous and seeking there drive the same player. */
+   controls, and play, pause, next, previous and seeking there drive the same player. The artwork there is the
+   track's green grain square from lock/ (tools/make_art_thumbs.py), never the untreated photo. */
 const MS=("mediaSession" in navigator)?navigator.mediaSession:null;
 let msTrackShown=null;
 function msState(p){
@@ -1793,7 +1792,7 @@ function msState(p){
     if(p&&msTrackShown!==p){
       msTrackShown=p;
       MS.metadata=new MediaMetadata({title:p.title,artist:"field unit",album:"demos",
-        artwork:p.art?[{src:new URL(p.art,location.href).href,type:/\.png$/i.test(p.art)?"image/png":"image/jpeg"}]:[]});
+        artwork:p.art?[{src:new URL("lock/"+p.art.replace(/\.[^.]+$/,"")+".png",location.href).href,sizes:"512x512",type:"image/png"}]:[]});
     }
     MS.playbackState=p?(p.playing?"playing":"paused"):"none";
   }catch(e){}
