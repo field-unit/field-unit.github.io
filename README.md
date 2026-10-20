@@ -200,6 +200,9 @@ original and the normal picture come back.
 - **20 Oct:** shared links show only "field unit" and the ∅: the page's description and og:description are gone,
   and `og.png` is the logo alone, drawn by `tools/make_og.py` exactly as the page draws it at rest. Phones' media
   controls show each track's green grain square from `lock/` instead of the photo.
+- **20 Oct (evening):** the ∅'s dim grain fills the whole screen: a fixed canvas behind the page (`#bgGrain`, `bgPaint`)
+  with grain pixels the logo's size, drawn through the current look; the logo leaves its darkest level clear so it
+  sits in the grain with no box. The noise is made once per window size and re-dithered at 3 fps.
 
 ## Housekeeping (24 Sep 2026)
 

@@ -45,6 +45,8 @@ body{
   padding-bottom:40px;
   -webkit-font-smoothing:none;
 }
+/* the logo's grain carried across the whole screen, behind everything (drawn by bgPaint) */
+#bgGrain{position:fixed;left:0;top:0;z-index:-1;pointer-events:none;image-rendering:pixelated;image-rendering:crisp-edges}
 /* fixed subtle scanlines */
 body::after{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
@@ -316,6 +318,7 @@ body.radio-on{padding-bottom:150px}   /* room to scroll the last tiles clear of 
 </style>
 </head>
 <body>
+<canvas id="bgGrain" aria-hidden="true"></canvas>
 
 <h1 class="vh">field unit</h1>
 <div class="hero"><canvas id="glyph" width="176" height="110" tabindex="0" role="button" aria-label="the ∅ talks: press to hear it, arrow keys to spin it"></canvas></div>
@@ -546,16 +549,17 @@ function glyphField(t){
     // interior glow + drifting grain
     const glow=Math.max(0,0.42-d)*(0.9+0.8*lit*(look.block>2?0.4:1))*room;   // less under chip; more in the warehouse
     const gr=noise(u*26+tg*0.7,v*16-tg*0.5)*0.30;
-    let val=Math.max(ring,slash)*0.98+glow*0.55+gr*(d<0.5?1:0.35)+lit*0.04;
+    const edge=Math.min(1,Math.min(u,1-u,v,1-v)/0.15);              // the canvas edge: nothing may show a box there
+    let val=Math.max(ring,slash)*0.98+glow*0.55+gr*(d<0.5?1:0)+lit*0.04*(d<0.5?1:0);
     if(still)return Math.min(1,val);
     if(g==="delay"){                     // rings going out from the ring in time, a new one each half second
       for(let k=0;k<2;k++){ const f=(beat+k)/2; val=Math.max(val,0.85*Math.pow(1-f,1.2)*Math.max(0,1-Math.abs(d-0.37-0.16*f)/0.022)); }
     }else if(g==="radio"){               // a band of interference drifting down, and now and then a line drops out
       const b=Math.max(0,1-Math.abs(v-band)/0.08);
-      val=val*(1-0.55*b)+b*0.45*noise(u*80,t*40);
+      val=val*(1-0.55*b*edge)+b*edge*0.45*noise(u*80,t*40);
       if(drop>=0&&Math.abs(v-drop)<0.035)val*=0.3;
     }else if(g==="warehouse"){           // a beam of light crossing it on a slant
-      val+=0.26*Math.max(0,1-Math.abs(u*1.6-v*0.9-sweep)/0.12);
+      val+=0.26*edge*Math.max(0,1-Math.abs(u*1.6-v*0.9-sweep)/0.12);
     }
     return Math.min(1,val);
   };
@@ -742,11 +746,36 @@ function drawPlayer(p,t){
 
 function redrawAllVisuals(t=clock()){
   const ph=REDUCED?0:(t*8)|0;
-  paint(gctx,176,110,glyphField(t),ph);
+  paint(gctx,176,110,glyphField(t),ph,true);
   paint(fctx,110,7,footField(t),ph);
+  bgPaint(REDUCED?0:(t*6)|0);
   players.forEach(p=>drawPlayer(p,t));
   danceDraw();
 }
+
+/* ---------- the grain behind everything ----------
+   The dim grain around the ∅ carried across the whole screen: a fixed canvas behind the page whose grain pixels are
+   the logo's own size, drawn through the current look (so the dice faces and colours reach it too). The logo leaves its
+   darkest level clear, so the two meet without an edge. The noise is made once per window size; each frame only
+   re-dithers it (the Bayer phase steps, as the logo's does) at a quarter of the logo's rate, so it costs very little. */
+const bgc=document.getElementById("bgGrain"), bctx=bgc.getContext("2d");
+let bgW=0, bgH=0, bgField=null;
+function bgSize(){
+  const s=Math.max(1,glyph.getBoundingClientRect().width/176);
+  const W=Math.ceil(innerWidth/s)+1, H=Math.ceil(innerHeight/s)+1;
+  bgc.style.width=(W*s)+"px"; bgc.style.height=(H*s)+"px";
+  if(W===bgW&&H===bgH)return false;
+  bgW=W; bgH=H; bgc.width=W; bgc.height=H;
+  bgField=new Float32Array(W*H);
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++)bgField[y*W+x]=noise(x*0.148,y*0.146)*0.105;   // the logo's outer grain, its scale
+  return true;
+}
+function bgPaint(ph){
+  if(!bgField)return;
+  paint(bctx,bgW,bgH,(u,v)=>bgField[Math.min(bgH-1,(v*bgH)|0)*bgW+Math.min(bgW-1,(u*bgW)|0)],ph);
+}
+bgSize();
+addEventListener("resize",()=>{ if(bgSize())bgPaint(REDUCED?0:((clock()*6)|0)); });
 
 /* ---------- animation loop (hero + footer + playing tiles) ---------- */
 const perf=()=>performance.now()/1000;
@@ -760,8 +789,9 @@ function frame(){
   if(tick!==lastTick){
     lastTick=tick;
     const ph=tick;
-    if(!voice.raf)paint(gctx,176,110,glyphField(t),ph);   // while it's turning, the voice's loop draws it, more often
+    if(!voice.raf)paint(gctx,176,110,glyphField(t),ph,true);   // while it's turning, the voice's loop draws it, more often
     paint(fctx,110,7,footField(t),ph);
+    if(!(tick&3))bgPaint(tick>>2);       // the background's grain steps at a quarter of the rate (3 fps): it costs little
     players.forEach(p=>{if(p.playing)drawPlayer(p,t);});
   }
   if(!REDUCED && !document.hidden){ rafId=requestAnimationFrame(frame); animating=true; }
@@ -772,7 +802,7 @@ document.addEventListener("visibilitychange",()=>{ if(!document.hidden) wake(); 
 
 /* first static paint for all, then start loop */
 players.forEach(p=>drawPlayer(p,0.5));
-if(REDUCED){ paint(gctx,176,110,glyphField(0.5),0); paint(fctx,110,7,footField(0.5),0); }
+if(REDUCED){ paint(gctx,176,110,glyphField(0.5),0,true); paint(fctx,110,7,footField(0.5),0); bgPaint(0); }
 else frame();
 
 
@@ -1449,7 +1479,7 @@ function voiceTick(now){
   const busy=speed>0||!!voiceDrag||Math.abs(voice.tapTo-voice.tap)>0.002||Math.abs(voice.yaw-home)>0.002||
     voice.glow>0.004||voice.flash>0.004||voice.srcs.length>0;
   if(!busy){ voice.yaw=voice.tap=voice.tapTo=voice.glow=voice.flash=0; }   // still: back exactly where it belongs
-  if(!busy||now-voice.painted>=33){ voice.painted=now; paint(gctx,176,110,glyphField(clock()),REDUCED?0:(clock()*12)|0); }
+  if(!busy||now-voice.painted>=33){ voice.painted=now; paint(gctx,176,110,glyphField(clock()),REDUCED?0:(clock()*12)|0,true); }
   if(busy)voice.raf=requestAnimationFrame(voiceTick);
 }
 function voicePush(dv){                          // a scroll or an arrow key: more speed, either way round
