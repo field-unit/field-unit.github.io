@@ -322,6 +322,23 @@
    "mp3PeakDbfs": -3.21,
    "peakLimited": false,
    "offsetSeconds": 0.0
+  },
+  "rippit": {
+   "title": "rippit",
+   "original": "rippit.mp3",
+   "fx": "audio/chip-fx/rippit.mp3",
+   "seconds": 280.435,
+   "fxSeconds": 280.435,
+   "sampleRate": 48000,
+   "sourceSha256": "151e147142c2aace85b57639eb9331399bb24e9f6533df848d040bea3e4c09c5",
+   "settingsHash": "f5cd7e36de5e6419",
+   "bytes": 6731756,
+   "sourceRmsDbfs": -17.48,
+   "rmsDbfs": -17.48,
+   "peakDbfs": -2.97,
+   "mp3PeakDbfs": -3.25,
+   "peakLimited": false,
+   "offsetSeconds": 0.0
   }
  },
  "recipe": "chip-fx-v2",
