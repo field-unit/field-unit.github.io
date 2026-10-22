@@ -100,7 +100,8 @@ body::after{
 .fxbtn.dice[aria-pressed="true"]::before{background:var(--fxc);border-color:var(--fxc)}
 #fxDie{position:absolute;left:0;top:0;width:40px;height:40px;image-rendering:pixelated;image-rendering:crisp-edges;
   pointer-events:none;z-index:6;opacity:0;transition:opacity .2s}
-#fxDie.show{opacity:1}
+#fxDie.show{opacity:1;pointer-events:auto;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.fxstatus a{color:var(--signal)}
 .fxbtn{
   position:relative;display:grid;place-items:center;width:52px;height:44px;padding:0;
   font-family:var(--term);font-size:11px;line-height:1;color:var(--mid);background:none;
@@ -1222,6 +1223,30 @@ function diceOff(message){
 diceBtn.addEventListener("click",()=>{
   if(dice.rolling)return;                      // let it land
   if(dice.face)diceOff(); else diceRoll();
+});
+
+/* ---------- the seventh face ----------
+   Left out of the key on purpose. With an effect on, the die sits on the buttons; tap the die itself seven times
+   running and it rolls again, to a face it doesn't have: the dice as a Max for Live device, to download. Each tap
+   only nudges it, so nothing gives the count away. The file's address is kept encoded so the source doesn't show it. */
+const SEVENTH=atob("cGl6LmVjaWQtdGludS1kbGVpZi9odG5ldmVz").split("").reverse().join("");
+let tapN=0, tapT=0;
+dieCv.addEventListener("pointerdown",e=>{
+  if(!dieCv.classList.contains("show")||dice.rolling||!dieRest)return;
+  e.preventDefault();
+  const now=performance.now();
+  tapN=now-tapT<900?tapN+1:1; tapT=now;
+  const sh=dieShelf(); diePlace(sh.x+dieRest.dx,sh.y+dieRest.dy-2);
+  setTimeout(()=>{ if(dieRest){ const s=dieShelf(); diePlace(s.x+dieRest.dx,s.y+dieRest.dy); } },90);
+  if(tapN<7)return;
+  tapN=0; dice.rolling=true;
+  dieRoll(dice.face).then(()=>{
+    dice.rolling=false;
+    fxStatus.textContent="the seventh face: ";
+    const a=document.createElement("a");
+    a.href=SEVENTH; a.download=""; a.textContent="field unit dice, for max for live ↓";
+    fxStatus.appendChild(a);
+  });
 });
 
 /* ---------- choosing a face: the colours under the dice ----------
