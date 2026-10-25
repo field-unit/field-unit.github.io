@@ -339,6 +339,23 @@
    "mp3PeakDbfs": -3.25,
    "peakLimited": false,
    "offsetSeconds": 0.0
+  },
+  "nullset": {
+   "title": "nullset",
+   "original": "nullset.mp3",
+   "fx": "audio/chip-fx/nullset.mp3",
+   "seconds": 316.974,
+   "fxSeconds": 316.974,
+   "sampleRate": 48000,
+   "sourceSha256": "22e71063ad47b72c99f16d582533817f684b6d7680fce7c38dcbb782d780ca08",
+   "settingsHash": "f5cd7e36de5e6419",
+   "bytes": 7609004,
+   "sourceRmsDbfs": -18.59,
+   "rmsDbfs": -18.59,
+   "peakDbfs": -3.05,
+   "mp3PeakDbfs": -3.3,
+   "peakLimited": false,
+   "offsetSeconds": 0.0
   }
  },
  "recipe": "chip-fx-v2",
