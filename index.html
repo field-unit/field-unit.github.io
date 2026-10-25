@@ -417,27 +417,27 @@ body.radio-on{padding-bottom:150px}   /* room to scroll the last tiles clear of 
    A post is either audio (+ optional art) OR images.
    ================================================================ */
 const POSTS = [
-  { id:"nullset", title:"nullset", audio:"nullset.mp3", art:"nullset-art.jpg" },
-  { id:"rippit", title:"rippit", audio:"rippit.mp3", art:"rippit-art.jpg" },
-  { id:"pablo-from-backyard-sports", title:"Pablo from Backyard Sports", audio:"pablo-from-backyard-sports.mp3", art:"pablo-from-backyard-sports-art.jpg" },
-  { id:"nordham", title:"Nordham", audio:"nordham.mp3", art:"nordham-art.jpg" },
-  { id:"tuckshop", title:"tuckshop", audio:"tuckshop.mp3", art:"tuckshopart.jpg" },
-  { id:"trenchcoat", title:"trenchcoat", audio:"trenchcoat.mp3", art:"trenchcoatart.jpg" },
-  { id:"nature-of-freak", title:"nature of freak", audio:"Nature_of_Freak_Demo.mp3", art:"Factory_Artwork~2.png" },
-  { id:"nomemory-notreal", title:"nomemory notreal", audio:"nomemory_notreal_mthree.mp3", art:"Hague_Artwork_Final.png" },
-  { id:"the-of-the", title:"the of the", audio:"the_of_the_demo.mp3", art:"Abbey_Canal_Artwork_3.jpg" },
-  { id:"curley-cuh", title:"curley cuh", audio:"Curley_Cuh_Demo.mp3", art:"Sign_Artwork_2.jpg" },
-  { id:"pocket-muck", title:"pocket muck", audio:"Pocket_Muck_Demo.mp3", art:"untitled11.png" },
-  { id:"medium-slate", title:"medium slate", audio:"Medium_Slate_Demo.mp3", art:"RedStaircaseBrickworkArtwork.jpg" },
-  { id:"lan-33", title:"LAN_33", audio:"LAN_33_Demo.mp3", art:"Canal_Bucket_Artwork6.jpg" },
-  { id:"navvy", title:"navvy", audio:"Navvy_Demo.mp3", art:"NoParking3.jpg" },
-  { id:"lbd-m3", title:"lbd+m3", audio:"lbd_m3_demo.mp3", art:"CloudArtwork3.jpg" },
-  { id:"wilt", title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" },
-  { id:"flake-999", title:"flake 999", audio:"flake-999.mp3", art:"flake-999-art.jpg" },
-  { id:"5-8zero", title:"5-8ZERO", audio:"5-8zero.mp3", art:"5-8zero-art.jpg" },
-  { id:"stinky", title:"stinky", audio:"stinky.mp3", art:"stinky-art.jpg" },
-  { id:"magnetex", title:"Magnetex", audio:"magnetex.mp3", art:"magnetex-art.jpg" },
-  { id:"gulpy", title:"Gulpy", audio:"gulpy.mp3", art:"gulpy-art.jpg" }
+  { id:"nullset", title:"nullset", audio:"nullset.mp3", art:"nullset-art.jpg", bpm:"98" },
+  { id:"rippit", title:"rippit", audio:"rippit.mp3", art:"rippit-art.jpg", bpm:"128.8" },
+  { id:"pablo-from-backyard-sports", title:"Pablo from Backyard Sports", audio:"pablo-from-backyard-sports.mp3", art:"pablo-from-backyard-sports-art.jpg", bpm:"133.3" },
+  { id:"nordham", title:"Nordham", audio:"nordham.mp3", art:"nordham-art.jpg", bpm:"137" },
+  { id:"tuckshop", title:"tuckshop", audio:"tuckshop.mp3", art:"tuckshopart.jpg", bpm:"105.8" },
+  { id:"trenchcoat", title:"trenchcoat", audio:"trenchcoat.mp3", art:"trenchcoatart.jpg", bpm:"92.2" },
+  { id:"nature-of-freak", title:"nature of freak", audio:"Nature_of_Freak_Demo.mp3", art:"Factory_Artwork~2.png", bpm:"120" },
+  { id:"nomemory-notreal", title:"nomemory notreal", audio:"nomemory_notreal_mthree.mp3", art:"Hague_Artwork_Final.png", bpm:"132" },
+  { id:"the-of-the", title:"the of the", audio:"the_of_the_demo.mp3", art:"Abbey_Canal_Artwork_3.jpg", bpm:"88" },
+  { id:"curley-cuh", title:"curley cuh", audio:"Curley_Cuh_Demo.mp3", art:"Sign_Artwork_2.jpg", bpm:"128.4" },
+  { id:"pocket-muck", title:"pocket muck", audio:"Pocket_Muck_Demo.mp3", art:"untitled11.png", bpm:"124" },
+  { id:"medium-slate", title:"medium slate", audio:"Medium_Slate_Demo.mp3", art:"RedStaircaseBrickworkArtwork.jpg", bpm:"128.7" },
+  { id:"lan-33", title:"LAN_33", audio:"LAN_33_Demo.mp3", art:"Canal_Bucket_Artwork6.jpg", bpm:"129.3" },
+  { id:"navvy", title:"navvy", audio:"Navvy_Demo.mp3", art:"NoParking3.jpg", bpm:"86" },
+  { id:"lbd-m3", title:"lbd+m3", audio:"lbd_m3_demo.mp3", art:"CloudArtwork3.jpg", bpm:"128" },
+  { id:"wilt", title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg", bpm:"127" },
+  { id:"flake-999", title:"flake 999", audio:"flake-999.mp3", art:"flake-999-art.jpg", bpm:"135" },
+  { id:"5-8zero", title:"5-8ZERO", audio:"5-8zero.mp3", art:"5-8zero-art.jpg", bpm:"132" },
+  { id:"stinky", title:"stinky", audio:"stinky.mp3", art:"stinky-art.jpg", bpm:"136.4" },
+  { id:"magnetex", title:"Magnetex", audio:"magnetex.mp3", art:"magnetex-art.jpg", bpm:"135.3" },
+  { id:"gulpy", title:"Gulpy", audio:"gulpy.mp3", art:"gulpy-art.jpg", bpm:"137" }
 ];
 
 /* ================================================================
@@ -607,7 +607,7 @@ function stopOthers(me){
 function trackAudio(p,src,preload){
   const a=new Audio(); a.preload=preload; a.src=src;
   fxRoute(a);                                      // once the live effects exist, every copy goes through them
-  if(dice.face&&dice.face.rate)fxRateOne(a,dice.face.rate);
+  if(dice.face&&dice.face.rate)fxRateOne(a,trackRate(p,dice.face.rate));
   const live=()=>a===p.audio;
   a.addEventListener("loadedmetadata",()=>{ if(a===p.orig){p.dur=a.duration||0;if(!p.playing)p.timeEl.textContent="00:00";if(radioCurrent()===p)fuRenderRadio();} });
   a.addEventListener("error",()=>{
@@ -675,7 +675,7 @@ POSTS.forEach((post,idx)=>{
     const p={canvas,ctx:canvas.getContext("2d"),W:192,H:72,
              btn:tile.querySelector(".pbtn"),timeEl:tile.querySelector(".atime"),
              tile,prog:0,playing:false,seed:idx*3.7+1,audio:null,dur:0,err:false,artLum:null,artImg:null,
-             index:players.length,title:post.title,id:post.id,art:post.art};
+             index:players.length,title:post.title,id:post.id,art:post.art,bpm:parseFloat(post.bpm)||0};
     tile.id="track-"+post.id;
     tile.querySelector(".sbtn").addEventListener("click",e=>shareTrack(p,e.currentTarget));
     // Two copies of the recording can stand behind a tile: the original, and its chip version, fetched only
@@ -951,7 +951,8 @@ function chipLost(p,a){
    Built with the browser's audio graph the first time one is rolled (inside the click, so the browser lets it
    sound). From then on every copy of every track is routed through it: a dry path, plus the rolled effect mixed in,
    faded over a tenth of a second either way. A page opened from disk can't do this, so there the dice rolls only
-   chip and slow. Slow needs no graph: the tracks just play at 0.84, and the pitch drops with it.
+   chip and slow. Slow needs no graph: the tracks just play at 0.84, and the pitch drops with it (a track under
+   110 BPM, its bpm in POSTS, goes the other way: up to 1.19, the pitch rising).
    The talking ∅ uses the same bus, on its own if need be: it makes its voice itself, so it works from disk too,
    and it doesn't pull the tracks into the graph (they only go through it once a live effect is rolled). */
 const AC=window.AudioContext||window.webkitAudioContext;
@@ -1078,7 +1079,10 @@ function fxRateOne(a,rate){
   a.preservesPitch=a.mozPreservesPitch=a.webkitPreservesPitch=(rate===1);
   a.defaultPlaybackRate=rate; a.playbackRate=rate;
 }
-function fxRate(rate){ players.forEach(p=>[p.orig,p.alt].forEach(a=>{ if(a)fxRateOne(a,rate); })); }
+// A track under 110 BPM is already in a low gear: slow takes it up one instead (1/0.84, about 1.19), pitch and all.
+const GEAR_UP_BELOW=110;
+const trackRate=(p,rate)=>rate!==1&&p.bpm&&p.bpm<GEAR_UP_BELOW?1/rate:rate;
+function fxRate(rate){ players.forEach(p=>[p.orig,p.alt].forEach(a=>{ if(a)fxRateOne(a,trackRate(p,rate)); })); }
 
 /* ---------- the die ----------
    A cube with a colour on each face in place of numbers, drawn in the same dithered grain as the rest: a 20-pixel
