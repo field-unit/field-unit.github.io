@@ -62,7 +62,7 @@ sound and picture. Press again: another roll, never the same face twice running.
 |---|---|---|
 | chip — crunched | every track swaps to its rendered chip copy (below) | magenta, 4-pixel blocks, three shades; the logo an octagon that turns in eighths, its grain stepping like a sprite |
 | delay — tight ping-pong | clean repeats 135 ms apart, left then right, each about 10 dB down, with no bass in them (380 Hz to 6.5 kHz) | teal, two crisp repeats trailing each shape; rings going out from the logo in time |
-| slow — down a gear | the tracks play at 0.84, and the pitch drops with them; a track under 110 BPM goes up a gear instead (1.19, the pitch rising) | amber, the grain crawling at under half speed; the logo breathes, its ring softer |
+| slow — down a gear | the tracks play at 0.84, and the pitch drops with them; nullset (marked `gear:"up"` in `POSTS`) goes up a gear instead (1.19, the pitch rising) | amber, the grain crawling at under half speed; the logo breathes, its ring softer |
 | swirl — phased | a slow six-stage phaser | purple, 2-pixel blocks, the logo turning slowly and twisting |
 | radio filter — far off | a narrow band, 420 Hz to 2.8 kHz, gently overdriven | red, a line slipping sideways now and then; a band of interference drifting down the logo |
 | warehouse — big room | a few hard reflections, then a short tail (about 1.3 s) that darkens as it dies, kept off the kick and bass (high-pass at 320 Hz) and low behind the track | blue, everything a little lighter; a beam of light sweeping across the logo |
@@ -236,8 +236,7 @@ shows it a minute or two later.
    is brought down first); an MP3 keeps its audio exactly as it is and loses only its tags;
 2. copies the artwork in with its hidden details taken out (camera, date, location). A picture over 2000 px gets a
    2000 px copy, and a photo stored on its side is turned upright;
-3. puts the track at the top of `POSTS`, with an `id` for its own link and its tempo measured as `bpm` (the slow face
-   speeds up a track under 110 BPM), and counts it in the page's description;
+3. puts the track at the top of `POSTS`, with an `id` for its own link, and counts it in the page's description;
 4. makes the tile's grain copy (`tools/make_art_thumbs.py`), with the brightness of a flat picture stretched;
 5. makes the CHIP FX version (`tools/chip_fx.py`);
 6. opens the page from this PC at the new track, then waits for a typed word (Enter alone doesn't choose):
@@ -245,7 +244,7 @@ shows it a minute or two later.
    was), or **up** / **down** (a higher or lower part of the artwork in the tile).
 
 **Changing** a track keeps its `id`, so links that have gone out keep working. A new recording or picture takes the
-old file's place, and the CHIP FX version and grain copy are made again (and a new recording's tempo measured again). **Removing** one takes it off the list with
+old file's place, and the CHIP FX version and grain copy are made again. **Removing** one takes it off the list with
 its files, grain copy and CHIP FX version, and lowers the count; its song and artwork are copied to
 `../source-assets-private/field-unit-removed` first. On the page, each track's changes can be published, kept for
 later or undone, and "Put back as it is live" undoes everything that isn't published.
@@ -258,8 +257,7 @@ code and forgets every phone. The originals are only ever read.
 
 By hand, the same steps: the files into this folder (`python tools/strip_meta.py <artwork>` takes out the picture's
 hidden details); a line at the top of `POSTS`, newest first, keeping an `id` once a link has gone out:
-`{ id:"wilt", title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg", bpm:"127" },` (`bpm` can be corrected
-by hand if the measured tempo is double or half); then `python tools/make_art_thumbs.py`
+`{ id:"wilt", title:"Wilt", audio:"Wilt_Demo.mp3", art:"Wilt_Artwork.jpg" },`; then `python tools/make_art_thumbs.py`
 (a flat picture wants a `TUNE` entry there and `--redo <artwork>`) and `python tools/chip_fx.py <song>`; then publish
 (below).
 
