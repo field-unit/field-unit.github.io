@@ -356,6 +356,23 @@
    "mp3PeakDbfs": -3.3,
    "peakLimited": false,
    "offsetSeconds": 0.0
+  },
+  "hypernet": {
+   "title": "hypernet",
+   "original": "hypernet.mp3",
+   "fx": "audio/chip-fx/hypernet.mp3",
+   "seconds": 379.535,
+   "fxSeconds": 379.535,
+   "sampleRate": 48000,
+   "sourceSha256": "e696c7eec0a69b6af6c48c17ba972c5dad07c042014efba92662d081a5e28d86",
+   "settingsHash": "f5cd7e36de5e6419",
+   "bytes": 9110060,
+   "sourceRmsDbfs": -16.44,
+   "rmsDbfs": -16.44,
+   "peakDbfs": -2.17,
+   "mp3PeakDbfs": -2.42,
+   "peakLimited": false,
+   "offsetSeconds": 0.0
   }
  },
  "recipe": "chip-fx-v2",
