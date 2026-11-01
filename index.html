@@ -326,7 +326,6 @@ body.radio-on{padding-bottom:150px}   /* room to scroll the last tiles clear of 
 
 <svg class="sprite" aria-hidden="true" focusable="false">
   <symbol id="i-null" viewBox="0 0 12 12"><path d="M11 0h1v1h-1zM4 1h4v1h-4zM10 1h1v1h-1zM2 2h2v1h-2zM8 2h2v1h-2zM2 3h1v1h-1zM8 3h2v1h-2zM1 4h1v1h-1zM7 4h1v1h-1zM10 4h1v1h-1zM1 5h1v1h-1zM6 5h1v1h-1zM10 5h1v1h-1zM1 6h1v1h-1zM5 6h1v1h-1zM10 6h1v1h-1zM1 7h1v1h-1zM4 7h1v1h-1zM10 7h1v1h-1zM2 8h2v1h-2zM9 8h1v1h-1zM2 9h2v1h-2zM8 9h2v1h-2zM1 10h1v1h-1zM4 10h4v1h-4zM0 11h1v1h-1z"/></symbol>
-  <symbol id="i-dance" viewBox="0 0 12 12"><path d="M9 0h1v1h-1zM5 1h2v1h-2zM9 1h1v1h-1zM5 2h2v1h-2zM8 2h1v1h-1zM6 3h2v1h-2zM4 4h4v1h-4zM6 5h1v1h-1zM6 6h1v1h-1zM5 7h3v1h-3zM4 8h1v1h-1zM8 8h1v1h-1zM3 9h1v1h-1zM9 9h1v1h-1zM4 10h1v1h-1zM8 10h1v1h-1zM3 11h2v1h-2zM8 11h2v1h-2z"/></symbol>
   <symbol id="i-die" viewBox="0 0 12 12"><path d="M1 0h10v1h-10zM0 1h1v10h-1zM11 1h1v10h-1zM1 11h10v1h-10zM2 2h2v2h-2zM5 5h2v2h-2zM8 8h2v2h-2z"/></symbol>
   <symbol id="i-mail" viewBox="0 0 12 12"><path d="M0 2h12v1h-12zM0 3h2v1h-2zM10 3h2v1h-2zM0 4h1v1h-1zM2 4h1v1h-1zM9 4h1v1h-1zM11 4h1v1h-1zM0 5h1v1h-1zM3 5h1v1h-1zM8 5h1v1h-1zM11 5h1v1h-1zM0 6h1v1h-1zM4 6h1v1h-1zM7 6h1v1h-1zM11 6h1v1h-1zM0 7h1v1h-1zM5 7h2v1h-2zM11 7h1v1h-1zM0 8h1v1h-1zM11 8h1v1h-1zM0 9h12v1h-12z"/></symbol>
   <symbol id="i-share" viewBox="0 0 12 12"><path d="M5 0h2v1h-2zM4 1h4v1h-4zM3 2h6v1h-6zM5 3h2v6h-2zM1 6h2v1h-2zM9 6h2v1h-2zM1 7h1v4h-1zM10 7h1v4h-1zM1 11h10v1h-10z"/></symbol>
@@ -340,7 +339,6 @@ body.radio-on{padding-bottom:150px}   /* room to scroll the last tiles clear of 
     <button class="fxmore" id="fxMore" type="button" aria-expanded="false" aria-controls="fxMenu" aria-label="choose an effect"><svg class="ico" aria-hidden="true"><use href="#i-caret"/></svg></button>
     <div class="fxmenu" id="fxMenu" role="group" aria-label="effects" hidden></div>
   </div>
-  <button class="fxbtn" id="danceMode" type="button" aria-pressed="false" aria-label="dancer" data-tip="dancer"><svg class="ico" aria-hidden="true"><use href="#i-dance"/></svg></button>
   <button class="fxbtn" id="radioMode" type="button" aria-pressed="false" aria-label="radio" data-tip="radio"><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg></button>
   <button class="fxbtn" id="contactBtn" type="button" aria-expanded="false" aria-controls="contactPanel" aria-label="contact" data-tip="contact"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg></button>
   <button class="fxbtn" id="fxHelp" type="button" aria-expanded="false" aria-controls="fxKey" aria-label="what the buttons do" data-tip="key">?</button>
@@ -352,8 +350,7 @@ body.radio-on{padding-bottom:150px}   /* room to scroll the last tiles clear of 
     <li><svg class="ico" aria-hidden="true"><use href="#i-null"/></svg><span><b>the ∅</b>scroll over it or swipe across it and it talks. harder, faster. tap to stop.</span></li>
     <li><svg class="ico" aria-hidden="true"><use href="#i-die"/></svg><span><b>dice</b>rolls one of six effects, on the sound and the picture:
       <span id="keySwatches"></span>. again for off. to pick one, hover the dice or press ▾ beside it and choose a colour.</span></li>
-    <li><svg class="ico" aria-hidden="true"><use href="#i-dance"/></svg><span><b>dancer</b>a dancing figure. starts the radio if it's quiet.</span></li>
-    <li><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg><span><b>radio</b>plays everything, one after another.</span></li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg><span><b>radio</b>plays everything, one after another, and a figure dances while it does.</span></li>
     <li><svg class="ico" aria-hidden="true"><use href="#i-share"/></svg><span><b>share</b>on each track: copies a link that opens this page with that track ready to play.</span></li>
     <li><span class="ico" aria-hidden="true">▶</span><span><b>player</b>stays in the corner as you scroll. track: one track. radio: all of them in turn. play or pause, skip to the next, stop (the radio goes off; the track keeps its place). drag the line, or use the arrow keys on it, to move through the track.</span></li>
     <li><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span><b>contact</b>get in touch.</span></li>
@@ -1673,8 +1670,8 @@ document.addEventListener("keydown",e=>{
 /* ============ radio: plays the tiles in turn ============
    There is one player per track: the radio just drives the tiles. Whatever is playing shows on its
    tile and on the radio panel alike, and pressing a tile moves the radio to that track.
-   radio.on   carry on to the next track when one ends (RADIO, PLAY, SKIP, DANCE switch it on)
-   radio.stop STOP was pressed: DANCE won't restart the music until PLAY or RADIO is pressed
+   radio.on   carry on to the next track when one ends (RADIO, PLAY, SKIP switch it on); while it's on and
+              playing, the dancer dances
    radio.index the current track (the last tile played), -1 before anything has played */
 const fuGlobalRadio=document.getElementById("globalRadio");
 const fuGlobalTitle=document.getElementById("globalRadioTitle");
@@ -1682,7 +1679,8 @@ const fuGlobalToggle=document.getElementById("globalRadioToggle");
 const fuGlobalSkip=document.getElementById("globalRadioSkip");
 const fuGlobalStop=document.getElementById("globalRadioStop");
 const fuRadioMode=document.getElementById("radioMode");
-const radio={on:false,stop:false,index:-1};
+const radio={on:false,index:-1};
+var danceReady=false;                    // set once the dancer (further down) exists: fuRenderRadio can run before it
 const grMode=document.getElementById("grMode"), grTitle=document.getElementById("grTitle"), grFx=document.getElementById("grFx");
 const grSeek=document.getElementById("grSeek"), grTime=document.getElementById("grTime"), grDur=document.getElementById("grDur");
 const grGo=document.getElementById("grGo"), grControls=document.getElementById("grControls");
@@ -1697,6 +1695,7 @@ function fuRenderRadio(){
   document.body.classList.toggle("radio-on",radio.index>=0);
   fuRadioMode.classList.toggle("on",radio.on&&playing);
   fuRadioMode.setAttribute("aria-pressed",radio.on&&playing?"true":"false");
+  if(danceReady)danceFollow(radio.on&&playing);       // the dancer comes and goes with the radio
   const f=dice.face, waiting=chip.want===true;
   grFx.textContent=f?(f.id==="radio"?"RADIO FX":f.name.toUpperCase()):"ORIGINAL";
   grFx.style.color=f?f.hex:"";
@@ -1774,7 +1773,6 @@ grGo.addEventListener("click",()=>{ const p=radioCurrent(); if(p){ fxWake(); pla
 // player offers one button that will, and nothing claims to be playing until it is.
 function playNow(p){
   player.blocked=null;
-  radio.stop=false;
   return startTrack(p).catch(err=>{
     if(p.err||!err)return;                     // the track itself didn't load: its tile shows ∅
     if(err.name==="NotAllowedError"){ player.blocked=p; radio.index=p.index; fuRenderRadio(); say("press play for "+p.title); }
@@ -1883,14 +1881,10 @@ function radioPlay(index){               // play a track by its tile, skipping a
   }
 }
 function radioStart(){                   // RADIO / PLAY: resume the current track, or pick one
-  radio.on=true; radio.stop=false;
+  radio.on=true;
   const p=radioCurrent();
   if(p&&p.playing){fuRenderRadio();return;}   // already playing: just carry on into the next tracks
   radioPlay(p?radio.index:Math.floor(Math.random()*players.length));
-}
-function fuStartRadio(){                 // DANCE: starts the radio, but never after STOP
-  if(radio.stop||players.some(p=>p.playing))return;
-  radioStart();
 }
 function fuToggleRadio(){                // PLAY/PAUSE on the player: carries on as it was, one track or the radio
   const p=radioCurrent();
@@ -1904,11 +1898,10 @@ function fuRadioButton(){                // the RADIO button: switch the radio o
   else{ radioStart(); say("radio on"); }
 }
 function fuSkipRadio(){                  // SKIP: the next track, keeping to one track or the radio
-  radio.stop=false;
   radioPlay(radio.index+1);
 }
 function fuStopRadio(){
-  radio.on=false; radio.stop=true;
+  radio.on=false;
   stopOthers(null);
   fuRenderRadio();
 }
@@ -1922,8 +1915,8 @@ fuRadioMode.addEventListener("click",fuRadioButton);
    between — no easing anywhere — which gives it its stiff, stepped way of moving. The figure is
    a handful of capsules sampled into the same Bayer-dithered ramp the artwork uses, so it is a cloud of green
    dots rather than a silhouette, and the chip face coarsens it exactly as it coarsens a tile: bigger blocks, fewer
-   greens. With it on, the figure is about eighteen blocks wide. */
-const danceMode=document.getElementById("danceMode");
+   greens. With it on, the figure is about eighteen blocks wide. It has no button: it dances while the radio plays
+   (fuRenderRadio switches it), and goes when the radio pauses or stops or a single track is played. */
 const danceStage=document.getElementById("danceStage");
 const danceCanvas=document.getElementById("electroDancer");
 const dctx=danceCanvas.getContext("2d");
@@ -2028,26 +2021,27 @@ function danceShufflePose(){
 }
 
 function danceSet(on){
+  if(!!on===danceOn)return;            // the radio redraws often; only a change starts or stops it
   danceOn=!!on;
   danceStage.classList.toggle("on",danceOn);
   danceStage.setAttribute("aria-hidden",danceOn?"false":"true");
-  danceMode.classList.toggle("on",danceOn);
-  danceMode.setAttribute("aria-pressed",danceOn?"true":"false");
-  danceMode.dataset.tip=danceOn?"dancer off":"dancer";
-  say(danceOn?"dancer on":"dancer off");
   clearInterval(danceTimer); clearInterval(danceMoveTimer);
   if(danceOn){
     danceShufflePose();
     danceTimer=setInterval(()=>{ if(!document.hidden){ dancePose++; danceDraw(); } },REDUCED?460:165);
     danceMoveTimer=setInterval(danceShufflePose,1550);
-    if(!players.some(p=>p.playing))fuStartRadio();
   }
 }
-danceMode.addEventListener("click",()=>danceSet(!danceOn));
+// Between two tracks the radio is briefly not playing: the dancer waits a moment before it goes, so it doesn't blink.
+let danceOffTimer=0;
+function danceFollow(on){
+  clearTimeout(danceOffTimer);
+  if(on)danceSet(true);
+  else if(danceOn)danceOffTimer=setTimeout(()=>danceSet(false),700);
+}
+danceReady=true;
+danceSet(radio.on&&!!(radioCurrent()&&radioCurrent().playing));   // in case the radio is already playing by now
 openShared();
-addEventListener("keydown",event=>{
-  if(event.key==="Escape"&&danceOn)danceSet(false);
-});
 
 </script>
 </body>
