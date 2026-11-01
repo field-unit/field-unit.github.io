@@ -47,6 +47,8 @@ body{
 }
 /* the logo's grain carried across the whole screen, behind everything (drawn by bgPaint) */
 #bgGrain{position:fixed;left:0;top:0;z-index:-1;pointer-events:none;image-rendering:pixelated;image-rendering:crisp-edges}
+/* the grain's pixels softened along the line only, as a tape blurs them (tapeSmear, below the body tag) */
+#bgGrain,#glyph,.aud canvas,#footc,#electroDancer{filter:url(#tapeSmear)}
 /* fixed subtle scanlines */
 body::after{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
@@ -319,6 +321,11 @@ body.radio-on{padding-bottom:150px}   /* room to scroll the last tiles clear of 
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="tapeSmear" x="-2%" y="0" width="104%" height="100%" color-interpolation-filters="sRGB">
+    <feGaussianBlur stdDeviation="0.7 0"/>
+  </filter>
+</svg>
 <canvas id="bgGrain" aria-hidden="true"></canvas>
 
 <h1 class="vh">field unit</h1>
@@ -460,7 +467,7 @@ const RAMPS={
 const tinted=k=>RAMPS[k].map(hexRGB);
 const LOOK={
   normal:{block:1,palette:[0,1,2,3,4]},
-  chip:{block:4,palette:[0,2,4],rgb:tinted("chip"),glyph:"chip"},     // big pixels, three shades
+  chip:{block:4,palette:[0,2,4],rgb:tinted("chip"),tape:false,glyph:"chip"},     // big pixels, three shades, no tape
   dub:{block:1,palette:[0,1,2,3,4],rgb:tinted("dub"),taps:[[0.022,0.55],[0.044,0.3]],glyph:"delay"},  // two crisp repeats
   slow:{block:1,palette:[0,1,2,3,4],rgb:tinted("slow"),speed:0.45,glyph:"slow"},     // the grain crawls at under half speed
   swirl:{block:2,palette:[0,1,2,3,4],rgb:tinted("swirl"),warp:0.8,glyph:"swirl"},    // the logo twists
@@ -475,22 +482,41 @@ const dice={face:null,last:null,rolling:false};
 const voice={vel:0,yaw:0,tap:0,tapTo:0,glow:0,flash:0,level:0,slow:true,buf:null,chip:null,len:0,pos:0,
   bus:null,tone:null,srcs:[],raf:0,at:0,painted:0,onceTill:0,side:1,hintAt:-1e9};
 
+/* Tape grain. A worn video tape rather than a screen: the dither's threshold is partly the Bayer grid and partly
+   noise that is new every frame and drawn out sideways in short streaks (a tape's noise runs along its lines); each
+   line is a touch lighter or darker than the last; and brightness smears to the right before it dies away (the
+   picture lags along the line), so hard edges trail off. Chip has none of it: it is meant to look like a computer. */
+const VHS={mix:0.45,streak:3,wobble:0.025,rise:0.85,fall:0.6};   // noise's share of the threshold, streak length, line wobble, smear
+function rnd(x,y,f){   // a hash: the same pixel and frame always get the same number, so a still frame stays still
+  let h=(Math.imul(x,374761393)+Math.imul(y,668265263)+Math.imul(f,1274126177))|0;
+  h=Math.imul(h^(h>>>13),1103515245); h^=h>>>16;
+  return (h>>>0)/4294967296;
+}
 function paint(ctx,W,H,field,phase,cutout){   // cutout: leave the darkest level clear, for the dancer
   const img=ctx.createImageData(W,H), d=img.data;
   const px=phase&3, py=(phase>>1)&3;
   const block=look.block, palette=look.palette, rgb=look.rgb||RGB, lift=look.lift||0, taps=look.taps||[];
-  const top=palette.length-1;
+  const top=palette.length-1, tape=look.tape===false?0:1, mix=VHS.mix*tape;
 
   for(let y=0;y<H;y+=block){
+    const row=(y/block)|0;
     // radio: every so often a line is pushed a few pixels sideways, and it moves on each frame
-    const slip=look.scan&&((((y/block)|0)+phase*7)%29===0)?3:0;
+    const slip=look.scan&&((row+phase*7)%29===0)?3:0;
+    const wob=tape?(rnd(7,row,phase)-0.5)*2*VHS.wobble:0, shift=(rnd(3,row,phase)*VHS.streak)|0;
+    let lag=-1;
     for(let x=0;x<W;x+=block){
+      const col=(x/block)|0;
       const u=(x+slip+block*0.5)/W, w=(y+block*0.5)/H;
       let v=field(u,w);
       for(const [off,k] of taps){ const e=field(u-off,w)*k; if(e>v)v=e; }   // delay: the shape repeated, fainter
+      if(tape){ lag=lag<0?v:lag+(v-lag)*(v>lag?VHS.rise:VHS.fall); v=lag+wob; }
       v+=lift; v=v<0?0:v>1?1:v;
       const lv=v*top, b=lv|0, f=lv-b;
-      const t=(BAYER[((y/block)+py)&3][((x/block)+px)&3]+0.5)/16;
+      let t=(BAYER[(row+py)&3][(col+px)&3]+0.5)/16;
+      if(mix){
+        const n=0.6*rnd(((col+shift)/VHS.streak)|0,row,phase)+0.4*rnd(col,row,phase+7919);
+        t=t*(1-mix)+n*mix;
+      }
       const lvl=f>t?Math.min(b+1,top):b;
       const c=rgb[palette[lvl]], alpha=cutout&&!lvl?0:255;
       for(let yy=0;yy<block && y+yy<H;yy++){
