@@ -373,6 +373,23 @@
    "mp3PeakDbfs": -2.42,
    "peakLimited": false,
    "offsetSeconds": 0.0
+  },
+  "jockey": {
+   "title": "jockey",
+   "original": "jockey.mp3",
+   "fx": "audio/chip-fx/jockey.mp3",
+   "seconds": 298.106,
+   "fxSeconds": 298.106,
+   "sampleRate": 48000,
+   "sourceSha256": "a9216918c5ab214e6ae32db6925fde7a6e57ed264effc244d70cd573209dc805",
+   "settingsHash": "f5cd7e36de5e6419",
+   "bytes": 7156268,
+   "sourceRmsDbfs": -18.67,
+   "rmsDbfs": -18.67,
+   "peakDbfs": -2.91,
+   "mp3PeakDbfs": -3.17,
+   "peakLimited": false,
+   "offsetSeconds": 0.0
   }
  },
  "recipe": "chip-fx-v2",
