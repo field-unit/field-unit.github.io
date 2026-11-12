@@ -390,6 +390,23 @@
    "mp3PeakDbfs": -3.17,
    "peakLimited": false,
    "offsetSeconds": 0.0
+  },
+  "voorhout": {
+   "title": "voorhout",
+   "original": "voorhout.mp3",
+   "fx": "audio/chip-fx/voorhout.mp3",
+   "seconds": 334.612,
+   "fxSeconds": 334.612,
+   "sampleRate": 48000,
+   "sourceSha256": "856c57def071dc6b61f722bdc2a158573f84011f1fa2b672c5f20dd12b2c35b6",
+   "settingsHash": "f5cd7e36de5e6419",
+   "bytes": 8032364,
+   "sourceRmsDbfs": -18.79,
+   "rmsDbfs": -18.79,
+   "peakDbfs": -2.85,
+   "mp3PeakDbfs": -3.12,
+   "peakLimited": false,
+   "offsetSeconds": 0.0
   }
  },
  "recipe": "chip-fx-v2",
